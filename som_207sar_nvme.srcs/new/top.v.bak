@@ -1,0 +1,1509 @@
+`timescale 1ns / 1ps
+`define DEV_VERSION_ID 32'h20230416
+//`define BYPASS_FILETR
+module top(
+input SYSREF_ANALOG_N,
+input SYSREF_ANALOG_P,
+input [0:0] CLK_DAC_N,
+input [0:0] CLK_DAC_P,
+input [1:0] CLK_ADC_N,
+input [1:0] CLK_ADC_P,
+input SYSREF_PL_N,
+input SYSREF_PL_P,
+input CLK_DCLK_PL_N,
+input CLK_DCLK_PL_P,  
+
+input [3:0] ADC_P,
+input [3:0] ADC_N,
+output [3:0] DAC_P,
+output [3:0] DAC_N,
+
+input CLK_PL_SYS_N,
+input CLK_PL_SYS_P,
+
+`ifndef SIMULATION
+// DDR
+output DDR4_act_n,
+output [16:0]DDR4_adr,
+output [1:0]DDR4_ba,
+output [0:0]DDR4_bg,
+output [0:0]DDR4_ck_c,
+output [0:0]DDR4_ck_t,
+output [0:0]DDR4_cke,
+output [0:0]DDR4_cs_n,
+inout [3:0]DDR4_dm_n,
+inout [31:0]DDR4_dq,
+inout [3:0]DDR4_dqs_c,
+inout [3:0]DDR4_dqs_t,
+output [0:0]DDR4_odt,
+output DDR4_reset_n,
+input DDR4_ALERT_N,
+output DDR4_PAR,
+
+// PCIe
+output RST_NVME_0_N,
+output RST_NVME_1_N,
+input pci0_clk_clk_n,
+input pci0_clk_clk_p,
+input pci1_clk_clk_n,
+input pci1_clk_clk_p,
+input [3:0]pcie0_exp_rxn,
+input [3:0]pcie0_exp_rxp,
+output [3:0]pcie0_exp_txn,
+output [3:0]pcie0_exp_txp,
+input [3:0]pcie1_exp_rxn,
+input [3:0]pcie1_exp_rxp,
+output [3:0]pcie1_exp_txn,
+output [3:0]pcie1_exp_txp,
+
+`endif
+input CLK_PL_DDR_N,
+input CLK_PL_DDR_P,
+// BC
+output BC_A_CLK,
+output BC_A_CS,
+output BC_A_LATCH,
+input  BC_A_RXD,
+output BC_A_RXEN,
+output [3:0] BC_A_TXD,
+output BC_A_TXEN,
+output BC_B_CLK,
+output BC_B_CS,
+output BC_B_LATCH,
+input  BC_B_RXD,
+output BC_B_RXEN,
+output [3:0] BC_B_TXD,
+output BC_B_TXEN,
+// RF
+input  RF_A_LOCK,
+output RF_A_RXCTL,
+output RF_A_SWITCH,
+output RF_A_TXEN,
+input  RF_A_UR_RX,
+output RF_A_UR_TX,
+input  RF_B_LOCK,
+output RF_B_RXCTL,
+output RF_B_SWITCH,
+output RF_B_TXEN,
+input  RF_B_UR_RX,
+output RF_B_UR_TX,
+// SPI
+output PL_SPI_SCK, 
+output PL_SPI_CS_N, 
+output PL_SPI_MOSI, 
+input PL_SPI_MISO,
+// remote ctrl/status/gps
+output PL_RS422_1_TX,
+input PL_RS422_1_RX,
+input PL_RS422_2_RX,	// GPS
+input PL_RS422_3_RX,	// EXT IMU
+output PL_RS422_3_TX,	// EXT IMU
+// sync data
+output PL_RS422_SAR_1_TXD,
+output PL_RS422_SAR_1_TXC,
+output PL_RS422_SAR_2_TXD,
+output PL_RS422_SAR_2_TXC,
+
+// motor
+output PL_RS485_M_TX,
+output PL_RS485_M_DE_REN,
+input PL_RS485_M_RX,
+output PL_RS485_M_PO_0,
+output PL_RS485_M_PO_1,
+
+output RST_GPS_N,
+output GPS_EVENT,
+input PPS_GPS_PL,
+output UART_PL_GPS,
+input UART_GPS_PL,
+input UART_IMU_PL,
+output DBG_UART_TX,
+input DBG_UART_RX,
+output DBG_PPSOUT,
+output FPGA_SYNC,
+output PL_DBG_LED
+);
+
+
+	
+// sys clock
+wire locked, clk100, clk50, clk150;
+clk_sys clk_ep0(
+.clk_in1_p(CLK_PL_SYS_P),
+.clk_in1_n(CLK_PL_SYS_N),
+.reset(0),
+.clk_out1(clk100),
+.clk_out2(clk50),
+.clk_out3(clk150),
+.locked(locked)
+);
+  
+
+wire [127:0] adc_data;
+wire  adc_valid;
+wire  adc_ready;
+wire  adc_start;
+wire adc_last;
+
+wire  bram_clk;
+wire  bram_rst;
+wire  bram_en;
+wire [23:0] bram_addr;
+wire [3:0] bram_we;
+wire [31:0] bram_rddata;
+wire [31:0] bram_wrdata;
+
+wire [127:0] m00_axis_tdata;
+wire [127:0] m01_axis_tdata;
+wire [127:0] m02_axis_tdata;
+wire [127:0] m03_axis_tdata;
+wire [127:0] m10_axis_tdata;
+wire [127:0] m11_axis_tdata;
+wire [127:0] m12_axis_tdata;
+wire [127:0] m13_axis_tdata;
+wire [255:0] s00_axis_tdata;
+wire [255:0] s02_axis_tdata;
+wire [255:0] s10_axis_tdata;
+wire [255:0] s12_axis_tdata;
+wire clk_out100;
+wire init_calib_complete;
+
+wire [48:0] S_AXI_HPC1_araddr;
+wire [1:0] S_AXI_HPC1_arburst;
+wire [5:0] S_AXI_HPC1_arid;
+wire [7:0] S_AXI_HPC1_arlen;
+wire  S_AXI_HPC1_arlock;
+wire [3:0] S_AXI_HPC1_arqos;
+wire  S_AXI_HPC1_arready;
+wire [2:0] S_AXI_HPC1_arsize;
+wire  S_AXI_HPC1_aruser;
+wire  S_AXI_HPC1_arvalid;
+wire [48:0] S_AXI_HPC1_awaddr;
+wire [1:0] S_AXI_HPC1_awburst;
+wire [5:0] S_AXI_HPC1_awid;
+wire [7:0] S_AXI_HPC1_awlen;
+wire  S_AXI_HPC1_awlock;
+wire [3:0] S_AXI_HPC1_awqos;
+wire  S_AXI_HPC1_awready;
+wire [2:0] S_AXI_HPC1_awsize;
+wire  S_AXI_HPC1_awuser;
+wire  S_AXI_HPC1_awvalid;
+wire [5:0] S_AXI_HPC1_bid;
+wire  S_AXI_HPC1_bready;
+wire [1:0] S_AXI_HPC1_bresp;
+wire  S_AXI_HPC1_bvalid;
+wire [127:0] S_AXI_HPC1_rdata;
+wire [5:0] S_AXI_HPC1_rid;
+wire  S_AXI_HPC1_rlast;
+wire  S_AXI_HPC1_rready;
+wire [1:0] S_AXI_HPC1_rresp;
+wire  S_AXI_HPC1_rvalid;
+wire [127:0] S_AXI_HPC1_wdata;
+wire  S_AXI_HPC1_wlast;
+wire  S_AXI_HPC1_wready;
+wire [15:0] S_AXI_HPC1_wstrb;
+wire  S_AXI_HPC1_wvalid;
+wire [35:0]mem_axi_araddr;
+wire [1:0]mem_axi_arburst;
+wire [3:0]mem_axi_arcache;
+wire [7:0]mem_axi_arlen;
+wire [0:0]mem_axi_arlock;
+wire [2:0]mem_axi_arprot;
+wire [3:0]mem_axi_arqos;
+wire mem_axi_arready;
+wire [3:0]mem_axi_arregion;
+wire [2:0]mem_axi_arsize;
+wire mem_axi_arvalid;
+wire [35:0]mem_axi_awaddr;
+wire [1:0]mem_axi_awburst;
+wire [3:0]mem_axi_awcache;
+wire [7:0]mem_axi_awlen;
+wire [0:0]mem_axi_awlock;
+wire [2:0]mem_axi_awprot;
+wire [3:0]mem_axi_awqos;
+wire mem_axi_awready;
+wire [3:0]mem_axi_awregion;
+wire [2:0]mem_axi_awsize;
+wire mem_axi_awvalid;
+wire mem_axi_bready;
+wire [1:0]mem_axi_bresp;
+wire mem_axi_bvalid;
+wire [511:0]mem_axi_rdata;
+wire mem_axi_rlast;
+wire mem_axi_rready;
+wire [1:0]mem_axi_rresp;
+wire mem_axi_rvalid;
+wire [511:0]mem_axi_wdata;
+wire mem_axi_wlast;
+wire mem_axi_wready;
+wire [63:0]mem_axi_wstrb;
+wire mem_axi_wvalid;
+wire [39:0]app_lite_araddr;
+wire [2:0]app_lite_arprot;
+wire app_lite_arready;
+wire app_lite_arvalid;
+wire [39:0]app_lite_awaddr;
+wire [2:0]app_lite_awprot;
+wire app_lite_awready;
+wire app_lite_awvalid;
+wire app_lite_bready;
+wire [1:0]app_lite_bresp;
+wire app_lite_bvalid;
+wire [31:0]app_lite_rdata;
+wire app_lite_rready;
+wire [1:0]app_lite_rresp;
+wire app_lite_rvalid;
+wire [31:0]app_lite_wdata;
+wire app_lite_wready;
+wire [3:0]app_lite_wstrb;
+wire app_lite_wvalid;
+//--------------------------- global clk and reset start
+wire pl_clk0;
+wire [0:0]pl_resetn;
+wire core_clk;
+reg core_rst = 0;
+assign core_clk = pl_clk0;
+always@(posedge core_clk)core_rst <= ~pl_resetn;
+reg core_rstn = 1;
+always@(posedge core_clk)core_rstn <= pl_resetn;
+// mem domain
+wire mem_clk;
+wire mem_rst;
+assign mem_clk = core_clk;
+assign mem_rst = core_rst;
+// adda domain
+wire  clk_adc_out;
+wire  clk_dac_out;
+wire adc_clk;
+wire dac_clk;
+assign adc_clk = clk_adc_out;
+assign dac_clk = clk_dac_out;
+//assign adc_clk = clk150;
+//assign dac_clk = clk150;
+reg adc_rst = 0;
+always@(posedge adc_clk)adc_rst <= core_rst;
+reg dac_rst = 0;
+always@(posedge dac_clk)dac_rst <= core_rst;
+
+// system clock moniter
+reg [31:0] counter = 0;
+reg rst100;
+always@(posedge clk100)rst100 <= core_rst;
+reg rst50;
+always@(posedge clk50)rst50 <= core_rst;
+
+always@(posedge clk100)counter <= counter + 1;
+assign PL_DBG_LED = counter[26];
+//--------------------------- global clk and reset end
+wire clk_adc0;
+wire clk_adc1;
+wire clk_dac0;
+wire clk_dac1;
+wire CLK_DCLK_LOCK;
+assign S_AXI_HPC1_awaddr[48:32] = 17'h0008;
+assign S_AXI_HPC1_araddr[48:32] = 17'h0008;
+
+wire AUXRAM_clk;
+wire AUXRAM_rst;
+wire AUXRAM_en;
+wire [15:0]AUXRAM_we;
+wire [31:0]AUXRAM_addr;
+wire [127:0]AUXRAM_din;
+wire [127:0]AUXRAM_dout;
+assign AUXRAM_clk = core_clk;
+assign AUXRAM_rst = core_rst;
+wire [3:0] over_range;
+wire [3:0] over_voltage;
+wire [3:0] clear_or;
+wire [3:0] clear_ov;
+wire PLUART_rxd;
+wire PLUART_txd;
+wire [5:0]cfg_ltssm_state0;
+wire [5:0]cfg_ltssm_state1;
+wire user_lnk_up0;
+wire user_lnk_up1;
+cpu_rfdc_wrap cpu_ep(
+.AUXRAM_addr(AUXRAM_addr),
+.AUXRAM_clk(AUXRAM_clk),
+.AUXRAM_din(AUXRAM_din),
+.AUXRAM_dout(AUXRAM_dout),
+.AUXRAM_en(AUXRAM_en),
+.AUXRAM_rst(AUXRAM_rst),
+.AUXRAM_we(AUXRAM_we),
+.over_range(over_range),
+.over_voltage(over_voltage),
+.clear_or(clear_or),
+.clear_ov(clear_ov),
+.PLUART_rxd(PLUART_rxd),
+.PLUART_txd(PLUART_txd),
+
+.PL_SPI_SCK(PL_SPI_SCK),    //output 
+.PL_SPI_CS_N(PL_SPI_CS_N),    //output 
+.PL_SPI_MOSI(PL_SPI_MOSI),    //output 
+.PL_SPI_MISO(PL_SPI_MISO),    //input 
+.pl_clk0(pl_clk0),    //output 
+.pl_resetn(pl_resetn),    //output [0:0]
+`ifndef SIMULATION
+.DDR4_act_n(DDR4_act_n),    //output 
+.DDR4_adr(DDR4_adr),    //output [16:0]
+.DDR4_ba(DDR4_ba),    //output [1:0]
+.DDR4_bg(DDR4_bg),    //output [0:0]
+.DDR4_ck_c(DDR4_ck_c),    //output [0:0]
+.DDR4_ck_t(DDR4_ck_t),    //output [0:0]
+.DDR4_cke(DDR4_cke),    //output [0:0]
+.DDR4_cs_n(DDR4_cs_n),    //output [0:0]
+.DDR4_dm_n(DDR4_dm_n),    //inout [3:0]
+.DDR4_dq(DDR4_dq),    //inout [31:0]
+.DDR4_dqs_c(DDR4_dqs_c),    //inout [3:0]
+.DDR4_dqs_t(DDR4_dqs_t),    //inout [3:0]
+.DDR4_odt(DDR4_odt),    //output [0:0]
+.DDR4_reset_n(DDR4_reset_n),    //output 
+
+.RST_NVME_0_N(RST_NVME_0_N),
+.RST_NVME_1_N(RST_NVME_1_N),
+.pci0_clk_clk_n(pci0_clk_clk_n),
+.pci0_clk_clk_p(pci0_clk_clk_p),
+.pci1_clk_clk_n(pci1_clk_clk_n),
+.pci1_clk_clk_p(pci1_clk_clk_p),
+.pcie0_exp_rxn(pcie0_exp_rxn),
+.pcie0_exp_rxp(pcie0_exp_rxp),
+.pcie0_exp_txn(pcie0_exp_txn),
+.pcie0_exp_txp(pcie0_exp_txp),
+.pcie1_exp_rxn(pcie1_exp_rxn),
+.pcie1_exp_rxp(pcie1_exp_rxp),
+.pcie1_exp_txn(pcie1_exp_txn),
+.pcie1_exp_txp(pcie1_exp_txp),
+.user_lnk_up0(user_lnk_up0),
+.user_lnk_up1(user_lnk_up1),
+.cfg_ltssm_state0(cfg_ltssm_state0),
+.cfg_ltssm_state1(cfg_ltssm_state1),
+
+`endif
+.c0_sys_clk_n(CLK_PL_DDR_N),	//input
+.c0_sys_clk_p(CLK_PL_DDR_P),	//input
+.clk_out100(clk_out100),    //output 
+.init_calib_complete(init_calib_complete),    //output 
+.S_AXI_HPC1_araddr(S_AXI_HPC1_araddr),    //input [48:0]
+.S_AXI_HPC1_arburst(S_AXI_HPC1_arburst),    //input [1:0]
+.S_AXI_HPC1_arid(S_AXI_HPC1_arid),    //input [5:0]
+.S_AXI_HPC1_arlen(S_AXI_HPC1_arlen),    //input [7:0]
+.S_AXI_HPC1_arlock(S_AXI_HPC1_arlock),    //input 
+.S_AXI_HPC1_arqos(S_AXI_HPC1_arqos),    //input [3:0]
+.S_AXI_HPC1_arready(S_AXI_HPC1_arready),    //output 
+.S_AXI_HPC1_arsize(S_AXI_HPC1_arsize),    //input [2:0]
+.S_AXI_HPC1_aruser(S_AXI_HPC1_aruser),    //input 
+.S_AXI_HPC1_arvalid(S_AXI_HPC1_arvalid),    //input 
+.S_AXI_HPC1_awaddr(S_AXI_HPC1_awaddr),    //input [48:0]
+.S_AXI_HPC1_awburst(S_AXI_HPC1_awburst),    //input [1:0]
+.S_AXI_HPC1_awid(S_AXI_HPC1_awid),    //input [5:0]
+.S_AXI_HPC1_awlen(S_AXI_HPC1_awlen),    //input [7:0]
+.S_AXI_HPC1_awlock(S_AXI_HPC1_awlock),    //input 
+.S_AXI_HPC1_awqos(S_AXI_HPC1_awqos),    //input [3:0]
+.S_AXI_HPC1_awready(S_AXI_HPC1_awready),    //output 
+.S_AXI_HPC1_awsize(S_AXI_HPC1_awsize),    //input [2:0]
+.S_AXI_HPC1_awuser(S_AXI_HPC1_awuser),    //input 
+.S_AXI_HPC1_awvalid(S_AXI_HPC1_awvalid),    //input 
+.S_AXI_HPC1_bid(S_AXI_HPC1_bid),    //output [5:0]
+.S_AXI_HPC1_bready(S_AXI_HPC1_bready),    //input 
+.S_AXI_HPC1_bresp(S_AXI_HPC1_bresp),    //output [1:0]
+.S_AXI_HPC1_bvalid(S_AXI_HPC1_bvalid),    //output 
+.S_AXI_HPC1_rdata(S_AXI_HPC1_rdata),    //output [127:0]
+.S_AXI_HPC1_rid(S_AXI_HPC1_rid),    //output [5:0]
+.S_AXI_HPC1_rlast(S_AXI_HPC1_rlast),    //output 
+.S_AXI_HPC1_rready(S_AXI_HPC1_rready),    //input 
+.S_AXI_HPC1_rresp(S_AXI_HPC1_rresp),    //output [1:0]
+.S_AXI_HPC1_rvalid(S_AXI_HPC1_rvalid),    //output 
+.S_AXI_HPC1_wdata(S_AXI_HPC1_wdata),    //input [127:0]
+.S_AXI_HPC1_wlast(S_AXI_HPC1_wlast),    //input 
+.S_AXI_HPC1_wready(S_AXI_HPC1_wready),    //output 
+.S_AXI_HPC1_wstrb(S_AXI_HPC1_wstrb),    //input [15:0]
+.S_AXI_HPC1_wvalid(S_AXI_HPC1_wvalid),    //input 
+.mem_axi_araddr(mem_axi_araddr),    //input [35:0]
+.mem_axi_arburst(mem_axi_arburst),    //input [1:0]
+.mem_axi_arcache(mem_axi_arcache),    //input [3:0]
+.mem_axi_arlen(mem_axi_arlen),    //input [7:0]
+.mem_axi_arlock(mem_axi_arlock),    //input [0:0]
+.mem_axi_arprot(mem_axi_arprot),    //input [2:0]
+.mem_axi_arqos(mem_axi_arqos),    //input [3:0]
+.mem_axi_arready(mem_axi_arready),    //output 
+.mem_axi_arregion(mem_axi_arregion),    //input [3:0]
+.mem_axi_arsize(mem_axi_arsize),    //input [2:0]
+.mem_axi_arvalid(mem_axi_arvalid),    //input 
+.mem_axi_awaddr(mem_axi_awaddr),    //input [35:0]
+.mem_axi_awburst(mem_axi_awburst),    //input [1:0]
+.mem_axi_awcache(mem_axi_awcache),    //input [3:0]
+.mem_axi_awlen(mem_axi_awlen),    //input [7:0]
+.mem_axi_awlock(mem_axi_awlock),    //input [0:0]
+.mem_axi_awprot(mem_axi_awprot),    //input [2:0]
+.mem_axi_awqos(mem_axi_awqos),    //input [3:0]
+.mem_axi_awready(mem_axi_awready),    //output 
+.mem_axi_awregion(mem_axi_awregion),    //input [3:0]
+.mem_axi_awsize(mem_axi_awsize),    //input [2:0]
+.mem_axi_awvalid(mem_axi_awvalid),    //input 
+.mem_axi_bready(mem_axi_bready),    //input 
+.mem_axi_bresp(mem_axi_bresp),    //output [1:0]
+.mem_axi_bvalid(mem_axi_bvalid),    //output 
+.mem_axi_rdata(mem_axi_rdata),    //output [511:0]
+.mem_axi_rlast(mem_axi_rlast),    //output 
+.mem_axi_rready(mem_axi_rready),    //input 
+.mem_axi_rresp(mem_axi_rresp),    //output [1:0]
+.mem_axi_rvalid(mem_axi_rvalid),    //output 
+.mem_axi_wdata(mem_axi_wdata),    //input [511:0]
+.mem_axi_wlast(mem_axi_wlast),    //input 
+.mem_axi_wready(mem_axi_wready),    //output 
+.mem_axi_wstrb(mem_axi_wstrb),    //input [63:0]
+.mem_axi_wvalid(mem_axi_wvalid),    //input 
+.app_lite_araddr(app_lite_araddr),    //output [39:0]
+.app_lite_arprot(app_lite_arprot),    //output [2:0]
+.app_lite_arready(app_lite_arready),    //input 
+.app_lite_arvalid(app_lite_arvalid),    //output 
+.app_lite_awaddr(app_lite_awaddr),    //output [39:0]
+.app_lite_awprot(app_lite_awprot),    //output [2:0]
+.app_lite_awready(app_lite_awready),    //input 
+.app_lite_awvalid(app_lite_awvalid),    //output 
+.app_lite_bready(app_lite_bready),    //output 
+.app_lite_bresp(app_lite_bresp),    //input [1:0]
+.app_lite_bvalid(app_lite_bvalid),    //input 
+.app_lite_rdata(app_lite_rdata),    //input [31:0]
+.app_lite_rready(app_lite_rready),    //output 
+.app_lite_rresp(app_lite_rresp),    //input [1:0]
+.app_lite_rvalid(app_lite_rvalid),    //input 
+.app_lite_wdata(app_lite_wdata),    //output [31:0]
+.app_lite_wready(app_lite_wready),    //input 
+.app_lite_wstrb(app_lite_wstrb),    //output [3:0]
+.app_lite_wvalid(app_lite_wvalid),    //output 
+.adc_clk(adc_clk),    //input 
+.adc_data(adc_data),    //input [DWIDTH-1:0]
+.adc_valid(adc_valid),    //input 
+.adc_ready(adc_ready),    //output 
+.adc_start(adc_start),    //output 
+.adc_last(adc_last),    //input 
+.bram_clk(bram_clk),    //output 
+.bram_rst(bram_rst),    //output 
+.bram_en(bram_en),    //output 
+.bram_addr(bram_addr),    //output [23:0]
+.bram_we(bram_we),    //output [3:0]
+.bram_rddata(bram_rddata),    //input [31:0]
+.bram_wrdata(bram_wrdata),    //output [31:0]
+.clk_adc_out(clk_adc_out),    //output 
+.m00_axis_tdata(m00_axis_tdata),    //output [127:0]
+.m01_axis_tdata(m01_axis_tdata),    //output [127:0]
+.m02_axis_tdata(m02_axis_tdata),    //output [127:0]
+.m03_axis_tdata(m03_axis_tdata),    //output [127:0]
+.m10_axis_tdata(m10_axis_tdata),    //output [127:0]
+.m11_axis_tdata(m11_axis_tdata),    //output [127:0]
+.m12_axis_tdata(m12_axis_tdata),    //output [127:0]
+.m13_axis_tdata(m13_axis_tdata),    //output [127:0]
+.clk_dac_out(clk_dac_out),    //output 
+.s00_axis_tdata(s00_axis_tdata),    //input [255:0]
+.s02_axis_tdata(s02_axis_tdata),    //input [255:0]
+.s10_axis_tdata(s10_axis_tdata),    //input [255:0]
+.s12_axis_tdata(s12_axis_tdata),    //input [255:0]
+.sysref_in_diff_n(SYSREF_ANALOG_N),    //input 
+.sysref_in_diff_p(SYSREF_ANALOG_P),    //input 
+.dac0_clk_clk_n(CLK_DAC_N[0]),    //input 
+.dac0_clk_clk_p(CLK_DAC_P[0]),    //input 
+.adc0_clk_clk_n(CLK_ADC_N[0]),    //input 
+.adc0_clk_clk_p(CLK_ADC_P[0]),    //input 
+.adc1_clk_clk_n(CLK_ADC_N[1]),    //input 
+.adc1_clk_clk_p(CLK_ADC_P[1]),    //input 
+.SYSREF_PL_N(SYSREF_PL_N),    //input 
+.SYSREF_PL_P(SYSREF_PL_P),    //input 
+.CLK_DCLK_PL_N(CLK_DCLK_PL_N),    //input 
+.CLK_DCLK_PL_P(CLK_DCLK_PL_P),    //input 
+.CLK_DCLK_LOCK(CLK_DCLK_LOCK),	  //output
+.clk_adc0(clk_adc0),       
+.clk_adc1(clk_adc1),       //output
+.clk_dac0(clk_dac0),       //output
+.clk_dac1(clk_dac1),       //output
+.vin0_01_v_n(ADC_N[0]),    //input 
+.vin0_01_v_p(ADC_P[0]),    //input 
+.vin0_23_v_n(ADC_N[1]),    //input 
+.vin0_23_v_p(ADC_P[1]),    //input 
+.vin1_01_v_n(ADC_N[2]),    //input 
+.vin1_01_v_p(ADC_P[2]),    //input 
+.vin1_23_v_n(ADC_N[3]),    //input 
+.vin1_23_v_p(ADC_P[3]),    //input 
+.vout00_v_n(DAC_N[0]),    //output 
+.vout00_v_p(DAC_P[0]),    //output 
+.vout02_v_n(DAC_N[1]),    //output 
+.vout02_v_p(DAC_P[1]),    //output 
+.vout10_v_n(DAC_N[2]),    //output 
+.vout10_v_p(DAC_P[2]),    //output 
+.vout12_v_n(DAC_N[3]),    //output 
+.vout12_v_p(DAC_P[3])    //output 
+);
+//assign S_AXI_HPC1_araddr = 0;
+//assign S_AXI_HPC1_arburst = 0;
+//assign S_AXI_HPC1_arid = 0;
+//assign S_AXI_HPC1_arlen = 0;
+//assign S_AXI_HPC1_arlock = 0;
+//assign S_AXI_HPC1_arqos = 0;
+//assign S_AXI_HPC1_arsize = 0;
+//assign S_AXI_HPC1_aruser = 0;
+//assign S_AXI_HPC1_arvalid = 0;
+//assign S_AXI_HPC1_awaddr = 0;
+//assign S_AXI_HPC1_awburst = 0;
+//assign S_AXI_HPC1_awid = 0;
+//assign S_AXI_HPC1_awlen = 0;
+//assign S_AXI_HPC1_awlock = 0;
+//assign S_AXI_HPC1_awqos = 0;
+//assign S_AXI_HPC1_awsize = 0;
+//assign S_AXI_HPC1_awuser = 0;
+//assign S_AXI_HPC1_awvalid = 0;
+//assign S_AXI_HPC1_bready = 0;
+//assign S_AXI_HPC1_rready = 0;
+//assign S_AXI_HPC1_wdata = 0;
+//assign S_AXI_HPC1_wlast = 0;
+//assign S_AXI_HPC1_wstrb = 0;
+//assign S_AXI_HPC1_wvalid = 0;
+// DAC driver
+
+wire vio_reset;
+reg [31:0] counter0;
+always@(posedge clk100)begin
+	if(vio_reset)counter0 <= 0;
+	else counter0 <= counter0 + 1;
+end
+reg [31:0] counter1;
+reg vio_reset_r1;
+always@(posedge adc_clk)vio_reset_r1 <= vio_reset;
+always@(posedge adc_clk)begin
+	if(vio_reset_r1)counter1 <= 0;
+	else counter1 <= counter1 + 1;
+end
+reg [31:0] counter2;
+reg vio_reset_r2;
+always@(posedge clk_out100)vio_reset_r2 <= vio_reset;
+always@(posedge clk_out100)begin
+	if(vio_reset_r2)counter2 <= 0;
+	else counter2 <= counter2 + 1;
+end
+
+reg [31:0] counter_adc0;
+reg vio_reset_adc0;
+always@(posedge clk_adc0)vio_reset_adc0 <= vio_reset;
+always@(posedge clk_adc0)begin
+	if(vio_reset_adc0)counter_adc0 <= 0;
+	else counter_adc0 <= counter_adc0 + 1;
+end
+reg [31:0] counter_adc1;
+reg vio_reset_adc1;
+always@(posedge clk_adc1)vio_reset_adc1 <= vio_reset;
+always@(posedge clk_adc1)begin
+	if(vio_reset_adc1)counter_adc1 <= 0;
+	else counter_adc1 <= counter_adc1 + 1;
+end
+reg [31:0] counter_dac0;
+reg vio_reset_dac0;
+always@(posedge clk_dac0)vio_reset_dac0 <= vio_reset;
+always@(posedge clk_dac0)begin
+	if(vio_reset_dac0)counter_dac0 <= 0;
+	else counter_dac0 <= counter_dac0 + 1;
+end
+reg [31:0] counter_dac1;
+reg vio_reset_dac1;
+always@(posedge clk_dac1)vio_reset_dac1 <= vio_reset;
+always@(posedge clk_dac1)begin
+	if(vio_reset_dac1)counter_dac1 <= 0;
+	else counter_dac1 <= counter_dac1 + 1;
+end
+
+wire [255:0] vio_dataout;
+wire [255:0] rom_dataout;
+wire [1:0] vio_selchirp;
+wire vio_forceready;
+wire vio_forceloopback;
+
+vio_rfdc vio_rfdc_ep0(
+.clk(clk100),
+.probe_in0({cfg_ltssm_state1, cfg_ltssm_state0, user_lnk_up1, user_lnk_up0, CLK_DCLK_LOCK, init_calib_complete}),
+.probe_in1(counter0),
+.probe_in2(counter1),
+.probe_in3(counter2),
+.probe_in4(counter_adc0),
+.probe_in5(counter_adc1),
+.probe_in6(counter_dac0),
+.probe_in7(counter_dac1),
+.probe_in8({over_range,over_voltage}),
+.probe_out0(vio_dataout),
+.probe_out1(vio_selchirp),
+.probe_out2(vio_reset),
+.probe_out3(vio_forceready),
+.probe_out4(vio_forceloopback),
+.probe_out5({clear_or,clear_ov})
+);
+reg [1:0] selchirp;
+always@(posedge dac_clk)selchirp <= vio_selchirp;
+reg [255:0] dac_pattern;
+reg [255:0] ddr_pattern;
+reg [1:0] dac_sel_r;
+assign s00_axis_tdata = dac_sel_r[0]?dac_pattern:256'h0;
+//assign s02_axis_tdata = dac_sel_r[1]?dac_pattern:256'h0;
+//assign s10_axis_tdata = dac_pattern;
+//assign s12_axis_tdata = dac_pattern;
+// selchirp[1]=1: select from DDR, else
+// selchirp[0]=0: select from vio_dataout, else rom_dataout
+always@(posedge dac_clk)dac_pattern <= selchirp[1]?ddr_pattern:(selchirp[0]?rom_dataout:vio_dataout);
+reg [9:0] rom_addra;
+always@(posedge dac_clk)rom_addra <= rom_addra + 1;
+rom_chirp rom_chirp_ep (
+  .clka(dac_clk),    // input wire clka
+  .addra(rom_addra),  // input wire [9 : 0] addra
+  .douta(rom_dataout)  // output wire [255 : 0] douta
+);
+`ifndef BYPASS_ALLSCOPE
+
+// ADC monitor
+ila_rfdc ila_rfdc_ep0(
+.clk(adc_clk),
+.probe0(m00_axis_tdata),
+.probe1(m01_axis_tdata)
+);
+`endif
+// app wrap
+wire [31:0] cfg_H2D_addr_dma;
+wire [31:0] cfg_H2D_size_dma;
+wire [31:0] cfg_H2D_burst_len;
+wire [31:0] cfg_H2D_frame_len;
+wire [31:0] cfg_H2D_trans_len;
+wire [31:0] cfg_H2D_axi_ctrl;
+wire [31:0] cfg_H2D_axi_status;
+wire [31:0] cfg_D2H_addr_dma;
+wire [31:0] cfg_D2H_addr_sym;
+wire [31:0] cfg_D2H_size_dma;
+wire [31:0] cfg_D2H_size_sym;
+wire [31:0] cfg_D2H_burst_len;
+wire [31:0] cfg_D2H_frame_len;
+wire [31:0] cfg_D2H_trans_len;
+wire [31:0] cfg_D2H_axi_ctrl;
+wire [31:0] cfg_D2H_axi_status;
+wire [31:0] aux_H2D_addr_dma;
+wire [31:0] aux_H2D_size_dma;
+wire [31:0] aux_H2D_burst_len;
+wire [31:0] aux_H2D_frame_len;
+wire [31:0] aux_H2D_axi_ctrl;
+wire [31:0] aux_H2D_axi_status;
+wire [31:0] aux_D2H_addr_dma;
+wire [31:0] aux_D2H_size_dma;
+wire [31:0] aux_D2H_burst_len;
+wire [31:0] aux_D2H_frame_len;
+wire [31:0] aux_D2H_axi_ctrl;
+wire [31:0] aux_D2H_axi_status;
+wire [31:0] cfg_AD_rnum;
+wire [31:0] cfg_AD_anum;
+wire [31:0] cfg_AD_delay;
+wire [31:0] cfg_AD_mode;
+wire [31:0] cfg_AD_base;
+wire [31:0] cfg_AD_status;
+wire [31:0] cfg_DA_rnum;
+wire [31:0] cfg_DA_anum;
+wire [31:0] cfg_DA_delay;
+wire [31:0] cfg_DA_mode;
+wire [31:0] cfg_DA_base;
+wire [31:0] cfg_DA_status;
+wire [31:0] cfg_prftime;
+wire [31:0] cfg_pretime;
+wire [31:0] cfg_prfmode;
+wire [31:0] cfg_mode_ctrl;
+wire [31:0] cfg_dev_adc_ctrl;
+wire [31:0] cfg_dev_adc_ro;
+wire [31:0] cfg_dev_adc_filter;
+wire [31:0] cfg_dev_adc_iodelay;
+wire [31:0] cfg_dev_dac_ctrl;
+wire [31:0] cfg_dev_dac_ro;
+wire [31:0] cfg_dev_dac_filter;
+wire [31:0] cfg_dev_dac_iodelay;
+wire [31:0] cfg_dev_ctrl;
+wire [31:0] cfg_dev_status;
+wire [31:0] cfg_dev_version;
+wire [31:0] cfg_dev_spisel;
+wire [31:0] cfg_mAD_rnum;
+wire [31:0] cfg_mAD_anum;
+wire [31:0] cfg_mAD_delay;
+wire [31:0] cfg_mAD_mode;
+wire [31:0] cfg_mAD_base;
+wire [31:0] cfg_mAD_status;
+wire [31:0] cfg_mDA_rnum;
+wire [31:0] cfg_mDA_anum;
+wire [31:0] cfg_mDA_delay;
+wire [31:0] cfg_mDA_mode;
+wire [31:0] cfg_mDA_base;
+wire [31:0] cfg_mDA_status;
+assign cfg_dev_version = `DEV_VERSION_ID;
+
+app_wrapper_lite 
+#(
+.HIGH_END(32'h82000000),
+.LOW_END(32'h81000000)
+)
+app_wrap1_EP0(
+.app_awaddr(app_lite_awaddr),    //input [31:0]
+.app_awprot(app_lite_awprot),    //input [2:0]
+.app_awready(app_lite_awready),    //output 
+.app_awvalid(app_lite_awvalid),    //input 
+.app_wdata(app_lite_wdata),    //input [31:0]
+.app_wready(app_lite_wready),    //output 
+.app_wstrb(app_lite_wstrb),    //input [3:0]
+.app_wvalid(app_lite_wvalid),    //input 
+.app_bready(app_lite_bready),    //input 
+.app_bresp(app_lite_bresp),    //output [1:0]
+.app_bvalid(app_lite_bvalid),    //output 
+.app_araddr(app_lite_araddr),    //input [31:0]
+.app_arprot(app_lite_arprot),    //input [2:0]
+.app_arready(app_lite_arready),    //output 
+.app_arvalid(app_lite_arvalid),    //input 
+.app_rdata(app_lite_rdata),    //output [31:0]
+.app_rready(app_lite_rready),    //input 
+.app_rresp(app_lite_rresp),    //output [1:0]
+.app_rvalid(app_lite_rvalid),    //output 
+.axi_aresetn(core_rstn),    //input 
+.axi_aclk(core_clk),    //input 
+
+.cfg_H2D_addr_dma(cfg_H2D_addr_dma),    //output [31:0]
+.cfg_H2D_size_dma(cfg_H2D_size_dma),    //output [31:0]
+.cfg_H2D_burst_len(cfg_H2D_burst_len),    //output [31:0]
+.cfg_H2D_frame_len(cfg_H2D_frame_len),    //output [31:0]
+.cfg_H2D_trans_len(cfg_H2D_trans_len),    //output [31:0]
+.cfg_H2D_axi_ctrl(cfg_H2D_axi_ctrl),    //output [31:0]
+.cfg_H2D_axi_status(cfg_H2D_axi_status),    //input [31:0]
+.cfg_D2H_addr_dma(cfg_D2H_addr_dma),    //output [31:0]
+.cfg_D2H_addr_sym(cfg_D2H_addr_sym),    //output [31:0]
+.cfg_D2H_size_dma(cfg_D2H_size_dma),    //output [31:0]
+.cfg_D2H_size_sym(cfg_D2H_size_sym),    //output [31:0]
+.cfg_D2H_burst_len(cfg_D2H_burst_len),    //output [31:0]
+.cfg_D2H_frame_len(cfg_D2H_frame_len),    //output [31:0]
+.cfg_D2H_trans_len(cfg_D2H_trans_len),    //output [31:0]
+.cfg_D2H_axi_ctrl(cfg_D2H_axi_ctrl),    //output [31:0]
+.cfg_D2H_axi_status(cfg_D2H_axi_status),    //input [31:0]
+.aux_H2D_addr_dma(aux_H2D_addr_dma),    //output [31:0]
+.aux_H2D_size_dma(aux_H2D_size_dma),    //output [31:0]
+.aux_H2D_burst_len(aux_H2D_burst_len),    //output [31:0]
+.aux_H2D_frame_len(aux_H2D_frame_len),    //output [31:0]
+.aux_H2D_axi_ctrl(aux_H2D_axi_ctrl),    //output [31:0]
+.aux_H2D_axi_status(aux_H2D_axi_status),    //input [31:0]
+.aux_D2H_addr_dma(aux_D2H_addr_dma),    //output [31:0]
+.aux_D2H_size_dma(aux_D2H_size_dma),    //output [31:0]
+.aux_D2H_burst_len(aux_D2H_burst_len),    //output [31:0]
+.aux_D2H_frame_len(aux_D2H_frame_len),    //output [31:0]
+.aux_D2H_axi_ctrl(aux_D2H_axi_ctrl),    //output [31:0]
+.aux_D2H_axi_status(aux_D2H_axi_status),    //input [31:0]
+
+.cfg_AD_rnum(cfg_AD_rnum),    //output [31:0]
+.cfg_AD_anum(cfg_AD_anum),    //output [31:0]
+.cfg_AD_delay(cfg_AD_delay),    //output [31:0]
+.cfg_AD_mode(cfg_AD_mode),    //output [31:0]
+.cfg_AD_base(cfg_AD_base),    //output [31:0]
+.cfg_AD_status(cfg_AD_status),    //input [31:0]
+.cfg_DA_rnum(cfg_DA_rnum),    //output [31:0]
+.cfg_DA_anum(cfg_DA_anum),    //output [31:0]
+.cfg_DA_delay(cfg_DA_delay),    //output [31:0]
+.cfg_DA_mode(cfg_DA_mode),    //output [31:0]
+.cfg_DA_base(cfg_DA_base),    //output [31:0]
+.cfg_DA_status(cfg_DA_status),    //input [31:0]
+.cfg_prftime(cfg_prftime),    //output [31:0]
+.cfg_pretime(cfg_pretime),    //output [31:0]
+.cfg_prfmode(cfg_prfmode),    //output [31:0]
+.cfg_mode_ctrl(cfg_mode_ctrl),    //output [31:0]
+.cfg_dev_adc_ctrl(cfg_dev_adc_ctrl),    //output [31:0]
+.cfg_dev_adc_ro(cfg_dev_adc_ro),    //input [31:0]
+.cfg_dev_adc_filter(cfg_dev_adc_filter),    //output [31:0]
+.cfg_dev_adc_iodelay(cfg_dev_adc_iodelay),    //output [31:0]
+.cfg_dev_dac_ctrl(cfg_dev_dac_ctrl),    //output [31:0]
+.cfg_dev_dac_ro(cfg_dev_dac_ro),    //input [31:0]
+.cfg_dev_dac_filter(cfg_dev_dac_filter),    //output [31:0]
+.cfg_dev_dac_iodelay(cfg_dev_dac_iodelay),    //output [31:0]
+.cfg_dev_ctrl(cfg_dev_ctrl),    //output [31:0]
+.cfg_dev_status(cfg_dev_status),    //input [31:0]
+.cfg_dev_version(cfg_dev_version),    //input [31:0]
+
+.cfg_dev_spisel(cfg_dev_spisel),    //output [31:0]
+.cfg_mAD_rnum(cfg_mAD_rnum),    //output [31:0]
+.cfg_mAD_anum(cfg_mAD_anum),    //output [31:0]
+.cfg_mAD_delay(cfg_mAD_delay),    //output [31:0]
+.cfg_mAD_mode(cfg_mAD_mode),    //output [31:0]
+.cfg_mAD_base(cfg_mAD_base),    //output [31:0]
+.cfg_mAD_status(cfg_mAD_status),    //input [31:0]
+.cfg_mDA_rnum(cfg_mDA_rnum),    //output [31:0]
+.cfg_mDA_anum(cfg_mDA_anum),    //output [31:0]
+.cfg_mDA_delay(cfg_mDA_delay),    //output [31:0]
+.cfg_mDA_mode(cfg_mDA_mode),    //output [31:0]
+.cfg_mDA_base(cfg_mDA_base),    //output [31:0]
+.cfg_mDA_status(cfg_mDA_status)    //input [31:0]
+);
+
+
+// control unit
+localparam LOCAL_DWIDTH = 256;
+localparam LOCAL_AWIDTH = 31;
+localparam CFG_AWIDTH = 32;
+wire [CFG_AWIDTH-1:0] tl_AD_base;
+wire [CFG_AWIDTH-1:0] tl_AD_rnum;
+wire  tl_AD_repeat;
+wire  tl_AD_reset;
+wire [CFG_AWIDTH-1:0] tl_DA_base;
+wire [CFG_AWIDTH-1:0] tl_DA_rnum;
+wire  tl_DA_repeat;
+wire  tl_DA_reset;
+wire [31:0] tl_DA_status;
+wire [31:0] tl_AD_status;
+wire adc_mask;
+wire dac_mask;
+wire  mfifo_rd_clr;
+wire  mfifo_rd_valid;
+wire  mfifo_rd_enable;
+wire  mfifo_wr_clr;
+wire  mfifo_wr_valid;
+wire  mfifo_wr_enable;
+wire  fifo_rd_clr;
+wire  fifo_wr_clr;
+wire  fifo_rd_valid;
+wire  fifo_rd_enable;
+wire  fifo_wr_valid;
+wire  fifo_wr_enable;
+
+wire  preprf;
+wire  prfin;
+wire  prfmux;
+wire  prffix;
+wire [31:0] prfcnt;
+wire  PRFIN_IOSIMU;
+assign prfin_ex = PRFIN_IOSIMU;
+control_unit control_unit_EP0(
+.pcie_clk(core_clk),    //input 
+.pcie_rst(core_rst),    //input 
+.cfg_AD_base(cfg_AD_base),    //input [31:0]
+.cfg_AD_rnum(cfg_AD_rnum),    //input [31:0]
+.cfg_AD_anum(cfg_AD_anum),    //input [31:0]
+.cfg_AD_delay(cfg_AD_delay),    //input [31:0]
+.cfg_AD_mode(cfg_AD_mode),    //input [31:0]
+.cfg_AD_status(cfg_AD_status),    //output [31:0]
+.cfg_DA_base(cfg_DA_base),    //input [31:0]
+.cfg_DA_rnum(cfg_DA_rnum),    //input [31:0]
+.cfg_DA_anum(cfg_DA_anum),    //input [31:0]
+.cfg_DA_delay(cfg_DA_delay),    //input [31:0]
+.cfg_DA_mode(cfg_DA_mode),    //input [31:0]
+.cfg_DA_status(cfg_DA_status),    //output [31:0]
+
+.cfg_mAD_rnum(cfg_mAD_rnum),    //input [31:0]
+.cfg_mAD_anum(cfg_mAD_anum),    //input [31:0]
+.cfg_mAD_delay(cfg_mAD_delay),    //input [31:0]
+.cfg_mAD_mode(cfg_mAD_mode),    //input [31:0]
+.cfg_mAD_base(cfg_mAD_base),    //input [31:0]
+.cfg_mAD_status(cfg_mAD_status),    //output [31:0]
+.cfg_mDA_rnum(cfg_mDA_rnum),    //input [31:0]
+.cfg_mDA_anum(cfg_mDA_anum),    //input [31:0]
+.cfg_mDA_delay(cfg_mDA_delay),    //input [31:0]
+.cfg_mDA_mode(cfg_mDA_mode),    //input [31:0]
+.cfg_mDA_base(cfg_mDA_base),    //input [31:0]
+.cfg_mDA_status(cfg_mDA_status),    //output [31:0]
+.cfg_prftime(cfg_prftime),    //input [31:0]
+.cfg_pretime(cfg_pretime),    //input [31:0]
+.cfg_prfmode(cfg_prfmode),    //input [31:0]
+.prfin_ex(prfin_ex),    //input 
+.cfg_mode_ctrl(cfg_mode_ctrl),    //input [31:0]
+.PPS_GPS_PL(PPS_GPS_PL),
+
+.mem_clk(mem_clk),    //input 
+.mem_rst(mem_rst),    //input 
+.tl_AD_base(tl_AD_base),    //output [31:0]
+.tl_AD_rnum(tl_AD_rnum),    //output [31:0]
+.tl_AD_repeat(tl_AD_repeat),    //output 
+.tl_AD_reset(tl_AD_reset),    //output 
+.tl_AD_status(tl_AD_status),    //input [31:0] 
+.tl_DA_base(tl_DA_base),    //output [31:0]
+.tl_DA_rnum(tl_DA_rnum),    //output [31:0]
+.tl_DA_repeat(tl_DA_repeat),    //output 
+.tl_DA_reset(tl_DA_reset),    //output 
+.tl_DA_status(tl_DA_status),    //input [31:0] 
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.dac_clk(dac_clk),    //input 
+.dac_rst(dac_rst),    //input 
+.adc_mask(adc_mask),    //input 
+.dac_mask(dac_mask),    //input 
+.preprf(preprf),    //output 
+.prfin(prfin),    //output 
+.prffix(prffix),    //input 
+.prfmux(prfmux),    //output 
+.prfcnt(prfcnt),    //output [31:0]
+.mfifo_rd_clr(mfifo_rd_clr),    //output 
+.mfifo_rd_valid(mfifo_rd_valid),    //output 
+.mfifo_rd_enable(mfifo_rd_enable),    //output 
+.mfifo_wr_clr(mfifo_wr_clr),    //output 
+.mfifo_wr_valid(mfifo_wr_valid),    //output 
+.mfifo_wr_enable(mfifo_wr_enable),    //output 
+.fifo_rd_clr(fifo_rd_clr),    //output 
+.fifo_rd_valid(fifo_rd_valid),    //output 
+.fifo_rd_enable(fifo_rd_enable),    //output 
+.fifo_wr_clr(fifo_wr_clr),    //output 
+.fifo_wr_valid(fifo_wr_valid),    //output 
+.fifo_wr_enable(fifo_wr_enable)    //output 
+);
+
+// local channel
+reg ad_mem_rst, da_mem_rst;
+always@(posedge mem_clk)ad_mem_rst <= mem_rst | (~cfg_mAD_mode[8]);
+always@(posedge mem_clk)da_mem_rst <= mem_rst | (~cfg_mDA_mode[8]);
+
+//------------------------------- ADC data -------------------------------
+// add low pass filter and multi, use cfg_dev_adc_ctrl to select
+// [16]: 1:enable low pass, 0: bypass
+// [17]: 1:enable multi, 0: bypass
+// [18]: 1:invert I/Q, 0: bypass
+reg select_enFilter = 0;
+reg select_invIQ = 0;
+reg select_enMulti = 0;
+always@(posedge adc_clk)begin
+	select_enFilter <= cfg_dev_adc_ctrl[16];
+	select_enMulti <= cfg_dev_adc_ctrl[17];
+	select_invIQ <= cfg_dev_adc_ctrl[18];
+end
+wire s_axis_data_tready;
+reg s_axis_data_tvalid;
+reg [15:0] fir_valid = 0;
+reg [127:0] s00_axis_data_tdata;
+reg [127:0] s01_axis_data_tdata;
+reg [127:0] s02_axis_data_tdata;
+reg [127:0] s03_axis_data_tdata;
+always@(posedge adc_clk)begin
+	if(adc_rst)fir_valid <= 0;
+	else fir_valid <= {fir_valid[14:0], s_axis_data_tready};
+
+	if(adc_rst)s_axis_data_tvalid = 0;
+	else if(&fir_valid)s_axis_data_tvalid = 1;
+	
+	s00_axis_data_tdata <= m00_axis_tdata;
+	s01_axis_data_tdata <= m01_axis_tdata;
+	s02_axis_data_tdata <= m02_axis_tdata;
+	s03_axis_data_tdata <= m03_axis_tdata;
+end
+ 
+wire m00_axis_data_tvalid;
+wire m01_axis_data_tvalid;
+wire m02_axis_data_tvalid;
+wire m03_axis_data_tvalid;
+wire [127:0] m00_axis_data_tdata;
+wire [127:0] m01_axis_data_tdata;
+wire [127:0] m02_axis_data_tdata;
+wire [127:0] m03_axis_data_tdata;
+`ifndef BYPASS_FILETR
+fir02N40 fir_ep0 (
+.aresetn(~adc_rst),                        // input wire aresetn
+.aclk(adc_clk),                            // input wire aclk
+.s_axis_data_tvalid(s_axis_data_tvalid),  		// input wire s_axis_data_tvalid
+.s_axis_data_tready(s_axis_data_tready),  // output wire s_axis_data_tready
+.s_axis_data_tdata (s00_axis_data_tdata),    		// input wire [127 : 0] s_axis_data_tdata
+.m_axis_data_tvalid(m00_axis_data_tvalid),  // output wire m_axis_data_tvalid
+.m_axis_data_tdata (m00_axis_data_tdata)    // output wire [127 : 0] m_axis_data_tdata
+);
+
+fir02N40 fir_ep1 (
+.aresetn(~adc_rst),                        // input wire aresetn
+.aclk(adc_clk),                            // input wire aclk
+.s_axis_data_tvalid(s_axis_data_tvalid),  		// input wire s_axis_data_tvalid
+.s_axis_data_tready(),  					// output wire s_axis_data_tready
+.s_axis_data_tdata (s01_axis_data_tdata),    		// input wire [127 : 0] s_axis_data_tdata
+.m_axis_data_tvalid(m01_axis_data_tvalid),  // output wire m_axis_data_tvalid
+.m_axis_data_tdata (m01_axis_data_tdata)    // output wire [127 : 0] m_axis_data_tdata
+);
+
+fir02N40 fir_ep2 (
+.aresetn(~adc_rst),                        // input wire aresetn
+.aclk(adc_clk),                            // input wire aclk
+.s_axis_data_tvalid(s_axis_data_tvalid),  		// input wire s_axis_data_tvalid
+.s_axis_data_tready(),  					// output wire s_axis_data_tready
+.s_axis_data_tdata (s02_axis_data_tdata),    		// input wire [127 : 0] s_axis_data_tdata
+.m_axis_data_tvalid(m02_axis_data_tvalid),  // output wire m_axis_data_tvalid
+.m_axis_data_tdata (m02_axis_data_tdata)    // output wire [127 : 0] m_axis_data_tdata
+);
+
+fir02N40 fir_ep3 (
+.aresetn(~adc_rst),                        // input wire aresetn
+.aclk(adc_clk),                            // input wire aclk
+.s_axis_data_tvalid(s_axis_data_tvalid),  		// input wire s_axis_data_tvalid
+.s_axis_data_tready(),  					// output wire s_axis_data_tready
+.s_axis_data_tdata (s03_axis_data_tdata),    		// input wire [127 : 0] s_axis_data_tdata
+.m_axis_data_tvalid(m03_axis_data_tvalid),  // output wire m_axis_data_tvalid
+.m_axis_data_tdata (m03_axis_data_tdata)    // output wire [127 : 0] m_axis_data_tdata
+);
+`else
+assign m00_axis_data_tdata = s00_axis_data_tdata;
+assign m01_axis_data_tdata = s01_axis_data_tdata;
+assign m02_axis_data_tdata = s02_axis_data_tdata;
+assign m03_axis_data_tdata = s03_axis_data_tdata;
+`endif
+/*
+wire [255:0] ina;
+wire [255:0] inb;
+wire [255:0] outc;
+para_cmulti para_cmulti_EP0(
+.clk(adc_clk),    //input 
+.ina(ina),    //input [255:0]
+.inb(inb),    //input [255:0]
+.outc(outc)    //output [255:0]
+);
+assign inb = s00_axis_tdata;
+
+reg [LOCAL_DWIDTH-1:0] mfifo_wr_tdata;
+reg [127:0] fifo_wr_tdata;
+reg [127:0] dataI_axis_tdata;
+reg [127:0] dataQ_axis_tdata;
+genvar kk;
+generate
+//for(kk=0;kk<8;kk=kk+1)begin:blk1
+//	always@(posedge adc_clk)mfifo_wr_tdata[32*kk+15:32*kk+00] <= select_enFilter?m0_axis_data_tdata[16*kk+15:16*kk+00]:m00_axis_tdata[16*kk+15:16*kk+00];
+//	always@(posedge adc_clk)mfifo_wr_tdata[32*kk+31:32*kk+16] <= select_enFilter?m1_axis_data_tdata[16*kk+15:16*kk+00]:m01_axis_tdata[16*kk+15:16*kk+00];
+//end	
+//for(kk=0;kk<8;kk=kk+1)begin:blk2
+//	assign ina[32*kk+15:32*kk+00] = select_invIQ?m01_axis_tdata[16*kk+15:16*kk+00]:m00_axis_tdata[16*kk+15:16*kk+00];
+//	assign ina[32*kk+31:32*kk+16] = select_invIQ?m00_axis_tdata[16*kk+15:16*kk+00]:m01_axis_tdata[16*kk+15:16*kk+00];
+//	always@(posedge adc_clk)begin
+//		s0_axis_data_tdata[16*kk+15:16*kk+00] <= select_enMulti?outc[32*kk+15:32*kk+00]:m00_axis_tdata[16*kk+15:16*kk+00];
+//		s1_axis_data_tdata[16*kk+15:16*kk+00] <= select_enMulti?outc[32*kk+31:32*kk+16]:m01_axis_tdata[16*kk+15:16*kk+00];
+//	end
+//end
+for(kk=0;kk<8;kk=kk+1)begin:blk1
+	always@(posedge adc_clk)mfifo_wr_tdata[32*kk+15:32*kk+00] <= select_enFilter?m0_axis_data_tdata[16*kk+15:16*kk+00]:dataI_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)mfifo_wr_tdata[32*kk+31:32*kk+16] <= select_enFilter?m1_axis_data_tdata[16*kk+15:16*kk+00]:dataQ_axis_tdata[16*kk+15:16*kk+00];
+end	
+for(kk=0;kk<8;kk=kk+1)begin:blk2
+	assign ina[32*kk+15:32*kk+00] = select_invIQ?dataQ_axis_tdata[16*kk+15:16*kk+00]:dataI_axis_tdata[16*kk+15:16*kk+00];
+	assign ina[32*kk+31:32*kk+16] = select_invIQ?dataI_axis_tdata[16*kk+15:16*kk+00]:dataQ_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)begin
+		s0_axis_data_tdata[16*kk+15:16*kk+00] <= select_enMulti?outc[32*kk+15:32*kk+00]:dataI_axis_tdata[16*kk+15:16*kk+00];
+		s1_axis_data_tdata[16*kk+15:16*kk+00] <= select_enMulti?outc[32*kk+31:32*kk+16]:dataQ_axis_tdata[16*kk+15:16*kk+00];
+	end
+end
+
+for(kk=0;kk<4;kk=kk+1)begin:blk3
+	always@(posedge adc_clk)fifo_wr_tdata[32*kk+15:32*kk+00] <= select_enFilter?m0_axis_data_tdata[32*kk+15:32*kk+00]:s0_axis_data_tdata[32*kk+15:32*kk+00];
+	always@(posedge adc_clk)fifo_wr_tdata[32*kk+31:32*kk+16] <= select_enFilter?m1_axis_data_tdata[32*kk+15:32*kk+00]:s1_axis_data_tdata[32*kk+15:32*kk+00];
+end
+endgenerate
+
+reg [1:0] adc_sel_r;
+always@(posedge adc_clk)begin
+	dataI_axis_tdata <= adc_sel_r[0]?m00_axis_tdata:m02_axis_tdata;
+	dataQ_axis_tdata <= adc_sel_r[0]?m01_axis_tdata:m03_axis_tdata;
+end
+*/
+// disable system dma, only fast_channel is used
+assign adc_valid = 0;
+assign adc_data = 128'h0;
+assign adc_last = 0;
+
+
+//------------------------------- DAC data -------------------------------
+wire [LOCAL_DWIDTH-1:0] mfifo_rd_data;
+reg ddr_valid;
+wire DAC_VOUT;
+always@(posedge dac_clk)ddr_valid <= DAC_VOUT;
+always@(posedge dac_clk)ddr_pattern <= DAC_VOUT?mfifo_rd_data:256'h0;
+assign adc_mask = 0;
+assign dac_mask = 0;
+
+local_channel 
+#(
+.DIN_WIDTH(LOCAL_DWIDTH),
+.AWIDTH(LOCAL_AWIDTH),
+.CFG_AWIDTH(CFG_AWIDTH)
+)
+local_channel_EP0(
+.mem_clk(mem_clk),    //input 
+.ad_mem_rst(ad_mem_rst),    //input 
+.da_mem_rst(da_mem_rst),    //input 
+.mem_init_done(init_calib_complete),    //input 
+.tl_AD_base(tl_AD_base),    //input [31:0]
+.tl_AD_rnum(tl_AD_rnum),    //input [31:0]
+.tl_AD_repeat(tl_AD_repeat),    //input 
+.tl_AD_reset(tl_AD_reset),    //input 
+.tl_AD_status(tl_AD_status),    //output 
+.tl_DA_base(tl_DA_base),    //input [31:0]
+.tl_DA_rnum(tl_DA_rnum),    //input [31:0]
+.tl_DA_repeat(tl_DA_repeat),    //input 
+.tl_DA_reset(tl_DA_reset),    //input 
+.tl_DA_status(tl_DA_status),    //output 
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.dac_clk(dac_clk),    //input 
+.dac_rst(dac_rst),    //input 
+.mfifo_rd_clr(mfifo_rd_clr),    //input 
+.mfifo_rd_valid(1'b0),    //input 
+.mfifo_rd_enable(DAC_VOUT),    //input 
+.mfifo_rd_data(mfifo_rd_data),    //output [DIN_WIDTH-1:0]
+.mfifo_wr_clr(mfifo_wr_clr),    //input 
+.mfifo_wr_valid(mfifo_wr_valid),    //input 
+.mfifo_wr_enable(mfifo_wr_enable),    //input 
+.mfifo_wr_data(mfifo_wr_tdata),    //input [DIN_WIDTH-1:0]
+.m_axi_araddr(mem_axi_araddr[LOCAL_AWIDTH-1 : 0]),    //output [AWIDTH-1 : 0]
+.m_axi_arlen(mem_axi_arlen),    //output [LWIDTH-1 : 0]
+.m_axi_arsize(mem_axi_arsize),    //output [2 : 0]
+.m_axi_arvalid(mem_axi_arvalid),    //output 
+.m_axi_arready(mem_axi_arready),    //input 
+.m_axi_rdata(mem_axi_rdata),    //input [DOUT_WIDTH-1 : 0]
+.m_axi_rresp(mem_axi_rresp),    //input [1 : 0]
+.m_axi_rlast(mem_axi_rlast),    //input 
+.m_axi_rvalid(mem_axi_rvalid),    //input 
+.m_axi_rready(mem_axi_rready),    //output 
+.m_axi_arburst(mem_axi_arburst),    //output [1 : 0]
+.m_axi_arprot(mem_axi_arprot),    //output [2 : 0]
+.m_axi_arlock(mem_axi_arlock),    //output 
+.m_axi_arcache(mem_axi_arcache),    //output [3 : 0]
+.m_axi_awaddr(mem_axi_awaddr[LOCAL_AWIDTH-1 : 0]),    //output [AWIDTH-1 : 0]
+.m_axi_awlen(mem_axi_awlen),    //output [LWIDTH-1 : 0]
+.m_axi_awsize(mem_axi_awsize),    //output [2 : 0]
+.m_axi_awvalid(mem_axi_awvalid),    //output 
+.m_axi_awready(mem_axi_awready),    //input 
+.m_axi_wdata(mem_axi_wdata),    //output [DOUT_WIDTH-1 : 0]
+.m_axi_wlast(mem_axi_wlast),    //output 
+.m_axi_wvalid(mem_axi_wvalid),    //output 
+.m_axi_wready(mem_axi_wready),    //input 
+.m_axi_bready(mem_axi_bready),    //output 
+.m_axi_bresp(mem_axi_bresp),    //input [1 : 0]
+.m_axi_bvalid(mem_axi_bvalid),    //input 
+.m_axi_awburst(mem_axi_awburst),    //output [1 : 0]
+.m_axi_awprot(mem_axi_awprot),    //output [2 : 0]
+.m_axi_awlock(mem_axi_awlock),    //output 
+.m_axi_awcache(mem_axi_awcache),    //output [3 : 0]
+.m_axi_wstrb(mem_axi_wstrb)    //output [DOUT_WIDTH/8-1 : 0]
+);
+assign mem_axi_arqos = 0;
+assign mem_axi_arregion = 0;
+assign mem_axi_awqos = 0;
+assign mem_axi_awregion = 0;
+assign mem_axi_araddr[35:LOCAL_AWIDTH] = 9;
+assign mem_axi_awaddr[35:LOCAL_AWIDTH] = 9;
+
+// fast_channel
+wire [255:0] dac_aux_status;
+wire [255:0] adc_aux_status;
+assign dac_aux_status = 256'h0;
+assign adc_aux_status = 256'h0;
+//deepfifo wire
+wire cfg_axi_dinfifo_reset;
+wire [255:0] m_axis_din_tdata;
+wire  m_axis_din_tvalid;
+wire  m_axis_din_tready;
+wire  m_axis_din_tlast;
+wire [255:0] m_axis_dout_tdata;
+wire  m_axis_dout_tvalid;
+wire  m_axis_dout_tready;
+wire  m_axis_dout_tlast;
+reg host_ready = 0;
+reg host_loopsel = 0;
+wire [255:0] m_axis_fifo_tdata;
+wire  m_axis_fifo_tvalid;
+wire  m_axis_fifo_tready;
+wire  m_axis_fifo_tlast;
+wire [255:0] m_axis_mux_tdata;
+wire  m_axis_mux_tvalid;
+wire  m_axis_mux_tready;
+wire  m_axis_mux_tlast;
+
+reg [255:0] adc0_data;
+reg [255:0] adc1_data;
+wire [7:0] div_width;
+wire [7:0] div_pulse;
+wire [192*8-1:0] ctrl_data;
+wire [64*8-1:0] status_data;
+wire [96*8-1:0] param_data;
+wire [128*8-1:0] debug_data;
+
+//assign ctrl_data = 	{6{256'hAAAAAAAA00000000}};
+//assign status_data = 	{2{256'hBBBBBBBB11111111}};
+//assign param_data = 	{3{256'hCCCCCCCC22222222}};
+//assign debug_data = 	{4{256'hDDDDDDDD33333333}};
+genvar kk;
+generate
+for(kk=0;kk<8;kk=kk+1)begin:blk1
+	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= select_enFilter?m00_axis_data_tdata[16*kk+15:16*kk+00]:m00_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= select_enFilter?m01_axis_data_tdata[16*kk+15:16*kk+00]:m01_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= select_enFilter?m02_axis_data_tdata[16*kk+15:16*kk+00]:m02_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= select_enFilter?m03_axis_data_tdata[16*kk+15:16*kk+00]:m03_axis_tdata[16*kk+15:16*kk+00];
+end
+endgenerate
+
+//----------------------------- add following for simulator start -----------------------------------
+wire [255:0] sfifo_dout;
+reg [255:0] sfifo_din;
+reg sfifo_wr_srst;
+reg sfifo_wr_en;
+reg sfifo_rd_en;
+simu_fifo simu_fifo_ep (	// max depth 1024
+  .clk(adc_clk),                      // input wire clk
+  .srst(sfifo_wr_srst),                    // input wire srst
+  .din(sfifo_din),                      // input wire [255 : 0] din
+  .wr_en(sfifo_wr_en),                  // input wire wr_en
+  .rd_en(sfifo_rd_en),                  // input wire rd_en
+  .dout(sfifo_dout),                    // output wire [255 : 0] dout
+  .full(),                    // output wire full
+  .empty()                  // output wire empty
+);
+reg [9:0] scount;
+reg [9:0] sdelay;
+reg select_StartSimu = 0;	
+// cfg_dev_adc_ctrl
+// [9:0]: simulator delay value, 1 is 6.666ns, minimum value is 50, max value is 1000
+// [16]: 1:Enable simulator, 0: disable
+generate
+for(kk=0;kk<8;kk=kk+1)begin:sfifo_blk
+	always@(posedge adc_clk)sfifo_din[32*kk+15:32*kk+00] <= adc0_data[32*kk+31:32*kk+16];
+	always@(posedge adc_clk)sfifo_din[32*kk+31:32*kk+16] <= adc0_data[32*kk+15:32*kk+00];
+end
+endgenerate
+always@(posedge adc_clk)begin
+	select_StartSimu <= cfg_dev_adc_iodelay[16];
+	sdelay <= cfg_dev_adc_iodelay[9:0];
+	if(select_StartSimu)begin
+		if(scount<10'h3FF)scount <= scount + 1;
+		sfifo_wr_srst <= (scount<16);
+		sfifo_wr_en <= (scount>32);
+		sfifo_rd_en <= (scount>48) & (scount>sdelay);
+	end
+	else begin
+		sfifo_wr_srst <= 1;
+		sfifo_wr_en <= 0;
+		sfifo_rd_en <= 0;
+		scount <= 0;
+	end
+end
+assign s02_axis_tdata = select_StartSimu?sfifo_dout:(dac_sel_r[1]?dac_pattern:256'h0);
+assign s10_axis_tdata = sfifo_dout;
+assign s12_axis_tdata = sfifo_dout;
+
+//----------------------------- add following for simulator stop -----------------------------------
+
+wire [31:0] cfg_adc_frmlen;
+data_format data_format_EP0(
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.preprf(preprf),    //input 
+.prfin(prfin),    //input 
+.fifo_wr_clr(fifo_wr_clr),    //input 
+.fifo_wr_valid(fifo_wr_valid),    //input 
+.fifo_wr_enable(fifo_wr_enable),    //input 
+.cfg_AD_rnum(cfg_adc_frmlen),    //input [31:0]
+.adc0_data(adc0_data),    //input [255:0]
+.adc1_data(adc1_data),    //input [255:0]
+.div_width(div_width),    //input [7:0]
+.div_pulse(div_pulse),    //input [7:0]
+.ctrl_data(ctrl_data),    //input [192*8-1:0]
+.status_data(status_data),    //input [64*8-1:0]
+.param_data(param_data),    //input [96*8-1:0]
+.debug_data(debug_data),    //input [128*8-1:0]
+.adc_ready(m_axis_fifo_tready),    //input 
+.adc_valid(m_axis_fifo_tvalid),    //output 
+.adc_data(m_axis_fifo_tdata)    //output [255:0]
+);
+assign m_axis_fifo_tlast = 0;
+
+assign m_axis_mux_tdata = host_loopsel?m_axis_din_tdata:m_axis_fifo_tdata;
+assign m_axis_mux_tvalid = host_loopsel?m_axis_din_tvalid:m_axis_fifo_tvalid;
+assign m_axis_mux_tlast = host_loopsel?m_axis_din_tlast:m_axis_fifo_tlast;
+assign m_axis_fifo_tready = host_loopsel?1'b0:m_axis_mux_tready;
+assign m_axis_din_tready = host_loopsel?m_axis_mux_tready:1'b0;
+
+wire [31:0] cfg_D2H_ptr_sym;
+assign cfg_D2H_ptr_sym = cfg_dev_dac_filter;
+always@(posedge adc_clk)host_ready <= vio_forceready;
+always@(posedge adc_clk)host_loopsel <= vio_forceloopback;
+host_channel host_channel_EP0(
+.app_clk(core_clk),    //input 
+.app_rst(core_rst),    //input 
+.cfg_H2D_addr_dma(cfg_H2D_addr_dma),    //input [AWIDTH-1:0]
+.cfg_H2D_size_dma(cfg_H2D_size_dma),    //input [AWIDTH-1:0]
+.cfg_H2D_burst_len(cfg_H2D_burst_len),    //input [31:0]
+.cfg_H2D_frame_len(cfg_H2D_frame_len),    //input [31:0]
+.cfg_H2D_trans_len(cfg_H2D_trans_len),    //input [31:0]
+.cfg_H2D_axi_ctrl(cfg_H2D_axi_ctrl),    //input [31:0]
+.cfg_H2D_axi_status(cfg_H2D_axi_status),    //output [31:0]
+.cfg_D2H_addr_dma(cfg_D2H_addr_dma),    //input [AWIDTH-1:0]
+.cfg_D2H_addr_sym(cfg_D2H_addr_sym),    //input [AWIDTH-1:0]
+.cfg_D2H_size_dma(cfg_D2H_size_dma),    //input [AWIDTH-1:0]
+.cfg_D2H_size_sym(cfg_D2H_size_sym),    //input [AWIDTH-1:0]
+.cfg_D2H_burst_len(cfg_D2H_burst_len),    //input [31:0]
+.cfg_D2H_frame_len(cfg_D2H_frame_len),    //input [31:0]
+.cfg_D2H_trans_len(cfg_D2H_trans_len),    //input [31:0]
+.cfg_D2H_axi_ctrl(cfg_D2H_axi_ctrl),    //input [31:0]
+.cfg_D2H_axi_status(cfg_D2H_axi_status),    //output [31:0]
+.cfg_D2H_ptr_sym(cfg_D2H_ptr_sym),    //input [31:0]
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.s_axis_data_tdata (m_axis_mux_tdata),    //input [DIN_WIDTH-1:0]
+.s_axis_data_tvalid(m_axis_mux_tvalid),    //input 
+.s_axis_data_tready(m_axis_mux_tready),    //output 
+.s_axis_data_tlast (m_axis_mux_tlast),    //input 
+.cfg_axi_deepfifo_reset(cfg_axi_dinfifo_reset),
+.dac_clk(dac_clk),    //input 
+.dac_rst(dac_rst),    //input 
+.m_axis_data_tdata (m_axis_dout_tdata),    //output [DIN_WIDTH-1:0]
+.m_axis_data_tvalid(m_axis_dout_tvalid),    //output 
+.m_axis_data_tready(m_axis_dout_tready | host_ready),    //input 
+.m_axis_data_tlast (m_axis_dout_tlast),    //output 
+.mem_clk(core_clk),    //input 
+.mem_rst(core_rst),    //input 
+.dac_aux_status(dac_aux_status),    //input [255:0]
+.adc_aux_status(adc_aux_status),    //input [255:0]
+.ram_enb(AUXRAM_en),    //output 
+.ram_we(AUXRAM_we),    //output [31:0]
+.ram_addr(AUXRAM_addr),    //output [31:0]
+.ram_din(AUXRAM_din),    //output [255:0]
+.ram_dout(AUXRAM_dout),    //input [255:0]
+.m_axi_araddr(S_AXI_HPC1_araddr[31:0]),    //output [AWIDTH-1 : 0]
+.m_axi_arlen(S_AXI_HPC1_arlen),    //output [LWIDTH-1 : 0]
+.m_axi_arsize(S_AXI_HPC1_arsize),    //output [2 : 0]
+.m_axi_arvalid(S_AXI_HPC1_arvalid),    //output 
+.m_axi_arready(S_AXI_HPC1_arready),    //input 
+.m_axi_rdata(S_AXI_HPC1_rdata),    //input [DOUT_WIDTH-1 : 0]
+.m_axi_rresp(S_AXI_HPC1_rresp),    //input [1 : 0]
+.m_axi_rlast(S_AXI_HPC1_rlast),    //input 
+.m_axi_rvalid(S_AXI_HPC1_rvalid),    //input 
+.m_axi_rready(S_AXI_HPC1_rready),    //output 
+.m_axi_arburst(S_AXI_HPC1_arburst),    //output [1 : 0]
+.m_axi_arprot(S_AXI_HPC1_arprot),    //output [2 : 0]
+.m_axi_arlock(S_AXI_HPC1_arlock),    //output 
+.m_axi_arcache(S_AXI_HPC1_arcache),    //output [3 : 0]
+.m_axi_awaddr(S_AXI_HPC1_awaddr[31:0]),    //output [AWIDTH-1 : 0]
+.m_axi_awlen(S_AXI_HPC1_awlen),    //output [LWIDTH-1 : 0]
+.m_axi_awsize(S_AXI_HPC1_awsize),    //output [2 : 0]
+.m_axi_awvalid(S_AXI_HPC1_awvalid),    //output 
+.m_axi_awready(S_AXI_HPC1_awready),    //input 
+.m_axi_wdata(S_AXI_HPC1_wdata),    //output [DOUT_WIDTH-1 : 0]
+.m_axi_wlast(S_AXI_HPC1_wlast),    //output 
+.m_axi_wvalid(S_AXI_HPC1_wvalid),    //output 
+.m_axi_wready(S_AXI_HPC1_wready),    //input 
+.m_axi_bready(S_AXI_HPC1_bready),    //output 
+.m_axi_bresp(S_AXI_HPC1_bresp),    //input [1 : 0]
+.m_axi_bvalid(S_AXI_HPC1_bvalid),    //input 
+.m_axi_awburst(S_AXI_HPC1_awburst),    //output [1 : 0]
+.m_axi_awprot(S_AXI_HPC1_awprot),    //output [2 : 0]
+.m_axi_awlock(S_AXI_HPC1_awlock),    //output 
+.m_axi_awcache(S_AXI_HPC1_awcache),    //output [3 : 0]
+.m_axi_wstrb(S_AXI_HPC1_wstrb)    //output [DOUT_WIDTH/8-1 : 0]
+);
+ila_fifo ila_fifo_ep0(
+.clk(adc_clk),
+.probe0(m_axis_dout_tvalid),    // input wire s_axis_tvalid
+.probe1(m_axis_dout_tready),    // output wire s_axis_tready
+.probe2(m_axis_dout_tdata),      // input wire [127 : 0] s_axis_tdata
+.probe3(m_axis_dout_tlast),      // input wire s_axis_tlast
+.probe4(m_axis_din_tvalid),    // output wire m_axis_tvalid
+.probe5(m_axis_din_tready),    // input wire m_axis_tready
+.probe6(m_axis_din_tdata),      // output wire [127 : 0] m_axis_tdata
+.probe7(m_axis_din_tlast)      // output wire m_axis_tlast
+);
+axis_data_fifox256 axis_data_fifox256_ep (
+  .s_axis_aresetn(~cfg_axi_dinfifo_reset),  // input wire s_axis_aresetn
+  .s_axis_aclk(adc_clk),        // input wire s_axis_aclk
+  .s_axis_tvalid(m_axis_dout_tvalid),    // input wire s_axis_tvalid
+  .s_axis_tready(m_axis_dout_tready),    // output wire s_axis_tready
+  .s_axis_tdata (m_axis_dout_tdata),      // input wire [127 : 0] s_axis_tdata
+  .s_axis_tlast (m_axis_dout_tlast),      // input wire s_axis_tlast
+  .m_axis_tvalid(m_axis_din_tvalid),    // output wire m_axis_tvalid
+  .m_axis_tready(m_axis_din_tready),    // input wire m_axis_tready
+  .m_axis_tdata (m_axis_din_tdata),      // output wire [127 : 0] m_axis_tdata
+  .m_axis_tlast (m_axis_din_tlast)      // output wire m_axis_tlast
+);
+
+assign S_AXI_HPC1_arid = 0;
+assign S_AXI_HPC1_awid = 0;
+assign S_AXI_HPC1_awqos = 4'hF;
+assign S_AXI_HPC1_arqos = 4'hF;
+assign S_AXI_HPC1_aruser = 0;
+assign S_AXI_HPC1_awuser = 0;
+wire [1:0] adc_sel;
+wire [1:0] dac_sel;
+wire [15:0] adc_div;
+assign div_width = adc_div[7:0];
+assign div_pulse = adc_div[15:8];
+multifunc multifunc_EP0(
+.clk(clk50),    //input 
+.reset(rst50),    //input 
+
+.rs485_rx(PL_RS485_M_RX),    //input 
+.rs485_tx(PL_RS485_M_TX),    //output 
+.rs485_en(PL_RS485_M_DE_REN),    //output 
+
+.adc_sel(adc_sel),
+.dac_sel(dac_sel),
+.adc_div(adc_div),
+.cfg_adc_frmlen(cfg_adc_frmlen),
+.ctrl_data(ctrl_data),    //output [48*32-1:0]
+.status_data(status_data),    //output [16*32-1:0]
+.param_data(param_data),    //output [24*32-1:0]
+.debug_data(debug_data),    //output [32*32-1:0]
+
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+
+.preprf(preprf),    //input 
+.prfin(prfin),    //input 
+.prffix(prffix),    //output 
+.prfmux(prfmux),    //input 
+
+.adc_valid(fifo_wr_valid),    //input 
+.dac_valid(mfifo_rd_enable),    //input 
+.DAC_VOUT(DAC_VOUT),     //output 
+.PRFIN_IOSIMU(PRFIN_IOSIMU),     //output 
+
+.bram_clk(bram_clk),    //input 
+.bram_rst(bram_rst),    //input 
+.bram_en(bram_en),    //input 
+.bram_addr(bram_addr),    //input [23:0]
+.bram_we(bram_we),    //input [3:0]
+.bram_rddata(bram_rddata),    //output [31:0]
+.bram_wrdata(bram_wrdata),    //input [31:0]
+
+.BC_A_CLK(BC_A_CLK),    //output 
+.BC_A_CS(BC_A_CS),    //output 
+.BC_A_LATCH(BC_A_LATCH),    //output 
+.BC_A_RXD(BC_A_RXD),    //input 
+.BC_A_RXEN(BC_A_RXEN),    //output 
+.BC_A_TXD(BC_A_TXD),    //output [3:0]
+.BC_A_TXEN(BC_A_TXEN),    //output 
+.BC_B_CLK(BC_B_CLK),    //output 
+.BC_B_CS(BC_B_CS),    //output 
+.BC_B_LATCH(BC_B_LATCH),    //output 
+.BC_B_RXD(BC_B_RXD),    //input 
+.BC_B_RXEN(BC_B_RXEN),    //output 
+.BC_B_TXD(BC_B_TXD),    //output [3:0]
+.BC_B_TXEN(BC_B_TXEN),    //output 
+.RF_A_LOCK(RF_A_LOCK),    //input 
+.RF_A_RXCTL(RF_A_RXCTL),    //output 
+.RF_A_SWITCH(RF_A_SWITCH),    //output 
+.RF_A_TXEN(RF_A_TXEN),    //output 
+.RF_A_UR_RX(RF_A_UR_RX),    //input 
+.RF_A_UR_TX(RF_A_UR_TX),    //output 
+.RF_B_LOCK(RF_B_LOCK),    //input 
+.RF_B_RXCTL(RF_B_RXCTL),    //output 
+.RF_B_SWITCH(RF_B_SWITCH),    //output 
+.RF_B_TXEN(RF_B_TXEN),    //output 
+.RF_B_UR_RX(RF_B_UR_RX),    //input 
+.RF_B_UR_TX(RF_B_UR_TX),    //output 
+.RST_GPS_N(RST_GPS_N),    //output 
+.GPS_EVENT(GPS_EVENT),    //output 
+.PPS_GPS_PL(PPS_GPS_PL),    //input 
+.UART_PL_GPS(UART_PL_GPS),    //output 
+.UART_GPS_PL(UART_GPS_PL),    //input 
+.UART_IMU_PL(UART_IMU_PL),    //input 
+.DBG_UART_TX(DBG_UART_TX),    //output 
+.DBG_UART_RX(DBG_UART_RX),    //input 
+.PL_RS422_3_TX(PL_RS422_3_TX),    //output 
+.PL_RS422_3_RX(PL_RS422_3_RX),    //input 
+.DBG_PPSOUT(DBG_PPSOUT)    //output 
+);
+always@(posedge adc_clk)begin
+/*
+	adc_sel_r <= adc_sel;
+*/	
+	dac_sel_r <= dac_sel;
+end
+
+assign PLUART_rxd = PL_RS422_1_RX;
+assign PL_RS422_1_TX = PLUART_txd;
+
+assign FPGA_SYNC = prfin;
+assign PL_RS485_M_PO_0 = fifo_wr_enable;
+assign PL_RS485_M_PO_1 = DAC_VOUT;
+endmodule

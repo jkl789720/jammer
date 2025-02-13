@@ -17,6 +17,7 @@ input      [31:0]   app_status7  ,
 input      [31:0]   app_status8  ,
 input      [31:0]   app_status9  ,
 input      [31:0]   app_status10 ,
+input      [31:0]   app_status11 ,
 
 output reg [31:0]   app_param0   ,
 output reg [31:0]   app_param1   ,
@@ -37,6 +38,8 @@ output reg [31:0]   app_param15  ,
 output reg [31:0]   app_param16  ,
 output reg [31:0]   app_param17  ,
 output reg [31:0]   app_param18  ,
+output reg [31:0]   app_param19  ,
+output reg [31:0]   app_param20  ,
 
 
 
@@ -84,6 +87,7 @@ reg [31:0] app_status7_r ;
 reg [31:0] app_status8_r ;
 reg [31:0] app_status9_r ;
 reg [31:0] app_status10_r;
+reg [31:0] app_status11_r;
 
 always@(posedge cfg_clk)begin
 	case(cfg_rd_addr_r1)
@@ -98,6 +102,7 @@ always@(posedge cfg_clk)begin
 		`PARAM_READ+16'h20:cfg_rd_dat <= app_status8_r ;
 		`PARAM_READ+16'h24:cfg_rd_dat <= app_status9_r ;
 		`PARAM_READ+16'h28:cfg_rd_dat <= app_status10_r;
+		`PARAM_READ+16'h2C:cfg_rd_dat <= app_status11_r;
 		
 		`PARAM_WRITE+16'h00:cfg_rd_dat <= app_param0;
 		`PARAM_WRITE+16'h04:cfg_rd_dat <= app_param1;
@@ -118,6 +123,8 @@ always@(posedge cfg_clk)begin
 		`PARAM_WRITE+16'h40:cfg_rd_dat <= app_param16;
 		`PARAM_WRITE+16'h44:cfg_rd_dat <= app_param17;
 		`PARAM_WRITE+16'h48:cfg_rd_dat <= app_param18;
+		`PARAM_WRITE+16'h4C:cfg_rd_dat <= app_param19;
+		`PARAM_WRITE+16'h50:cfg_rd_dat <= app_param20;
 
 		`ID_ADDR+16'h00		   :cfg_rd_dat <= 88;
 		`ID_ADDR+16'h04		   :cfg_rd_dat <= 99;
@@ -148,6 +155,8 @@ always@(posedge cfg_clk)begin
 		app_param16 <= 0;
 		app_param17 <= 0;
 		app_param18 <= 0;
+		app_param19 <= 0;
+		app_param20 <= 0;
     end
     else begin
         if (cfg_wr_en_r)begin
@@ -171,6 +180,8 @@ always@(posedge cfg_clk)begin
 				`PARAM_WRITE+16'h40:app_param16 <= cfg_wr_dat_r;
 				`PARAM_WRITE+16'h44:app_param17 <= cfg_wr_dat_r;
 				`PARAM_WRITE+16'h48:app_param18 <= cfg_wr_dat_r;
+				`PARAM_WRITE+16'h4C:app_param19 <= cfg_wr_dat_r;
+				`PARAM_WRITE+16'h50:app_param20 <= cfg_wr_dat_r;
 
 		        default:begin
                 end
@@ -193,6 +204,7 @@ always@(posedge cfg_clk)begin
         app_status8_r  <= 0;
         app_status9_r  <= 0;
         app_status10_r <= 0;
+        app_status11_r <= 0;
     end
     else begin
         app_status0_r  <= app_status0 ;
@@ -206,6 +218,7 @@ always@(posedge cfg_clk)begin
         app_status8_r  <= app_status8 ;
         app_status9_r  <= app_status9 ;
         app_status10_r <= app_status10;
+        app_status11_r <= app_status11;
     end
 end
 

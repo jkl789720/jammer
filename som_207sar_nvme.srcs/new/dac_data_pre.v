@@ -40,11 +40,7 @@ input							              dac_rst			              ,
 input							              adc_clk			              ,
 input							              adc_rst			              ,
   
-output	   						          prffix_inter	            ,//**
-output	reg						          preprf_inter	            ,
-output	reg						          prfin_inter		            ,
-output              			      RF_TXEN_inter	            ,//**
-output              			      BC_TXEN_inter	            ,//**
+
 
 //rpu   ctrl_reg
 input                	          ramrpu_clk     	          ,
@@ -59,6 +55,8 @@ input                           ramrpu_rst     	          ,
 //AD
 input     [127:0]					      m00_axis_tdata	          ,
 input     [127:0]   				    m01_axis_tdata	          ,
+input     [127:0]   				    m02_axis_tdata	          ,
+input     [127:0]   				    m03_axis_tdata	          ,
 
 //小chirp            
 input                	          ramb_clk       	          ,
@@ -92,14 +90,19 @@ output reg                      dac_valid_adjust          ,
 output reg [255:0]              dac_data_adjust           ,
 output                          data_record_mode          ,
 
+output                          rf_out                    ,
+
 output                          RF_A_TXEN                 ,
-output                          rf_out
+output                          bc_tx_en                  ,
+output                          record_en                 ,
+
+output	   						          prffix_inter	            ,//**
+output	reg						          preprf_inter	            ,
+output	reg						          prfin_inter		            ,
+output              			      RF_TXEN_inter	            ,//**
+output              			      BC_TXEN_inter	             //**
 
 );
-
-//reco_trig
-
-wire reco_trig;
 
 //adc_valid需要自己生成
 
@@ -118,15 +121,12 @@ wire   [31:0]                    app_param11     ;
 wire   [31:0]                    app_param12     ;
 wire   [31:0]                    app_param13     ;
 wire   [31:0]                    app_param14     ;
-
-`ifdef TEST
-reg    [31:0]                    app_param15     ;
-`else
 wire   [31:0]                    app_param15     ;
-`endif
 wire   [31:0]                    app_param16     ;
 wire   [31:0]                    app_param17     ;
 wire   [31:0]                    app_param18     ;
+wire   [31:0]                    app_param19     ;
+wire   [31:0]                    app_param20     ;
 
 wire   [31:0]                    app_status0     ;
 wire   [31:0]                    app_status1     ;
@@ -139,6 +139,7 @@ wire   [31:0]                    app_status7     ;
 wire   [31:0]                    app_status8     ;
 wire   [31:0]                    app_status9     ;
 wire   [31:0]                    app_status10    ;
+wire   [31:0]                    app_status11    ;
 
 wire   [255:0]                    dac_data       ;
 wire                              dac_valid_whole ;
@@ -174,7 +175,6 @@ wire rd_en;
 wire adc_valid_pre;
 wire adc_valid_expand;
 reg [11 : 0] read_addr;
-wire [255:0] read_data;
 
 // reg adc_valid;
 
@@ -198,34 +198,7 @@ always @(posedge adc_clk) begin
         read_addr <= 0;
 end
 
-// `ifdef TEST
-// bram_debug u_bram_debug (
-//   .clka    (adc_clk        ), 
-//   .ena     (0              ), 
-//   .wea     (0              ), 
-//   .addra   (0              ), 
-//   .dina    (0              ), 
-//   .douta   (douta          ), 
-//   .clkb    (adc_clk        ), 
-//   .enb     (rd_en          ), 
-//   .web     (0              ), 
-//   .addrb   (read_addr      ),
-//   .dinb    (dina           ), 
-//   .doutb   (read_data      )  
-// );
-// `endif
 
-wire [255:0] data;
-genvar hh;
-generate
-  for (hh = 0; hh < 8; hh = hh + 1) begin : blk0
-    lsfr u_lsfr(
-      .clk(adc_clk),
-      .rst_n(resetn),
-      .data(data[(hh+1)*32-1:hh*32])
-    );
-  end
-endgenerate
 
 
 reg [255:0] data_in [1791:0];
@@ -251,26 +224,22 @@ end
 
 assign adc_data_txt = data_in[read_addr_txt];
 
-wire [255:0] adc_data_in;
+wire [255:0] adc_data0;
 genvar kk;
 generate
 	for(kk = 0;kk < 8;kk = kk + 1)begin:blk1
-		assign adc_data_in[(kk+1)*32-1:kk*32] = {m01_axis_tdata[(kk+1)*16-1:kk*16],m00_axis_tdata[(kk+1)*16-1:kk*16]};
+		assign adc_data0[(kk+1)*32-1:kk*32] = {m01_axis_tdata[(kk+1)*16-1:kk*16],m00_axis_tdata[(kk+1)*16-1:kk*16]};
 	end
 endgenerate
 
-always@(*)begin
-  if(!resetn)
-    adc_data = 0;
-  else
-    case (ad_sel)
-      0 : adc_data = data;
-      1 : adc_data = read_data;
-      2 : adc_data = adc_data_in;
-      3 : adc_data = adc_data_txt;
-      default: adc_data = adc_data_in;
-    endcase
-end
+wire [255:0] adc_data1;
+genvar ss;
+generate
+	for(ss = 0;ss < 8;ss = ss + 1)begin:blk2
+		assign adc_data1[(ss+1)*32-1:ss*32] = {m03_axis_tdata[(ss+1)*16-1:ss*16],m02_axis_tdata[(ss+1)*16-1:ss*16]};
+	end
+endgenerate
+
 
 `ifdef DISTURB_DEBUG
 vio_rst u_vio_rst (
@@ -335,35 +304,37 @@ vio_rst u_vio_rst (
   
 
 
-//param
+// //param
 
-  localparam PRF_PERIOD = 31095;
-  assign app_param0 = 6016;                  //chirp_num
-  assign app_param1 = 1024;                   //proc_num
-  assign app_param2 = k_vlaue;              //k_value
-  assign app_param3 = b_vlaue;              //b_value
-  assign app_param4 = -32'sd245;                     //template_delay
-  assign app_param5 = PRF_PERIOD*3*8;                     //distance_delay 30000*8-200*12 + 7 (30000/2)*8
-  assign app_param6 = app_status9[0];                      //kb_valid 暂时无效，通过正确的延时来确立的k、b信号有效
-  assign app_param7 = 128*8;                  //adc_shreshold
-  assign app_param8 = 2;                      //mode_value
+//   localparam PRF_PERIOD = 31095;
+//   assign app_param0 = 6016;                    //chirp_num
+//   assign app_param1 = 1024;                    //proc_num
+//   assign app_param2 = k_vlaue;                 //k_value
+//   assign app_param3 = b_vlaue;                 //b_value
+//   assign app_param4 = -32'sd245;               //template_delay
+//   assign app_param5 = PRF_PERIOD*3*8;          //distance_delay 30000*8-200*12 + 7 (30000/2)*8
+//   assign app_param6 = app_status9[0];          //kb_valid 暂时无效，通过正确的延时来确立的k、b信号有效
+//   assign app_param7 = 128*8;                   //adc_shreshold
+//   assign app_param8 = 1;                       //mode_value
 
-  assign app_param9  = PRF_PERIOD;                 //prf_period 200us
-  assign app_param10 = 200;                   //prf->adc延迟
-  assign app_param11 = 10;                    //disturb_times
-  assign app_param12 = 1;                    //resetn(software)
-  assign app_param13 = 0;                    //prf_adjust_req
-  assign app_param14 = -32'sd5;                    //prf_cnt_offset
-  assign app_param16 = 1;                    //star_mode
+//   assign app_param9  = PRF_PERIOD;             //prf_period 200us
+//   assign app_param10 = 200;                    //prf->adc延迟
+//   assign app_param11 = 10;                     //disturb_times
+//   assign app_param12 = 1;                      //resetn(software)
+//   assign app_param13 = 0;                      //prf_adjust_req
+//   assign app_param14 = -32'sd5;                //prf_cnt_offset
+//   assign app_param16 = 1;                      //star_mode
+//   assign app_param17 = 0;                      //record_mode
+//   assign app_param18 = 32'sd32767;             //功率系数
+//   assign app_param19 = 0;                      //adc_channel_sel
+//   assign app_param20 = 500;                    //data_record_period
 
-  assign app_param18 = 32'sd32767;
-
-  initial begin
-    #1000
-    app_param15 = 0;
-    #1000
-    app_param15 = 1;
-  end
+  // initial begin
+  //   #1000
+  //   app_param15 = 0;//fft点数change_req
+  //   #1000
+  //   app_param15 = 1;
+  // end
 
 `endif
 
@@ -379,7 +350,7 @@ hwreg_set_new u_hwreg_set_new(
 . app_status8  (app_status8	) ,
 . app_status9  (app_status9	) ,
 . app_status10 (app_status10) ,
-`ifndef TEST
+. app_status11 (app_status11) ,
 . app_param0  (app_param0 	) ,
 . app_param1  (app_param1 	) ,
 . app_param2  (app_param2 	) ,
@@ -399,7 +370,8 @@ hwreg_set_new u_hwreg_set_new(
 . app_param16 (app_param16 	) ,
 . app_param17 (app_param17 	) ,
 . app_param18 (app_param18 	) ,
-`endif
+. app_param19 (app_param19 	) ,
+. app_param20 (app_param20 	) ,
 . cfg_clk     (ramrpu_clk   ) ,
 . cfg_rd_en   (ramrpu_en    ) ,
 . cfg_wr_en   (ramrpu_we    ) ,
@@ -426,7 +398,8 @@ u_disturb_wrapper(
 . adc_clk           (adc_clk          ) ,
 . resetn            (resetn           ) ,
 . prf               (prf              ) ,
-. adc_data          (adc_data         ) ,//需要拼接而来
+. adc_data0         (adc_data0        ) ,//需要拼接而来
+. adc_data1         (adc_data1        ) ,//需要拼接而来
 . adc_valid_pre     (adc_valid_pre    ) ,//需要拼接而来
 . adc_valid_expand  (adc_valid_expand ) ,//需要拼接而来
 . rf_out            (rf_out           ) ,
@@ -463,6 +436,7 @@ u_disturb_wrapper(
 . app_param16       (app_param16      ) ,
 . app_param17       (app_param17      ) ,
 . app_param18       (app_param18      ) ,
+. app_param19       (app_param19      ) ,
 
 . app_status0       (app_status0      ) ,
 . app_status1       (app_status1      ) ,
@@ -475,6 +449,7 @@ u_disturb_wrapper(
 . app_status8       (app_status8      ) ,
 . app_status9       (app_status9      ) ,
 . app_status10      (app_status10     ) ,
+. app_status11      (app_status11     ) ,
 
 . mfifo_rd_enable   (mfifo_rd_enable  ) ,
 . mfifo_rd_data     (mfifo_rd_data    ) ,
@@ -484,8 +459,7 @@ u_disturb_wrapper(
 . dac_valid_o       (dac_valid_o      ) ,
 . err_flag          (err_flag         ) ,
 . fifo_overflow     (fifo_overflow    ) ,
-. fifo_underflow    (fifo_underflow   ) ,   
-. reco_trig         (reco_trig        )    
+. fifo_underflow    (fifo_underflow   )  
 );
 
 
@@ -517,9 +491,16 @@ end
 wire RF_A_TXEN_TEMP;
 assign dac_valid_o = CFGBC_OUTEN_r[DWIDTH_0/2];//改动点
 assign RF_A_TXEN_TEMP = (|CFGBC_OUTEN_r);
-assign RF_A_TXEN = RF_A_TXEN_TEMP && (~adc_valid_expand) ;//改动点
+// assign RF_A_TXEN = RF_A_TXEN_TEMP && (~adc_valid_expand) ;
 
+//打拍生成BC_TX_EN
+reg [DWIDTH_0/2:0] CFGBC_OUTEN_r_BC = 0;
+always@(posedge adc_clk)begin
+	CFGBC_OUTEN_r_BC <= {CFGBC_OUTEN_r_BC[(DWIDTH_0/2)-1:0], RF_A_TXEN_TEMP};
+end
 
+assign RF_A_TXEN = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && (~adc_valid_expand);//改动点
+assign bc_tx_en = (|CFGBC_OUTEN_r_BC) ;//改动点
 
 wire signed [15:0] power_adjust_coe;
 assign power_adjust_coe = app_param18[15:0];
@@ -621,5 +602,62 @@ always@(posedge adc_clk)begin
 end
 
 assign data_record_mode = data_record_mode_r[1];
+
+//-----------------------数据记录周期---------------------------//
+wire [31:0] data_record_period_in;
+assign data_record_period_in = app_param20;
+reg [31:0] data_record_period_r [1:0];
+wire [31:0] data_record_period;
+always @(posedge adc_clk) begin
+  if(!resetn)begin
+    data_record_period_r[0] <= 0;
+    data_record_period_r[1] <= 0;
+  end
+  else begin
+    data_record_period_r[0] <= data_record_period_in;
+    data_record_period_r[1] <= data_record_period_r[0];
+  end
+end
+
+assign data_record_period = data_record_period_r[1];
+
+//-----------------------数据记录信号的生成----------------------------//
+reg [31:0] cnt_record;
+reg add_flag;
+wire end_flag;
+reg prf_r;
+wire prf_pos;
+
+always@(posedge adc_clk)begin
+  if(!resetn)
+    prf_r <= 0;
+  else
+    prf_r <= prf;
+end
+
+assign prf_pos = ~prf_r && prf;
+always@(posedge adc_clk)begin
+  if(!resetn)
+    add_flag <= 0;
+  else if(prf_pos)
+    add_flag <= 1;
+  else if(end_flag)
+    add_flag <= 0;
+end
+
+assign end_flag = add_flag && cnt_record == data_record_period - 1;
+
+always @(adc_clk) begin
+  if(!resetn)
+    cnt_record <= 0;
+  else if(add_flag)begin
+    if(end_flag)
+      cnt_record <= 0;
+    else
+      cnt_record <= cnt_record + 1;
+  end
+end
+
+assign record_en = add_flag;
 
 endmodule

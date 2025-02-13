@@ -1,7 +1,7 @@
 // `include "configure.vh"
 `timescale 1ns / 1ps
-module threshold_detection#(
-    parameter   LOCAL_DWIDTH 	      = 256                 ,
+module threshold_detection_trig#(
+    parameter   LOCAL_DWIDTH 	    = 256                 ,
     parameter   WIDTH               = 16                  ,
     parameter   FFT_WIDTH           = 24                  ,
     parameter   LANE_NUM            = 8                   ,
@@ -17,9 +17,7 @@ input                       resetn          ,
 input       [255:0]         adc_data        ,
 input       [31:0]          adc_thshld      ,
 output                      trig_valid      ,
-output reg  [31:0]          trig_num        ,
-output reg  [31:0]          trig_gap        ,
-output reg  [31:0]          adc_avg_reg     
+output reg  [31:0]          adc_max     
 
     );
     
@@ -63,19 +61,6 @@ assign end_flag = add_flag && cnt_delay == TIME_100US - 1;
 //触发检测禁用
 assign detection_disen = add_flag;
 
-//触发条件判断
-// assign sum_adc_data = adc_data[31:0] + adc_data[63:32] + adc_data[95:64] + adc_data[127:96] + adc_data[159:128] + adc_data[191:160] + adc_data[223:192] + adc_data[255:224];
-// genvar jj;
-// generate
-//     for (jj = 0;jj < 8 ;jj = jj + 1 ) begin
-//         if(jj = 0)begin
-//             always@(posedge adc_clk)begin
-
-//             end
-
-//         end
-//     end
-// endgenerate
 reg signed [19:0] sum_adc_data_pre[7:0];
 always@(posedge adc_clk)begin
     if(!resetn)begin
@@ -149,9 +134,9 @@ end
 
 always@(posedge adc_clk)begin
     if(!resetn)
-        adc_avg_reg <= 0;
+        adc_max <= 0;
     else if(cnt_1s == 150_000_000 - 1)
-        adc_avg_reg <= avg_adc_data_filter_max;
+        adc_max <= avg_adc_data_filter_max;
 end
 
 
@@ -160,43 +145,5 @@ wire trig_valid_temp;
 
 assign trig_valid = ~(!resetn || detection_disen) ? (adc_thshld) < avg_adc_data_filter : 0;
 
-//触发次数
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_num <= 0;
-    else if(trig_valid)
-        trig_num <= trig_num + 1;
-end
-
-//gap计数
-reg [31:0] trig_gap_temp;
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_gap_temp <= 0;
-    else if(trig_valid)
-        trig_gap_temp <= 0;
-    else
-        trig_gap_temp <= trig_gap_temp + 1;
-end
-
-//锁存gap
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_gap <= 0;
-    else if(trig_valid && (trig_num > 0))
-        trig_gap <= trig_gap_temp;
-end
-
-
-`ifdef DISTURB_DEBUG
-ila_threshold_check u_ila_threshold_check (
-	.clk    (adc_clk                ), 
-	.probe0 (avg_adc_data           ), //16
-	.probe1 (avg_adc_data_filter    ), //16
-	.probe2 (trig_valid             ), //1
-	.probe3 (trig_num               ), //32
-	.probe4 (trig_gap               )  //32
-);
-`endif
 
 endmodule

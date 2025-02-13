@@ -18,13 +18,9 @@ input                             resetn            ,
 
 output                            prf               ,
 
-//ram_chirp
-input                             chirp_in_clka     ,
-input                             chirp_in_ena      ,
-input  [0 : 0]                    chirp_in_wea      ,
-input  [18 : 0]                   chirp_in_addra    ,
-input  [31 : 0]                   chirp_in_dina     ,
-output [31 : 0]                   chirp_in_douta    ,
+//adc
+input [WIDTH*2*8-1:0]             adc_data0         ,//改端口
+input [WIDTH*2*8-1:0]             adc_data1         ,//改端口
 
 //ram_chip_fft
 input                             chirp_fft_clka    ,
@@ -34,7 +30,19 @@ input   [13 : 0]                  chirp_fft_addra   ,
 input   [31 : 0]                  chirp_fft_dina    ,
 output  [31 : 0]                  chirp_fft_douta   ,
 
+//ram_chirp
+input                             chirp_in_clka     ,
+input                             chirp_in_ena      ,
+input  [0 : 0]                    chirp_in_wea      ,
+input  [18 : 0]                   chirp_in_addra    ,
+input  [31 : 0]                   chirp_in_dina     ,
+output [31 : 0]                   chirp_in_douta    ,
 
+//ddr
+input [LOCAL_DWIDTH-1:0] 	        mfifo_rd_data     ,
+
+input  [255:0]                    dac_data_o        ,
+input                             dac_valid_o       ,
 
 
 input   [31:0]                    app_param0        ,
@@ -56,6 +64,19 @@ input   [31:0]                    app_param15       ,
 input   [31:0]                    app_param16       ,
 input   [31:0]                    app_param17       ,
 input   [31:0]                    app_param18       ,
+input   [31:0]                    app_param19       ,
+
+//ddr_en
+output 						                mfifo_rd_enable   ,
+
+//dac数据输出
+output [255:0]                    dac_data          ,
+output                            dac_valid_whole   ,
+
+
+//adc_valid 相关信号
+output                            adc_valid_pre     ,
+output                            adc_valid_expand  ,
 
 
 output  [31:0]                    app_status0       ,
@@ -69,28 +90,15 @@ output  [31:0]                    app_status7       ,
 output  [31:0]                    app_status8       ,
 output  [31:0]                    app_status9       ,
 output  [31:0]                    app_status10      ,
-
-//fifo
-output 						      mfifo_rd_enable   ,
-input [LOCAL_DWIDTH-1:0] 	      mfifo_rd_data     ,
-
-//adc
-input [WIDTH*2*8-1:0]             adc_data          ,//需要拼接而来
-output                            adc_valid_pre     ,
-output                            adc_valid_expand  ,
+output  [31:0]                    app_status11      ,
 
 
-//dac
-output [255:0]                    dac_data          ,
-input  [255:0]                    dac_data_o        ,
-output                            dac_valid_whole   ,
-input                             dac_valid_o       ,
+
 //err_flag
 output                            err_flag          ,
 output                            fifo_overflow     ,
 output                            fifo_underflow    ,
 
-output                            reco_trig         ,
 output                            rf_out
 
 );
@@ -166,11 +174,13 @@ wire                            star_mode               ;
 
 //threshold_detection
 wire [31:0]                     adc_thshld              ;
+wire [WIDTH*2*8-1:0]            adc_data                ;
 wire [31:0]                     trig_num                ;
 wire [31:0]                     trig_gap                ;
 wire                            threshold_resetn        ;
 wire                            trig_valid              ;
-wire [31:0]                     adc_avg_reg             ;
+wire [31:0]                     adc_max0                ;
+wire [31:0]                     adc_max1                ;
 
 
 //mode_ctrl
@@ -191,6 +201,8 @@ wire [31:0]                     distance_delay_now      ;
 wire [31:0]                     template_delay_now      ;
 wire [23:0]                     k_data_now              ;
 wire [23:0]                     b_data_now              ;
+
+wire                            reco_trig               ;
 
 
 
@@ -284,29 +296,31 @@ u_disturb(
 . fifo_underflow            (fifo_underflow         ) 
     );
 
-threshold_detection#(
-    .LOCAL_DWIDTH 	   (LOCAL_DWIDTH 	 ),
-    .WIDTH             (WIDTH          ),
-    .FFT_WIDTH         (FFT_WIDTH      ),
-    .LANE_NUM          (LANE_NUM       ),
-    .CHIRP_NUM         (CHIRP_NUM      ),
-    .CALCLT_DELAY      (CALCLT_DELAY   ),
-    .DWIDTH_0          (DWIDTH_0       ),
-    .SHIFT_RAM_DELAY   (SHIFT_RAM_DELAY),
-    .ADC_CLK_FREQ      (ADC_CLK_FREQ   ),
-    .RECO_DELAY        (RECO_DELAY     )
-  )
-u_threshold_detection(
-. adc_clk       (adc_clk           ) ,
-. resetn        (resetn            ) ,
-. adc_data      (adc_data          ) ,
-. adc_thshld    (adc_thshld        ) ,
-. trig_num      (trig_num          ) ,
-. trig_gap      (trig_gap          ) ,
-. adc_valid     (adc_valid         ) ,
-. trig_valid    (trig_valid        ) ,
-. adc_avg_reg   (adc_avg_reg       ) 
-); 
+threshold_detection_merge#(
+    . LOCAL_DWIDTH 	  (LOCAL_DWIDTH 	 ),
+    . WIDTH           (WIDTH           ),
+    . FFT_WIDTH       (FFT_WIDTH       ),
+    . LANE_NUM        (LANE_NUM        ),
+    . CHIRP_NUM       (CHIRP_NUM       ),
+    . CALCLT_DELAY    (CALCLT_DELAY    ),
+    . DWIDTH_0        (DWIDTH_0        ),
+    . SHIFT_RAM_DELAY (SHIFT_RAM_DELAY ),
+    . ADC_CLK_FREQ    (ADC_CLK_FREQ    ),
+    . RECO_DELAY      (RECO_DELAY      )
+)u_threshold_detection_merge(
+. adc_clk    (adc_clk   ) ,
+. resetn     (resetn    ) ,
+. adc_data0  (adc_data0 ) ,
+. adc_data1  (adc_data1 ) ,
+. adc_thshld (adc_thshld) ,
+. trig_valid (trig_valid) ,
+. trig_num   (trig_num  ) ,
+. trig_gap   (trig_gap  ) ,
+. adc_max0   (adc_max0  ) ,
+. adc_max1   (adc_max1  )
+);
+
+
 
 ctrl_sig_gen#(
     .LOCAL_DWIDTH 	   (LOCAL_DWIDTH 	 ),
@@ -354,22 +368,13 @@ ctrl_sig_gen#(
 . fft_index_max_latch       (fft_index_max_latch )  
     );
 
-// mode_ctrl u_mode_ctrl(
-// .  adc_clk       (adc_clk     )  ,
-// .  resetn        (resetn      )  ,
-// .  mode_value    (mode_value  )  ,
-// .  disturb_en    (disturb_en  )  ,
-// .  detection_en  (detection_en)
-//     );
-
 wire resetn_sof;
 
 wire recorde_mode;
 wire [31:0] power_adjust_coe;
+wire adc_channel_sel;
 
-assign recorde_mode = app_param17[0];
 
-assign power_adjust_coe = app_param18;
 
 assign chirp_length     = app_param0          ;
 assign proc_length      = app_param1          ;
@@ -388,6 +393,9 @@ assign prf_adjust_req   = app_param13[0]      ;
 assign prf_cnt_offset   = app_param14         ;
 assign change_eq        = app_param15[0]      ;
 assign star_mode        = app_param16[0]      ;
+assign recorde_mode     = app_param17[0];
+assign power_adjust_coe = app_param18;
+assign adc_channel_sel  = app_param19[0];
 
 assign app_status0      = fft_value_max_latch_q   ;
 assign app_status1      = fft_value_max_latch_i   ;
@@ -399,7 +407,10 @@ assign app_status6      = fft_index_max_latch     ;
 assign app_status7      = trig_num                ;
 assign app_status8      = trig_gap                ;
 assign app_status9      = {31'b0,fft_valid}       ;
-assign app_status10     = adc_avg_reg;
+assign app_status10     = adc_max0;
+assign app_status11     = adc_max1;
+
+assign adc_data = adc_channel_sel ? adc_data1 : adc_data0;
 
 `ifdef DISTURB_DEBUG
 vio_reg_write u_vio_reg_write (
@@ -422,7 +433,8 @@ vio_reg_write u_vio_reg_write (
   .probe_in15   (change_eq          ),  
   .probe_in16   (star_mode          ),  
   .probe_in17   (recorde_mode       ),  
-  .probe_in18   (power_adjust_coe   )  
+  .probe_in18   (power_adjust_coe   ),  
+  .probe_in19   (adc_channel_sel    ) //1 
 );
 
 vio_reg_read u_vio_reg_read (
@@ -436,7 +448,9 @@ vio_reg_read u_vio_reg_read (
   .probe_in6    (fft_index_max_latch    ),
   .probe_in7    (trig_num               ),
   .probe_in8    (trig_gap               ),
-  .probe_in9    (fft_valid              )
+  .probe_in9    (fft_valid              ),
+  .probe_in10   (adc_max0               ),//32
+  .probe_in11   (adc_max1               ) //32
 );
 `endif
 

@@ -142,6 +142,7 @@ output 				rf_out
 wire dac_valid_adjust;
 wire [255:0] dac_data_adjust;
 wire data_record_mode;
+wire  record_en;
 dac_data_pre dac_data_pre_Ep0
 (
 .dac_clk(dac_clk),
@@ -157,6 +158,8 @@ dac_data_pre dac_data_pre_Ep0
 //AD			
 .m00_axis_tdata(m00_axis_tdata),
 .m01_axis_tdata(m01_axis_tdata),
+.m02_axis_tdata(m02_axis_tdata),
+.m03_axis_tdata(m03_axis_tdata),
 //DA			
 .s00_axis_tdata(s00_axis_tdata),
 
@@ -198,7 +201,8 @@ dac_data_pre dac_data_pre_Ep0
 .dac_valid_adjust(dac_valid_adjust),    
 .dac_data_adjust(dac_data_adjust),    
 .data_record_mode (data_record_mode),    
-.rf_out (rf_out)    
+.rf_out (rf_out),    
+.record_en (record_en)    
 
 //debug
 //.vio_dataout(vio_dataout),
@@ -337,19 +341,32 @@ assign m01_axis_tdata_temp = adc_valid ? m01_axis_tdata : 0;
 wire [255:0] s00_axis_tdata_temp;
 assign s00_axis_tdata_temp = dac_valid_adjust ? dac_data_adjust : 0;
 
+wire [255:0] adc0_data_buff;
+wire [255:0] adc1_data_buff;
+//-----------------2025/02/12 22:51改动--------------------//
 genvar kk;
 generate
 for(kk=0;kk<8;kk=kk+1)begin:blk1
-	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m00_axis_tdata_temp[16*kk+15:16*kk+00];
-	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m01_axis_tdata_temp[16*kk+15:16*kk+00];
-//	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= select_enFilter?m02_axis_data_tdata[16*kk+15:16*kk+00]:m02_axis_tdata[16*kk+15:16*kk+00];
-//	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= select_enFilter?m03_axis_data_tdata[16*kk+15:16*kk+00]:m03_axis_tdata[16*kk+15:16*kk+00];
-	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
-	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
+	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m00_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m01_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= m02_axis_tdata[16*kk+15:16*kk+00];
+	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= m03_axis_tdata[16*kk+15:16*kk+00];
+	// always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
+	// always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
 end
 endgenerate
 
+adc_buff u_adc0_buff (
+  .D(adc0_data),      // input wire [255 : 0] D
+  .CLK(adc_clk),  // input wire CLK
+  .Q(adc0_data_buff)      // output wire [255 : 0] Q
+);
 
+adc_buff u_adc1_buff (
+  .D(adc1_data),      // input wire [255 : 0] D
+  .CLK(adc_clk),  // input wire CLK
+  .Q(adc1_data_buff)      // output wire [255 : 0] Q
+);
 
 // system dma, fir data
 //assign adc_dma_valid = 0;
@@ -416,9 +433,11 @@ assign div_pulse1 = adc_div[15:8];
 assign div_width2 = adc_div[23:16];
 assign div_pulse2 = adc_div[31:24];
 
-wire data_valid;
+// wire data_valid;
 
-assign data_valid = data_record_mode ? adc_valid : dac_valid_adjust;
+// assign data_valid = data_record_mode ? adc_valid : dac_valid_adjust;
+
+
 
 data_format data_format_EP0(
 .adc_clk(adc_clk),    //input 
@@ -427,11 +446,11 @@ data_format data_format_EP0(
 .prfin(prffix_inter),    //input 
 .fifo_wr_clr(fifo_wr_clr),    //input 
 .fifo_wr_valid(fifo_wr_valid),    //input 
-.fifo_wr_enable(data_valid),    //input 
+.fifo_wr_enable(record_en),    //input 
 .cfg_AD_rnum(cfg_adc_frmlen),    //input [31:0]
 .fifo_overflow(rec_fifo_overflow[0]),	// output
-.adc0_data(adc0_data),    //input [255:0]
-.adc1_data(adc1_data),    //input [255:0]
+.adc0_data(adc0_data_buff),    //input [255:0]
+.adc1_data(adc1_data_buff),    //input [255:0]
 .div_width(div_width1),    //input [7:0]
 .div_pulse(div_pulse1),    //input [7:0]
 .ctrl_data(ctrl_data),    //input [192*8-1:0]

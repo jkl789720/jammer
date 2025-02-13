@@ -58,9 +58,9 @@ input [3:0]pcie1_exp_rxn,
 input [3:0]pcie1_exp_rxp,
 output [3:0]pcie1_exp_txn,
 output [3:0]pcie1_exp_txp,
-output BC_A_TXEN,
+// output BC_A_TXEN,//2025/02/13注掉
 // output BC_B_TXEN,
-output BC_A_RXEN,
+// output BC_A_RXEN,//2025/02/13注掉
 `endif
 input CLK_PL_DDR_N,
 input CLK_PL_DDR_P,
@@ -81,9 +81,9 @@ output BC_B_RXEN,
 output [3:0] BC_B_TXD,
 output BC_B_TXEN,
 `endif */
-output BC_A_LATCH,
-output[0:0] 	BC_A_TXD,   
-input 	BC_A_RXD,
+// output BC_A_LATCH,//2025/02/13注掉
+// output[0:0] 	BC_A_TXD,//2025/02/13注掉
+// input 	BC_A_RXD,//2025/02/13注掉
 
 
 output                  	BC_scl_o    	,
@@ -876,7 +876,7 @@ assign PLUART_rxd = PL_RS422_1_RX;
 assign PL_RS422_1_TX = PLUART_txd;
 `else
 assign PLUART_rxd = BC_A_RXD;
-assign BC_A_TXD[0] = PLUART_txd;
+// assign BC_A_TXD[0] = PLUART_txd;
 `endif
 
 assign FPGA_SYNC = prffix;

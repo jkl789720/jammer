@@ -1,0 +1,2443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tt_top_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="axi_bram_ctrl_funcs" />
+            <top_module name="axi_dma_pkg" />
+            <top_module name="axi_sg_pkg" />
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="lib_pkg" />
+            <top_module name="std" />
+            <top_module name="tt_top" />
+            <top_module name="vcomponents" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="235294fs"></ZoomEndTime>
+      <Cursor1Time time="4153438fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="414"></NameColumnWidth>
+      <ValueColumnWidth column_width="179"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="5" />
+   <wvobject fp_name="group514" type="group">
+      <obj_property name="label">tt</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tt_top/sysref_in_diff_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_n</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/sysref_in_diff_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_p</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/adc2_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/adc2_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/dac0_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/dac0_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vin2_01_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vin2_01_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vin2_23_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vin2_23_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vout00_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vout00_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vout02_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/vout02_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/CLK_100M_SYS_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS_N</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/CLK_100M_SYS_P" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS_P</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS_P</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/CLK_PL_DDR_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_PL_DDR_N</obj_property>
+         <obj_property name="ObjectShortName">CLK_PL_DDR_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/CLK_PL_DDR_P" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_PL_DDR_P</obj_property>
+         <obj_property name="ObjectShortName">CLK_PL_DDR_P</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/prfin_ex" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">prfin_ex</obj_property>
+         <obj_property name="ObjectShortName">prfin_ex</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_CS_ADCPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_CS_DACPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_DACPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_DACPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_CS_LMK04828_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_LMK04828_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_LMK04828_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_MISO" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MISO</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MISO</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_MOSI" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MOSI</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MOSI</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_SPI_SCK" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_SCK</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_SCK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_DBG_LED" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_DBG_LED</obj_property>
+         <obj_property name="ObjectShortName">PL_DBG_LED</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_UART_RX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_RX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_RX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/PL_UART_TX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_TX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_TX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/clk100m" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk100m</obj_property>
+         <obj_property name="ObjectShortName">clk100m</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/clk300m" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk300m</obj_property>
+         <obj_property name="ObjectShortName">clk300m</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/clk400m" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk400m</obj_property>
+         <obj_property name="ObjectShortName">clk400m</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/clk1k" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk1k</obj_property>
+         <obj_property name="ObjectShortName">clk1k</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/sysref_in_diff_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_n</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/sysref_in_diff_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_p</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc2_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc2_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac0_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac0_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vin2_01_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vin2_01_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vin2_23_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vin2_23_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vout00_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vout00_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vout02_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vout02_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_100M_SYS_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS_N</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_100M_SYS_P" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS_P</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS_P</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_PL_DDR_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_PL_DDR_N</obj_property>
+         <obj_property name="ObjectShortName">CLK_PL_DDR_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_PL_DDR_P" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_PL_DDR_P</obj_property>
+         <obj_property name="ObjectShortName">CLK_PL_DDR_P</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group515" type="group">
+      <obj_property name="label">top</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tt_top/top_EP0/prfin_ex" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">prfin_ex</obj_property>
+         <obj_property name="ObjectShortName">prfin_ex</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_CS_ADCPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_CS_DACPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_DACPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_DACPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_CS_LMK04828_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_LMK04828_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_LMK04828_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_MISO" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MISO</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MISO</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_MOSI" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MOSI</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MOSI</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_SPI_SCK" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_SCK</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_SCK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_DBG_LED" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_DBG_LED</obj_property>
+         <obj_property name="ObjectShortName">PL_DBG_LED</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_UART_RX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_RX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_RX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/PL_UART_TX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_TX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_TX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_100M_SYS" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CLK_100M_SYS_bufg" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CLK_100M_SYS_bufg</obj_property>
+         <obj_property name="ObjectShortName">CLK_100M_SYS_bufg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/locked" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">locked</obj_property>
+         <obj_property name="ObjectShortName">locked</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk100" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk100</obj_property>
+         <obj_property name="ObjectShortName">clk100</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk25" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk25</obj_property>
+         <obj_property name="ObjectShortName">clk25</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk200" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk200</obj_property>
+         <obj_property name="ObjectShortName">clk200</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_data" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_data[127:0]</obj_property>
+         <obj_property name="ObjectShortName">adc_data[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_valid</obj_property>
+         <obj_property name="ObjectShortName">adc_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_ready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_ready</obj_property>
+         <obj_property name="ObjectShortName">adc_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_start" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_start</obj_property>
+         <obj_property name="ObjectShortName">adc_start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_flowctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_flowctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">adc_flowctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_clk</obj_property>
+         <obj_property name="ObjectShortName">bram_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_rst</obj_property>
+         <obj_property name="ObjectShortName">bram_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_en" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_en</obj_property>
+         <obj_property name="ObjectShortName">bram_en</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_addr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_addr[23:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_addr[23:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_we" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_we[3:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_we[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_rddata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_rddata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_rddata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/bram_wrdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_wrdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_wrdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/m20_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m20_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m20_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/m21_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m21_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m21_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/m22_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m22_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m22_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/m23_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m23_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m23_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/s00_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">s00_axis_tdata[255:0]</obj_property>
+         <obj_property name="ObjectShortName">s00_axis_tdata[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/s02_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">s02_axis_tdata[255:0]</obj_property>
+         <obj_property name="ObjectShortName">s02_axis_tdata[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk_out100" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_out100</obj_property>
+         <obj_property name="ObjectShortName">clk_out100</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/init_calib_complete" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">init_calib_complete</obj_property>
+         <obj_property name="ObjectShortName">init_calib_complete</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_araddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_araddr[35:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_araddr[35:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arburst" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arcache" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arlen" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arlock" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arlock[0:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arlock[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arqos" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arqos[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arqos[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arregion" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arregion[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arregion[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arsize" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_arvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awaddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awaddr[35:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awaddr[35:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awburst" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awcache" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awlen" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awlock" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awlock[0:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awlock[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awqos" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awqos[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awqos[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awregion" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awregion[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awregion[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awsize" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_awvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_bready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_bresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_bvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_rdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rdata[63:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rdata[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_rlast" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rlast</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_rready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_rresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_rvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_wdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wdata[63:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wdata[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_wlast" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wlast</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_wready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_wstrb" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wstrb[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wstrb[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_axi_wvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_araddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_araddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_araddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_arprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_arready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_arvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_awaddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awaddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awaddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_awprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_awready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_awvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_bready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_bresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_bvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_rdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_rready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_rresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_rvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_wdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_wready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_wstrb" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/app_lite_wvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/pl_clk0" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">pl_clk0</obj_property>
+         <obj_property name="ObjectShortName">pl_clk0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/pl_resetn" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">pl_resetn[0:0]</obj_property>
+         <obj_property name="ObjectShortName">pl_resetn[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/core_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">core_clk</obj_property>
+         <obj_property name="ObjectShortName">core_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/core_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">core_rst</obj_property>
+         <obj_property name="ObjectShortName">core_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/core_rstn" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">core_rstn</obj_property>
+         <obj_property name="ObjectShortName">core_rstn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_clk</obj_property>
+         <obj_property name="ObjectShortName">mem_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mem_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_rst</obj_property>
+         <obj_property name="ObjectShortName">mem_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk_adc_out" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_adc_out</obj_property>
+         <obj_property name="ObjectShortName">clk_adc_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/clk_dac_out" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_dac_out</obj_property>
+         <obj_property name="ObjectShortName">clk_dac_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_clk</obj_property>
+         <obj_property name="ObjectShortName">adc_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac_clk</obj_property>
+         <obj_property name="ObjectShortName">dac_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_rst</obj_property>
+         <obj_property name="ObjectShortName">adc_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac_rst</obj_property>
+         <obj_property name="ObjectShortName">dac_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vio_dataout" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vio_dataout[255:0]</obj_property>
+         <obj_property name="ObjectShortName">vio_dataout[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/rom_dataout" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">rom_dataout[255:0]</obj_property>
+         <obj_property name="ObjectShortName">rom_dataout[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/vio_selchirp" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vio_selchirp</obj_property>
+         <obj_property name="ObjectShortName">vio_selchirp</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/selchirp" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">selchirp</obj_property>
+         <obj_property name="ObjectShortName">selchirp</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac_pattern" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac_pattern[255:0]</obj_property>
+         <obj_property name="ObjectShortName">dac_pattern[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/rom_addra" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">rom_addra[9:0]</obj_property>
+         <obj_property name="ObjectShortName">rom_addra[9:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/douta" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">douta[31:0]</obj_property>
+         <obj_property name="ObjectShortName">douta[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dina" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dina[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dina[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/addra" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">addra[31:0]</obj_property>
+         <obj_property name="ObjectShortName">addra[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/wea" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">wea[3:0]</obj_property>
+         <obj_property name="ObjectShortName">wea[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/counter" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">counter[31:0]</obj_property>
+         <obj_property name="ObjectShortName">counter[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_anum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_anum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_anum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_delay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_delay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_delay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_mode" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_mode[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_mode[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_AD_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_AD_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_AD_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_anum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_anum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_anum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_delay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_delay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_delay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_mode" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_mode[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_mode[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_DA_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_DA_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_DA_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_prftime" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_prftime[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_prftime[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_pretime" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_pretime[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_pretime[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_prfmode" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_prfmode[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_prfmode[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mode_ctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mode_ctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mode_ctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_adc_ctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_adc_ctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_adc_ctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_adc_ro" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_adc_ro[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_adc_ro[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_adc_filter" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_adc_filter[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_adc_filter[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_adc_iodelay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_adc_iodelay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_adc_iodelay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_dac_ctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_dac_ctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_dac_ctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_dac_ro" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_dac_ro[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_dac_ro[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_dac_filter" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_dac_filter[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_dac_filter[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_dac_iodelay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_dac_iodelay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_dac_iodelay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_ctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_ctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_ctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_version" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_version[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_version[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_dev_spisel" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_dev_spisel[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_dev_spisel[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_anum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_anum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_anum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_delay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_delay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_delay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_mode" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_mode[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_mode[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mAD_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mAD_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mAD_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_anum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_anum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_anum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_delay" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_delay[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_delay[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_mode" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_mode[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_mode[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cfg_mDA_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">cfg_mDA_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_mDA_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_AD_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_AD_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_AD_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_AD_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_AD_repeat" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_AD_repeat</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_repeat</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_AD_reset" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_AD_reset</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_DA_base" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_DA_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_DA_rnum" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_DA_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_DA_repeat" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_DA_repeat</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_repeat</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_DA_reset" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_DA_reset</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_DA_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_DA_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/tl_AD_status" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">tl_AD_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/adc_mask" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_mask</obj_property>
+         <obj_property name="ObjectShortName">adc_mask</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/dac_mask" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac_mask</obj_property>
+         <obj_property name="ObjectShortName">dac_mask</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_rd_clr" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_rd_clr</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_rd_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_rd_valid</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_rd_enable" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_rd_enable</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_wr_clr" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_wr_clr</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_wr_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_wr_valid</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_wr_enable" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_wr_enable</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_rd_clr" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_rd_clr</obj_property>
+         <obj_property name="ObjectShortName">fifo_rd_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_wr_clr" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_wr_clr</obj_property>
+         <obj_property name="ObjectShortName">fifo_wr_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_rd_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_rd_valid</obj_property>
+         <obj_property name="ObjectShortName">fifo_rd_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_rd_enable" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_rd_enable</obj_property>
+         <obj_property name="ObjectShortName">fifo_rd_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_wr_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_wr_valid</obj_property>
+         <obj_property name="ObjectShortName">fifo_wr_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/fifo_wr_enable" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">fifo_wr_enable</obj_property>
+         <obj_property name="ObjectShortName">fifo_wr_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/preprf" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">preprf</obj_property>
+         <obj_property name="ObjectShortName">preprf</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/prfin" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">prfin</obj_property>
+         <obj_property name="ObjectShortName">prfin</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/prfcnt" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">prfcnt[31:0]</obj_property>
+         <obj_property name="ObjectShortName">prfcnt[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_rd_data" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_rd_data[255:0]</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_data[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/mfifo_wr_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mfifo_wr_tdata[255:0]</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_tdata[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/ad_mem_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">ad_mem_rst</obj_property>
+         <obj_property name="ObjectShortName">ad_mem_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/da_mem_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">da_mem_rst</obj_property>
+         <obj_property name="ObjectShortName">da_mem_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/LOCAL_DWIDTH" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">LOCAL_DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">LOCAL_DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/LOCAL_AWIDTH" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">LOCAL_AWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">LOCAL_AWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/CFG_AWIDTH" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">CFG_AWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">CFG_AWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group450" type="group">
+      <obj_property name="label">cpu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_aclk" type="logic">
+         <obj_property name="ElementShortName">s_axi_aclk</obj_property>
+         <obj_property name="ObjectShortName">s_axi_aclk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_aresetn" type="logic">
+         <obj_property name="ElementShortName">s_axi_aresetn</obj_property>
+         <obj_property name="ObjectShortName">s_axi_aresetn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_araddr" type="array">
+         <obj_property name="ElementShortName">s_axi_araddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_araddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_arprot" type="array">
+         <obj_property name="ElementShortName">s_axi_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_arready" type="logic">
+         <obj_property name="ElementShortName">s_axi_arready</obj_property>
+         <obj_property name="ObjectShortName">s_axi_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_arvalid" type="logic">
+         <obj_property name="ElementShortName">s_axi_arvalid</obj_property>
+         <obj_property name="ObjectShortName">s_axi_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_awaddr" type="array">
+         <obj_property name="ElementShortName">s_axi_awaddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_awaddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_awprot" type="array">
+         <obj_property name="ElementShortName">s_axi_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_awready" type="logic">
+         <obj_property name="ElementShortName">s_axi_awready</obj_property>
+         <obj_property name="ObjectShortName">s_axi_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_awvalid" type="logic">
+         <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
+         <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_bready" type="logic">
+         <obj_property name="ElementShortName">s_axi_bready</obj_property>
+         <obj_property name="ObjectShortName">s_axi_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_bresp" type="array">
+         <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_bvalid" type="logic">
+         <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
+         <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_rdata" type="array">
+         <obj_property name="ElementShortName">s_axi_rdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_rdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_rready" type="logic">
+         <obj_property name="ElementShortName">s_axi_rready</obj_property>
+         <obj_property name="ObjectShortName">s_axi_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_rresp" type="array">
+         <obj_property name="ElementShortName">s_axi_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_rvalid" type="logic">
+         <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
+         <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_wdata" type="array">
+         <obj_property name="ElementShortName">s_axi_wdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_wdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_wready" type="logic">
+         <obj_property name="ElementShortName">s_axi_wready</obj_property>
+         <obj_property name="ObjectShortName">s_axi_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_wstrb" type="array">
+         <obj_property name="ElementShortName">s_axi_wstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axi_wstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s_axi_wvalid" type="logic">
+         <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
+         <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m20_axis_tready" type="logic">
+         <obj_property name="ElementShortName">m20_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">m20_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m20_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">m20_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m20_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m21_axis_tready" type="logic">
+         <obj_property name="ElementShortName">m21_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">m21_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m21_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">m21_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m21_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m22_axis_tready" type="logic">
+         <obj_property name="ElementShortName">m22_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">m22_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m22_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">m22_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m22_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m23_axis_tready" type="logic">
+         <obj_property name="ElementShortName">m23_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">m23_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m23_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">m23_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m23_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s00_axis_tready" type="logic">
+         <obj_property name="ElementShortName">s00_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">s00_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s00_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">s00_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s00_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s02_axis_tready" type="logic">
+         <obj_property name="ElementShortName">s02_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">s02_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s02_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">s02_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s02_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_rstn_in" type="logic">
+         <obj_property name="ElementShortName">adc_rstn_in</obj_property>
+         <obj_property name="ObjectShortName">adc_rstn_in</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dac_rstn_in" type="logic">
+         <obj_property name="ElementShortName">dac_rstn_in</obj_property>
+         <obj_property name="ObjectShortName">dac_rstn_in</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_rstn" type="logic">
+         <obj_property name="ElementShortName">adc_rstn</obj_property>
+         <obj_property name="ObjectShortName">adc_rstn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dac_rstn" type="logic">
+         <obj_property name="ElementShortName">dac_rstn</obj_property>
+         <obj_property name="ObjectShortName">dac_rstn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io0_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_io0_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io0_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io0_io" type="logic">
+         <obj_property name="ElementShortName">SPI0_io0_io</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io0_io</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io0_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_io0_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io0_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io0_t" type="logic">
+         <obj_property name="ElementShortName">SPI0_io0_t</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io0_t</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io1_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_io1_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io1_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io1_io" type="logic">
+         <obj_property name="ElementShortName">SPI0_io1_io</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io1_io</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io1_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_io1_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io1_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_io1_t" type="logic">
+         <obj_property name="ElementShortName">SPI0_io1_t</obj_property>
+         <obj_property name="ObjectShortName">SPI0_io1_t</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_sck_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_sck_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_sck_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_sck_io" type="logic">
+         <obj_property name="ElementShortName">SPI0_sck_io</obj_property>
+         <obj_property name="ObjectShortName">SPI0_sck_io</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_sck_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_sck_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_sck_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_sck_t" type="logic">
+         <obj_property name="ElementShortName">SPI0_sck_t</obj_property>
+         <obj_property name="ObjectShortName">SPI0_sck_t</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss1_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss1_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss1_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss2_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss2_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss2_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss_io" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss_io</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss_io</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss_o" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss_o</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss_o</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss_t" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss_t</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss_t</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss1_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss1_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss1_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/SPI0_ss2_i" type="logic">
+         <obj_property name="ElementShortName">SPI0_ss2_i</obj_property>
+         <obj_property name="ObjectShortName">SPI0_ss2_i</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/M_DMA_AXIS_tdata" type="array">
+         <obj_property name="ElementShortName">M_DMA_AXIS_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">M_DMA_AXIS_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/M_DMA_AXIS_tkeep" type="array">
+         <obj_property name="ElementShortName">M_DMA_AXIS_tkeep[15:0]</obj_property>
+         <obj_property name="ObjectShortName">M_DMA_AXIS_tkeep[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/M_DMA_AXIS_tlast" type="logic">
+         <obj_property name="ElementShortName">M_DMA_AXIS_tlast</obj_property>
+         <obj_property name="ObjectShortName">M_DMA_AXIS_tlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/M_DMA_AXIS_tready" type="logic">
+         <obj_property name="ElementShortName">M_DMA_AXIS_tready</obj_property>
+         <obj_property name="ObjectShortName">M_DMA_AXIS_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/M_DMA_AXIS_tvalid" type="logic">
+         <obj_property name="ElementShortName">M_DMA_AXIS_tvalid</obj_property>
+         <obj_property name="ObjectShortName">M_DMA_AXIS_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/S_DMA_AXIS_tdata" type="array">
+         <obj_property name="ElementShortName">S_DMA_AXIS_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">S_DMA_AXIS_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/S_DMA_AXIS_tkeep" type="array">
+         <obj_property name="ElementShortName">S_DMA_AXIS_tkeep[15:0]</obj_property>
+         <obj_property name="ObjectShortName">S_DMA_AXIS_tkeep[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/S_DMA_AXIS_tlast" type="logic">
+         <obj_property name="ElementShortName">S_DMA_AXIS_tlast</obj_property>
+         <obj_property name="ObjectShortName">S_DMA_AXIS_tlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/S_DMA_AXIS_tready" type="logic">
+         <obj_property name="ElementShortName">S_DMA_AXIS_tready</obj_property>
+         <obj_property name="ObjectShortName">S_DMA_AXIS_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/S_DMA_AXIS_tvalid" type="logic">
+         <obj_property name="ElementShortName">S_DMA_AXIS_tvalid</obj_property>
+         <obj_property name="ObjectShortName">S_DMA_AXIS_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param0" type="array">
+         <obj_property name="ElementShortName">app_param0[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param0[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param1" type="array">
+         <obj_property name="ElementShortName">app_param1[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param1[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param2" type="array">
+         <obj_property name="ElementShortName">app_param2[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param2[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param3" type="array">
+         <obj_property name="ElementShortName">app_param3[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param3[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param4" type="array">
+         <obj_property name="ElementShortName">app_param4[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param4[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param5" type="array">
+         <obj_property name="ElementShortName">app_param5[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param5[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param6" type="array">
+         <obj_property name="ElementShortName">app_param6[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param6[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_param7" type="array">
+         <obj_property name="ElementShortName">app_param7[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_param7[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/axcache" type="array">
+         <obj_property name="ElementShortName">axcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">axcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/axprot" type="array">
+         <obj_property name="ElementShortName">axprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">axprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mm2s_resetn_out" type="logic">
+         <obj_property name="ElementShortName">mm2s_resetn_out</obj_property>
+         <obj_property name="ObjectShortName">mm2s_resetn_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s2mm_resetn_out" type="logic">
+         <obj_property name="ElementShortName">s2mm_resetn_out</obj_property>
+         <obj_property name="ObjectShortName">s2mm_resetn_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/ddr_rst" type="logic">
+         <obj_property name="ElementShortName">ddr_rst</obj_property>
+         <obj_property name="ObjectShortName">ddr_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dma_clk" type="logic">
+         <obj_property name="ElementShortName">dma_clk</obj_property>
+         <obj_property name="ObjectShortName">dma_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dma_start" type="logic">
+         <obj_property name="ElementShortName">dma_start</obj_property>
+         <obj_property name="ObjectShortName">dma_start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dma_loopback" type="logic">
+         <obj_property name="ElementShortName">dma_loopback</obj_property>
+         <obj_property name="ObjectShortName">dma_loopback</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dma_axcache" type="array">
+         <obj_property name="ElementShortName">dma_axcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">dma_axcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dma_axprot" type="array">
+         <obj_property name="ElementShortName">dma_axprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">dma_axprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_aclk" type="logic">
+         <obj_property name="ElementShortName">m_axis_aclk</obj_property>
+         <obj_property name="ObjectShortName">m_axis_aclk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_reset" type="logic">
+         <obj_property name="ElementShortName">m_axis_reset</obj_property>
+         <obj_property name="ObjectShortName">m_axis_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_frmlen" type="array">
+         <obj_property name="ElementShortName">m_axis_frmlen[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axis_frmlen[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_tvalid" type="logic">
+         <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_tready" type="logic">
+         <obj_property name="ElementShortName">m_axis_tready</obj_property>
+         <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_tdata" type="array">
+         <obj_property name="ElementShortName">m_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_tkeep" type="array">
+         <obj_property name="ElementShortName">m_axis_tkeep[15:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axis_tkeep[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m_axis_tlast" type="logic">
+         <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+         <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/reset_r" type="array">
+         <obj_property name="ElementShortName">reset_r[15:0]</obj_property>
+         <obj_property name="ObjectShortName">reset_r[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcmux_data" type="array">
+         <obj_property name="ElementShortName">adcmux_data[127:0]</obj_property>
+         <obj_property name="ObjectShortName">adcmux_data[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcmux_valid" type="logic">
+         <obj_property name="ElementShortName">adcmux_valid</obj_property>
+         <obj_property name="ObjectShortName">adcmux_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcmux_start" type="logic">
+         <obj_property name="ElementShortName">adcmux_start</obj_property>
+         <obj_property name="ObjectShortName">adcmux_start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcmux_ready" type="logic">
+         <obj_property name="ElementShortName">adcmux_ready</obj_property>
+         <obj_property name="ObjectShortName">adcmux_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mcounter" type="array">
+         <obj_property name="ElementShortName">mcounter[31:0]</obj_property>
+         <obj_property name="ObjectShortName">mcounter[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcsim_data" type="array">
+         <obj_property name="ElementShortName">adcsim_data[127:0]</obj_property>
+         <obj_property name="ObjectShortName">adcsim_data[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcsim_valid" type="logic">
+         <obj_property name="ElementShortName">adcsim_valid</obj_property>
+         <obj_property name="ObjectShortName">adcsim_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcsim_ready" type="logic">
+         <obj_property name="ElementShortName">adcsim_ready</obj_property>
+         <obj_property name="ObjectShortName">adcsim_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adcsim_enable" type="logic">
+         <obj_property name="ElementShortName">adcsim_enable</obj_property>
+         <obj_property name="ObjectShortName">adcsim_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/pcounter" type="array">
+         <obj_property name="ElementShortName">pcounter[31:0]</obj_property>
+         <obj_property name="ObjectShortName">pcounter[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/total_size" type="array">
+         <obj_property name="ElementShortName">total_size[31:0]</obj_property>
+         <obj_property name="ObjectShortName">total_size[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/irq" type="logic">
+         <obj_property name="ElementShortName">irq</obj_property>
+         <obj_property name="ObjectShortName">irq</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/DWIDTH" type="array">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/KWIDTH" type="array">
+         <obj_property name="ElementShortName">KWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">KWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group516" type="group">
+      <obj_property name="label">cpu</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_CS_ADCPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_ADCPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_CS_DACPLL_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_DACPLL_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_DACPLL_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_CS_LMK04828_N" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_CS_LMK04828_N</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_CS_LMK04828_N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_MISO" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MISO</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MISO</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_MOSI" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_MOSI</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_MOSI</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_SPI_SCK" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_SPI_SCK</obj_property>
+         <obj_property name="ObjectShortName">PL_SPI_SCK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_UART_RX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_RX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_RX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/PL_UART_TX" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">PL_UART_TX</obj_property>
+         <obj_property name="ObjectShortName">PL_UART_TX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/pl_clk0" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">pl_clk0</obj_property>
+         <obj_property name="ObjectShortName">pl_clk0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/pl_resetn" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">pl_resetn[0:0]</obj_property>
+         <obj_property name="ObjectShortName">pl_resetn[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/c0_sys_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">c0_sys_clk_n</obj_property>
+         <obj_property name="ObjectShortName">c0_sys_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/c0_sys_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">c0_sys_clk_p</obj_property>
+         <obj_property name="ObjectShortName">c0_sys_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/clk_out100" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_out100</obj_property>
+         <obj_property name="ObjectShortName">clk_out100</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/init_calib_complete" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">init_calib_complete</obj_property>
+         <obj_property name="ObjectShortName">init_calib_complete</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_araddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_araddr[35:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_araddr[35:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arburst" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arcache" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arlen" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arlock" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arlock[0:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arlock[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arqos" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arqos[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arqos[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arregion" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arregion[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arregion[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arsize" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_arvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_arvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awaddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awaddr[35:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awaddr[35:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awburst" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awcache" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awlen" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awlock" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awlock[0:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awlock[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awqos" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awqos[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awqos[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awregion" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awregion[3:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awregion[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awsize" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_awvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_awvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_bready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_bresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_bvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_bvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_rdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rdata[63:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rdata[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_rlast" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rlast</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_rready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_rresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_rvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_rvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_wdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wdata[63:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wdata[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_wlast" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wlast</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_wready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wready</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_wstrb" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wstrb[7:0]</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wstrb[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/mem_axi_wvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">mem_axi_wvalid</obj_property>
+         <obj_property name="ObjectShortName">mem_axi_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_araddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_araddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_araddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_arprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_arready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_arvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_arvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_awaddr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awaddr[39:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awaddr[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_awprot" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_awready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_awvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_awvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_bready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_bresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_bvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_bvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_rdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_rready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_rresp" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_rvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_rvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_wdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_wready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wready</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_wstrb" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/app_lite_wvalid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">app_lite_wvalid</obj_property>
+         <obj_property name="ObjectShortName">app_lite_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_clk</obj_property>
+         <obj_property name="ObjectShortName">adc_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_data" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_data[127:0]</obj_property>
+         <obj_property name="ObjectShortName">adc_data[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_valid" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_valid</obj_property>
+         <obj_property name="ObjectShortName">adc_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_ready" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_ready</obj_property>
+         <obj_property name="ObjectShortName">adc_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_start" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_start</obj_property>
+         <obj_property name="ObjectShortName">adc_start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc_flowctrl" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc_flowctrl[31:0]</obj_property>
+         <obj_property name="ObjectShortName">adc_flowctrl[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_clk" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_clk</obj_property>
+         <obj_property name="ObjectShortName">bram_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_rst" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_rst</obj_property>
+         <obj_property name="ObjectShortName">bram_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_en" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_en</obj_property>
+         <obj_property name="ObjectShortName">bram_en</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_addr" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_addr[23:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_addr[23:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_we" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_we[3:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_we[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_rddata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_rddata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_rddata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/bram_wrdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">bram_wrdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_wrdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/clk_adc_out" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_adc_out</obj_property>
+         <obj_property name="ObjectShortName">clk_adc_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m20_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m20_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m20_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m21_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m21_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m21_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m22_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m22_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m22_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/m23_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">m23_axis_tdata[127:0]</obj_property>
+         <obj_property name="ObjectShortName">m23_axis_tdata[127:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/clk_dac_out" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">clk_dac_out</obj_property>
+         <obj_property name="ObjectShortName">clk_dac_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s00_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">s00_axis_tdata[255:0]</obj_property>
+         <obj_property name="ObjectShortName">s00_axis_tdata[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/s02_axis_tdata" type="array">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">s02_axis_tdata[255:0]</obj_property>
+         <obj_property name="ObjectShortName">s02_axis_tdata[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/sysref_in_diff_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_n</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/sysref_in_diff_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">sysref_in_diff_p</obj_property>
+         <obj_property name="ObjectShortName">sysref_in_diff_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc2_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/adc2_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">adc2_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">adc2_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dac0_clk_clk_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_n</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/dac0_clk_clk_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">dac0_clk_clk_p</obj_property>
+         <obj_property name="ObjectShortName">dac0_clk_clk_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vin2_01_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vin2_01_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_01_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_01_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vin2_23_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_n</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vin2_23_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vin2_23_v_p</obj_property>
+         <obj_property name="ObjectShortName">vin2_23_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vout00_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vout00_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout00_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout00_v_p</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vout02_v_n" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_n</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/cpu_ep/vout02_v_p" type="logic">
+         <obj_property name="DisplayName">FullPathName</obj_property>
+         <obj_property name="ElementShortName">vout02_v_p</obj_property>
+         <obj_property name="ObjectShortName">vout02_v_p</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group517" type="group">
+      <obj_property name="label">local</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mem_clk" type="logic">
+         <obj_property name="ElementShortName">mem_clk</obj_property>
+         <obj_property name="ObjectShortName">mem_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/ad_mem_rst" type="logic">
+         <obj_property name="ElementShortName">ad_mem_rst</obj_property>
+         <obj_property name="ObjectShortName">ad_mem_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/da_mem_rst" type="logic">
+         <obj_property name="ElementShortName">da_mem_rst</obj_property>
+         <obj_property name="ObjectShortName">da_mem_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_AD_base" type="array">
+         <obj_property name="ElementShortName">tl_AD_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_AD_rnum" type="array">
+         <obj_property name="ElementShortName">tl_AD_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_AD_repeat" type="logic">
+         <obj_property name="ElementShortName">tl_AD_repeat</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_repeat</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_AD_reset" type="logic">
+         <obj_property name="ElementShortName">tl_AD_reset</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_AD_status" type="array">
+         <obj_property name="ElementShortName">tl_AD_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_AD_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_DA_base" type="array">
+         <obj_property name="ElementShortName">tl_DA_base[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_base[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_DA_rnum" type="array">
+         <obj_property name="ElementShortName">tl_DA_rnum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_rnum[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_DA_repeat" type="logic">
+         <obj_property name="ElementShortName">tl_DA_repeat</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_repeat</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_DA_reset" type="logic">
+         <obj_property name="ElementShortName">tl_DA_reset</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/tl_DA_status" type="array">
+         <obj_property name="ElementShortName">tl_DA_status[31:0]</obj_property>
+         <obj_property name="ObjectShortName">tl_DA_status[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/adc_clk" type="logic">
+         <obj_property name="ElementShortName">adc_clk</obj_property>
+         <obj_property name="ObjectShortName">adc_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/adc_rst" type="logic">
+         <obj_property name="ElementShortName">adc_rst</obj_property>
+         <obj_property name="ObjectShortName">adc_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/dac_clk" type="logic">
+         <obj_property name="ElementShortName">dac_clk</obj_property>
+         <obj_property name="ObjectShortName">dac_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/dac_rst" type="logic">
+         <obj_property name="ElementShortName">dac_rst</obj_property>
+         <obj_property name="ObjectShortName">dac_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_rd_clr" type="logic">
+         <obj_property name="ElementShortName">mfifo_rd_clr</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_rd_valid" type="logic">
+         <obj_property name="ElementShortName">mfifo_rd_valid</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_rd_enable" type="logic">
+         <obj_property name="ElementShortName">mfifo_rd_enable</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_rd_data" type="array">
+         <obj_property name="ElementShortName">mfifo_rd_data[255:0]</obj_property>
+         <obj_property name="ObjectShortName">mfifo_rd_data[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_wr_clr" type="logic">
+         <obj_property name="ElementShortName">mfifo_wr_clr</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_clr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_wr_valid" type="logic">
+         <obj_property name="ElementShortName">mfifo_wr_valid</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_valid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_wr_enable" type="logic">
+         <obj_property name="ElementShortName">mfifo_wr_enable</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mfifo_wr_data" type="array">
+         <obj_property name="ElementShortName">mfifo_wr_data[255:0]</obj_property>
+         <obj_property name="ObjectShortName">mfifo_wr_data[255:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/mem_init_done" type="logic">
+         <obj_property name="ElementShortName">mem_init_done</obj_property>
+         <obj_property name="ObjectShortName">mem_init_done</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_araddr" type="array">
+         <obj_property name="ElementShortName">m_axi_araddr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_araddr[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arlen" type="array">
+         <obj_property name="ElementShortName">m_axi_arlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arsize" type="array">
+         <obj_property name="ElementShortName">m_axi_arsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arvalid" type="logic">
+         <obj_property name="ElementShortName">m_axi_arvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arready" type="logic">
+         <obj_property name="ElementShortName">m_axi_arready</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_rdata" type="array">
+         <obj_property name="ElementShortName">m_axi_rdata[511:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_rdata[511:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_rresp" type="array">
+         <obj_property name="ElementShortName">m_axi_rresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_rresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_rlast" type="logic">
+         <obj_property name="ElementShortName">m_axi_rlast</obj_property>
+         <obj_property name="ObjectShortName">m_axi_rlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_rvalid" type="logic">
+         <obj_property name="ElementShortName">m_axi_rvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axi_rvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_rready" type="logic">
+         <obj_property name="ElementShortName">m_axi_rready</obj_property>
+         <obj_property name="ObjectShortName">m_axi_rready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arburst" type="array">
+         <obj_property name="ElementShortName">m_axi_arburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arprot" type="array">
+         <obj_property name="ElementShortName">m_axi_arprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arlock" type="logic">
+         <obj_property name="ElementShortName">m_axi_arlock</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arlock</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_arcache" type="array">
+         <obj_property name="ElementShortName">m_axi_arcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_arcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awaddr" type="array">
+         <obj_property name="ElementShortName">m_axi_awaddr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awaddr[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awlen" type="array">
+         <obj_property name="ElementShortName">m_axi_awlen[7:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awlen[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awsize" type="array">
+         <obj_property name="ElementShortName">m_axi_awsize[2:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awsize[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awvalid" type="logic">
+         <obj_property name="ElementShortName">m_axi_awvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awready" type="logic">
+         <obj_property name="ElementShortName">m_axi_awready</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_wdata" type="array">
+         <obj_property name="ElementShortName">m_axi_wdata[511:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_wdata[511:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_wlast" type="logic">
+         <obj_property name="ElementShortName">m_axi_wlast</obj_property>
+         <obj_property name="ObjectShortName">m_axi_wlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_wvalid" type="logic">
+         <obj_property name="ElementShortName">m_axi_wvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axi_wvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_wready" type="logic">
+         <obj_property name="ElementShortName">m_axi_wready</obj_property>
+         <obj_property name="ObjectShortName">m_axi_wready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_bready" type="logic">
+         <obj_property name="ElementShortName">m_axi_bready</obj_property>
+         <obj_property name="ObjectShortName">m_axi_bready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_bresp" type="array">
+         <obj_property name="ElementShortName">m_axi_bresp[1:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_bresp[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_bvalid" type="logic">
+         <obj_property name="ElementShortName">m_axi_bvalid</obj_property>
+         <obj_property name="ObjectShortName">m_axi_bvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awburst" type="array">
+         <obj_property name="ElementShortName">m_axi_awburst[1:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awburst[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awprot" type="array">
+         <obj_property name="ElementShortName">m_axi_awprot[2:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awprot[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awlock" type="logic">
+         <obj_property name="ElementShortName">m_axi_awlock</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awlock</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_awcache" type="array">
+         <obj_property name="ElementShortName">m_axi_awcache[3:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_awcache[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/m_axi_wstrb" type="array">
+         <obj_property name="ElementShortName">m_axi_wstrb[63:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axi_wstrb[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/DIN_WIDTH" type="array">
+         <obj_property name="ElementShortName">DIN_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DIN_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/DOUT_WIDTH" type="array">
+         <obj_property name="ElementShortName">DOUT_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DOUT_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/AWIDTH" type="array">
+         <obj_property name="ElementShortName">AWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">AWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/LWIDTH" type="array">
+         <obj_property name="ElementShortName">LWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">LWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/DATA_SIZE" type="array">
+         <obj_property name="ElementShortName">DATA_SIZE[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DATA_SIZE[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tt_top/top_EP0/local_channel_EP0/CFG_AWIDTH" type="array">
+         <obj_property name="ElementShortName">CFG_AWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">CFG_AWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

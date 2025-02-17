@@ -647,7 +647,7 @@ end
 
 assign end_flag = add_flag && cnt_record == data_record_period - 1;
 
-always @(adc_clk) begin
+always @(posedge adc_clk) begin
   if(!resetn)
     cnt_record <= 0;
   else if(add_flag)begin
@@ -659,5 +659,19 @@ always @(adc_clk) begin
 end
 
 assign record_en = add_flag;
+
+
+ila_record u_ila_record (
+	.clk(adc_clk), // input wire clk
+
+
+	.probe0(prf), // input wire [0:0]  probe0  
+	.probe1(data_record_period), // input wire [31:0]  probe1 
+	.probe2(record_en), // input wire [0:0]  probe2
+	.probe3(cnt_record), // input wire [31:0]  probe3
+	.probe4(add_flag), // input wire [0:0]  probe3
+	.probe5(end_flag), // input wire [0:0]  probe3
+	.probe6(prf_pos) // input wire [0:0]  probe3
+);
 
 endmodule

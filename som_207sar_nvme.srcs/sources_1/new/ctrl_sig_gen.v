@@ -101,18 +101,27 @@ end
 
 
 
+reg trig_valid_r;//至少触发过一次
+always @(posedge adc_clk) begin
+    if(!resetn)
+        trig_valid_r <= 0;
+    else if(trig_valid)
+        trig_valid_r <= 1;
+        
+end
 
 //prf generate
 
 always@(posedge adc_clk)begin
     if(!resetn)
         cnt_prf1 <= 0;
-
     else if(mode_value == 1)begin
-        if(trig_valid)
-            cnt_prf1 <= 0;
-        else
-            cnt_prf1 <= cnt_prf1 + 32'sd1;
+        if(trig_valid_r | trig_valid)begin
+            if(trig_valid)
+                cnt_prf1 <= 0;
+            else
+                cnt_prf1 <= cnt_prf1 + 32'sd1;
+        end
     end
 
     else if(mode_value == 2)begin
@@ -134,7 +143,7 @@ always@(posedge adc_clk)begin
         cnt_prf1 <= 0;
 end
 
-assign prf1 = cnt_prf1 < (TIME_100US - 32'sd1);
+assign prf1 = cnt_prf1 > 0 && cnt_prf1 <= (TIME_100US);
 
 
 assign prf = prf1;

@@ -141,4 +141,17 @@ always@(posedge adc_clk)begin
         trig_gap <= trig_gap_temp;
 end
 
+ila_threshold_detection u_ila_threshold_detection (
+	.clk(adc_clk), // input wire clk
+
+
+	.probe0(trig_valid), // input wire [0:0]  probe0  
+	.probe1(trig_num), // input wire [31:0]  probe1 
+	.probe2(trig_gap), // input wire [31:0]  probe2 
+	.probe3(adc_max0), // input wire [31:0]  probe3 
+	.probe4(adc_max1), // input wire [31:0]  probe4
+	.probe5(adc_data0), // input wire [255:0]  probe4
+	.probe6(adc_thshld) // input wire [31:0]  probe4
+);
+
 endmodule

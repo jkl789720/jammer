@@ -91,8 +91,8 @@ output                  	BC_rst_o        ,
 output                  	BC_sel_o        ,
 output                  	BC_ld_o         ,
 output                  	BC_dary_o       ,
-output                  	BC_trt_o        ,
-output                  	BC_trr_o        ,
+// output                  	BC_trt_o        ,
+// output                  	BC_trr_o        ,
 output [BC_CHIP_NUM-1:0]    BC_sd_o         ,
 // RF
 input  RF_A_LOCK,
@@ -140,7 +140,7 @@ output UART_PL_GPS,
 input UART_GPS_PL,
 input UART_IMU_PL,
 // output DBG_UART_TX,
-input DBG_UART_RX,
+// input DBG_UART_RX,
 output DBG_PPSOUT,
 output FPGA_SYNC,
 output PL_DBG_LED,
@@ -839,13 +839,13 @@ multifunc multifunc_EP0(
 .RF_A_LOCK(RF_A_LOCK),    //input 
 .RF_A_RXCTL(RF_A_RXCTL),    //output 
 .RF_A_SWITCH(RF_A_SWITCH),    //output 
-.RF_A_TXEN(RF_TXEN_OUT[0]),    //output 
+.RF_A_TXEN(),    //output 
 .RF_A_UR_RX(RF_A_UR_RX),    //input 
 .RF_A_UR_TX(RF_A_UR_TX),    //output 
 .RF_B_LOCK(RF_B_LOCK),    //input 
 .RF_B_RXCTL(RF_B_RXCTL),    //output 
 .RF_B_SWITCH(RF_B_SWITCH),    //output 
-.RF_B_TXEN(RF_TXEN_OUT[1]),    //output 
+.RF_B_TXEN(),    //output 
 .RF_B_UR_RX(RF_B_UR_RX),    //input 
 .RF_B_UR_TX(RF_B_UR_TX),    //output 
 .RST_GPS_N(RST_GPS_N),    //output 
@@ -864,8 +864,8 @@ multifunc multifunc_EP0(
 .PL_RS422_3_TX(PL_RS422_3_TX),    //output 
 .PL_RS422_3_RX(PL_RS422_3_RX),    //input 
 .DBG_PPSOUT(DBG_PPSOUT),    //output 
-.rf_tx_en_v	(rf_tx_en_v	)	,//output 
-.rf_tx_en_h	(rf_tx_en_h	)	,//output 
+.rf_tx_en_v	(RF_TXEN_OUT[0]	)	,//output 
+.rf_tx_en_h	(RF_TXEN_OUT[1]	)	,//output 
 .trt_o_p_0	(trt_o_p_0	)	,//output 
 .trr_o_p_0	(trr_o_p_0	)	,//output 	
 .trt_o_p_1	(trt_o_p_1	)	,//output 	

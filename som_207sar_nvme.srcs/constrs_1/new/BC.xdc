@@ -25,7 +25,7 @@ set_property PACKAGE_PIN B13 [get_ports BC_scl_o]
 set_property PACKAGE_PIN C14 [get_ports BC_ld_o]
 set_property PACKAGE_PIN F14 [get_ports BC_dary_o]
 set_property PACKAGE_PIN F13 [get_ports BC_sel_o]
-set_property PACKAGE_PIN C13 [get_ports BC_trr_o]
+set_property PACKAGE_PIN D13 [get_ports BC_rst_o]
 
 ##prf
 # set_property PACKAGE_PIN E14 [get_ports prf_in]

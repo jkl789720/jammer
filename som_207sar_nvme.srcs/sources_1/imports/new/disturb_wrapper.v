@@ -99,7 +99,8 @@ output                            err_flag          ,
 output                            fifo_overflow     ,
 output                            fifo_underflow    ,
 
-output                            rf_out
+output                            rf_out            ,
+output                            channel_sel
 
 );
 
@@ -372,7 +373,7 @@ wire resetn_sof;
 
 wire recorde_mode;
 wire [31:0] power_adjust_coe;
-wire adc_channel_sel;
+
 
 
 
@@ -395,7 +396,7 @@ assign change_eq        = app_param15[0]      ;
 assign star_mode        = app_param16[0]      ;
 assign recorde_mode     = app_param17[0];
 assign power_adjust_coe = app_param18;
-assign adc_channel_sel  = app_param19[0];
+assign channel_sel  = app_param19[0];
 
 assign app_status0      = fft_value_max_latch_q   ;
 assign app_status1      = fft_value_max_latch_i   ;
@@ -410,7 +411,7 @@ assign app_status9      = {31'b0,fft_valid}       ;
 assign app_status10     = adc_max0;
 assign app_status11     = adc_max1;
 
-assign adc_data = adc_channel_sel ? adc_data1 : adc_data0;
+assign adc_data = channel_sel ? adc_data1 : adc_data0;
 
 `ifdef DISTURB_DEBUG
 vio_reg_write u_vio_reg_write (
@@ -434,7 +435,7 @@ vio_reg_write u_vio_reg_write (
   .probe_in16   (star_mode          ),  
   .probe_in17   (recorde_mode       ),  
   .probe_in18   (power_adjust_coe   ),  
-  .probe_in19   (adc_channel_sel    ) //1 
+  .probe_in19   (channel_sel    ) //1 
 );
 
 vio_reg_read u_vio_reg_read (

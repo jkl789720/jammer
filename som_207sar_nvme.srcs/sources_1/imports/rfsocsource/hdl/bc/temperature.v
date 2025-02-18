@@ -39,7 +39,10 @@ output     [7:0]                    temper_data3                 ,
 output reg                          temper_data_valid            ,
 output                              temper_read_done             ,
 
-input      [GROUP_CHIP_NUM-1:0]     sd_i                    
+input      [GROUP_CHIP_NUM-1:0]     sd_i                         ,
+input                               ld_o                         ,
+input                               dary_o                       ,
+input                               tr_o                         
 );
 
 reg [7:0] temper_data_buf [GROUP_CHIP_NUM-1:0];
@@ -475,4 +478,37 @@ always@(posedge sys_clk)begin
         bc_group_send_done <= 0;
 end
 
+//上电给芯片复位
+reg [15:0] cnt_reset = 100;
+
+always@(posedge sys_clk)begin
+    if(cnt_reset > 0)
+        cnt_reset <= cnt_reset - 1;
+    else
+        cnt_reset <= cnt_reset;
+end
+
+assign rst_o = cnt_reset > 0;
+
+
+`ifdef DEBUG
+wire [15:0] sd;
+assign sd = sd_o;
+ila_spi_sar u_ila_spi_sar (
+	.clk     (sys_clk           ),
+	.probe0  (trig              ),//1
+	.probe1  (scl_o             ),//1
+	.probe2  (rst_o             ),//1
+	.probe3  (sel_o             ),//1
+	.probe4  (cmd_flag          ),//1
+	.probe5  (sd                ),//16
+	.probe6  (c_state           ),//4
+	.probe7  (n_state           ),//4
+	.probe8  (cnt_bit           ),//32
+	.probe9  (mode              ),//1
+	.probe10 (ld_o              ),//1
+	.probe11 (dary_o            ),//1
+	.probe12 (tr_o              ) //1
+);
+`endif
 endmodule

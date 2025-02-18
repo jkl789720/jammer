@@ -92,16 +92,18 @@ output                          data_record_mode          ,
 
 output                          rf_out                    ,
 
-output                          RF_A_TXEN                 ,
-output                          bc_tx_en                  ,
+
 output                          record_en                 ,
 
 output	   						          prffix_inter	            ,//**
 output	reg						          preprf_inter	            ,
 output	reg						          prfin_inter		            ,
 output              			      RF_TXEN_inter	            ,//**
-output              			      BC_TXEN_inter	             //**
-
+output              			      BC_TXEN_inter	            , //**
+output                          rf_tx_en_v                ,
+output                          rf_tx_en_h                ,
+output                          bc_tx_en                  ,
+output                          channel_sel
 );
 
 //adc_valid需要自己生成
@@ -150,7 +152,11 @@ reg    [WIDTH*2*8-1:0]              adc_data       ;//需要拼接而来
 
 wire                              prf            ;
 
+
 wire resetn_vio;
+
+wire rf_tx_en;
+
 `ifdef TEST
 reg [7:0] cnt_reset = 0;
 always@(posedge adc_clk)begin
@@ -223,12 +229,13 @@ always @(posedge adc_clk) begin
 end
 
 assign adc_data_txt = data_in[read_addr_txt];
-
+//-----------------2025/02/12 22:51改动--------------------//
+//ad0和ad1接反，从而实现ad0接h通道，ad1接v通道；射频模块那块反了一层，因此这里软件再反一次反回来
 wire [255:0] adc_data0;
 genvar kk;
 generate
 	for(kk = 0;kk < 8;kk = kk + 1)begin:blk1
-		assign adc_data0[(kk+1)*32-1:kk*32] = {m01_axis_tdata[(kk+1)*16-1:kk*16],m00_axis_tdata[(kk+1)*16-1:kk*16]};
+		assign adc_data0[(kk+1)*32-1:kk*32] = {m03_axis_tdata[(kk+1)*16-1:kk*16],m02_axis_tdata[(kk+1)*16-1:kk*16]};
 	end
 endgenerate
 
@@ -236,7 +243,7 @@ wire [255:0] adc_data1;
 genvar ss;
 generate
 	for(ss = 0;ss < 8;ss = ss + 1)begin:blk2
-		assign adc_data1[(ss+1)*32-1:ss*32] = {m03_axis_tdata[(ss+1)*16-1:ss*16],m02_axis_tdata[(ss+1)*16-1:ss*16]};
+		assign adc_data1[(ss+1)*32-1:ss*32] = {m01_axis_tdata[(ss+1)*16-1:ss*16],m00_axis_tdata[(ss+1)*16-1:ss*16]};
 	end
 endgenerate
 
@@ -459,7 +466,8 @@ u_disturb_wrapper(
 . dac_valid_o       (dac_valid_o      ) ,
 . err_flag          (err_flag         ) ,
 . fifo_overflow     (fifo_overflow    ) ,
-. fifo_underflow    (fifo_underflow   )  
+. fifo_underflow    (fifo_underflow   ) ,
+. channel_sel       (channel_sel      )
 );
 
 
@@ -499,7 +507,7 @@ always@(posedge adc_clk)begin
 	CFGBC_OUTEN_r_BC <= {CFGBC_OUTEN_r_BC[(DWIDTH_0/2)-1:0], RF_A_TXEN_TEMP};
 end
 
-assign RF_A_TXEN = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && (~adc_valid_expand);//改动点
+assign rf_tx_en = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && (~adc_valid_expand);//改动点
 assign bc_tx_en = (|CFGBC_OUTEN_r_BC) ;//改动点
 
 wire signed [15:0] power_adjust_coe;
@@ -660,6 +668,15 @@ end
 
 assign record_en = add_flag;
 
+//-----------------射频模块使能生成----------------------//
+rf_mode u_rf_mode(
+. adc_clk     (adc_clk    ) ,
+. resetn      (resetn     ) ,
+. rf_tx_en    (rf_tx_en   ) ,
+. channel_sel (channel_sel) ,  
+. rf_tx_en_h  (rf_tx_en_h ) ,
+. rf_tx_en_v  (rf_tx_en_v )
+);
 
 ila_record u_ila_record (
 	.clk(adc_clk), // input wire clk

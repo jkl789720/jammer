@@ -1,9 +1,4 @@
-//------------------2023/12/29注解--------------------//
-//g3换成g2只需要更改 LANE_BIT 和 FRAME_DATA_BIT两个参数即可
-//可以把四组波控信号连接到一起，然后继续用这个程序实现并行控制，毕竟16跟数据线是独立的 26 106
 `include "configure.vh"
-//assign BC_B_TXEN   = tr_o; 设置一个分配器开关，来选择A或B天线阵列
-//1201us  spi:243024
 module bc_wrapper#(
     `ifndef G3
     parameter LANE_BIT         = 20                              ,
@@ -53,14 +48,22 @@ module bc_wrapper#(
         output                        tr_o_b         ,
         output                        rst_o_b        ,
     `else
-        output                        sel_o_h        ,
-        output                        scl_o_h    	 ,
-        output [GROUP_CHIP_NUM-1:0]   sd_o_h         ,
-        output                        ld_o_h         ,
-        output                        dary_o_h       ,
-        output                        trt_o_h        ,
-        output                        trr_o_h        ,
-        output                        rst_o_h        ,
+        output                        sel_o_p          ,
+        output                        scl_o_p    	   ,
+        output [GROUP_CHIP_NUM-1:0]   sd_o_p           ,
+        output                        ld_o_p           ,
+        output                        dary_o_p         ,
+
+        output                        trt_o_p_0      ,
+        output                        trr_o_p_0      ,
+        output                        trt_o_p_1      ,
+        output                        trr_o_p_1      ,
+        output                        trt_o_p_2      ,
+        output                        trr_o_p_2      ,
+        output                        trt_o_p_3      ,
+        output                        trr_o_p_3      ,
+
+        output                        rst_o_p          ,
     `endif		
 
 	input                	          rama_clk       ,
@@ -75,28 +78,15 @@ module bc_wrapper#(
     input  [31:0] 			          app_param1	 ,
     input  [31:0] 			          app_param2	 ,
     output [31:0] 			          app_status0	 ,
-    output [31:0] 			          app_status1	 
+    output [31:0] 			          app_status1	 ,
+    input                             sel_param      
 
 ); 
 
 
 wire reset;//复位
 
-	// wire sys_clk_bufg,sys_clk;
-//    IBUFDS IBUFDS_inst (
-//       .O(sys_clk_bufg),   // 1-bit output: Buffer output
-//       .I(sys_clk_P),   // 1-bit input: Diff_p buffer input (connect directly to top-level port)
-//       .IB(sys_clk_n)  // 1-bit input: Diff_n buffer input (connect directly to top-level port)
-//    );
-//     BUFG BUFG_inst (
-//     .O(sys_clk), // 1-bit output: Clock output
-//     .I(sys_clk_bufg)  // 1-bit input: Clock input
-//    );
-
 //data_in
-
-
-
 //-------------------wire declare----------------------//
 //spi
 wire [DATA_BIT-1:0]        data_in          ;
@@ -118,6 +108,11 @@ wire                       temper_ready     ;
 wire                       temper_en        ;
 
 wire                       temper_read_done     ;
+
+wire [3:0]                 bc_mode;
+
+wire image_start;
+
 
 
 //--cpu_o_ctrl&&mode
@@ -192,34 +187,51 @@ assign rama_dout = (rama_addr >= bc_top_addr) ? delay_ram_dout: bc_ram_dout;
 assign bc_flag = (rama_addr < bc_top_addr);
 
 //reg
+reg [31:0] app_param0_r [1:0];
+reg [31:0] app_param1_r [1:0];
+reg [31:0] app_param2_r [1:0];
+always@(posedge sys_clk)begin
+    if(sys_rst)begin
+        app_param0_r[0] <= 0;
+        app_param1_r[0] <= 0;
+        app_param2_r[0] <= 0;
 
-	assign prf_start_in         = app_param0[0];
-	assign prf_mode_in          = app_param0[1];
-	assign ld_mode_in           = app_param0[2];
-	assign send_flag_in         = app_param0[3];
-	assign single_lane          = app_param0[4];
-	assign tr_mode              = app_param0[5];
-	assign polarization_mode    = app_param0[6];
-    assign temper_req           = app_param0[7];
+        app_param0_r[1] <= 0;
+        app_param1_r[1] <= 0;
+        app_param2_r[1] <= 0;
+    end
+    else begin
+        app_param0_r[0] <= app_param0;
+        app_param1_r[0] <= app_param1;
+        app_param2_r[0] <= app_param2;
 
-	assign valid_in     = app_param1[0];
-	assign beam_pos_num	= app_param2   ;
-	//cpu_i_gen
-	assign app_status0          = `ID_NUM;
-    assign app_status1          = {31'b0,temper_data_valid};
+        app_param0_r[1] <= app_param0_r[0];
+        app_param1_r[1] <= app_param1_r[0];
+        app_param2_r[1] <= app_param2_r[0];
+    end
+end
+        
+
+assign prf_start_in         = app_param0_r[1][0];
+assign prf_mode_in          = app_param0_r[1][1];
+assign ld_mode_in           = app_param0_r[1][2];
+assign send_flag_in         = app_param0_r[1][3];//打拍
+assign single_lane          = app_param0_r[1][4];//打拍
+assign tr_mode              = app_param0_r[1][5];
+assign polarization_mode    = app_param0_r[1][6];
 
 
+assign valid_in     = app_param1_r[1][0];//打拍
+assign temper_req   = app_param1_r[1][1];//打拍
+assign bc_mode      = app_param1_r[1][5:2];//打拍
+// assign sel_param    = app_param1_r[1][6];//打拍
+assign image_start  = app_param1_r[1][8];
 
-//---------已经不起作用了,可随时删除，暂留以备后续
-cpu_ctrl_sig_gen u_cpu_ctrl_sig_gen(
-. sys_rst       (sys_rst      ) ,
-. sys_clk       (sys_clk      ) ,
-. prf_in        (prf_in       ) ,
-. valid_in      (valid_in     ) ,
-. rd_done       (rd_done      ) ,
-. cpu_dat_sd_en (cpu_dat_sd_en) ,
-. data_sending  (data_sending ) 
-);
+assign beam_pos_num	= app_param2_r[1]   ;
+//cpu_i_gen
+assign app_status0          = `ID_NUM;
+assign app_status1          = {31'b0,temper_data_valid};
+
 
 wave_ctrl_sig_gen#(
     .LANE_BIT         (LANE_BIT         ),
@@ -242,7 +254,7 @@ u_wave_ctrl_sig_gen(
 . prf_start_in  		(prf_start_in  		),
 . prf_mode_in   		(prf_mode_in   		),
 . prf           		(prf_in             ),
-. ld_o	                (ld_o	            ),
+. ld_o	                (ld_o	            ),//**
 . send_flag_in			(send_flag_in	    ),
 . single_lane			(single_lane		),
 . tr_mode				(tr_mode			),
@@ -296,62 +308,13 @@ u_send_data_gen(
 .  bc_group_send_done   (bc_group_send_done     ) ,
 .  now_beam_send_done   (now_beam_send_done     ) ,
 .  ld_mode_in  	        (ld_mode_in             ) ,
-.  ld_o  	            (ld_o                   ) ,
-.  dary_o  	            (dary_o                 ) ,
+.  ld_o  	            (ld_o                   ) ,//**
+.  dary_o  	            (dary_o                 ) ,//**
 .  temper_en            (temper_en              ) ,
 .  temper_read_done     (temper_read_done       ) ,
 .  temper_req           (temper_req             ) ,
 .  reset                (reset                  ) 
 );
-
-
-
-// spi #(
-//     .LANE_BIT         (LANE_BIT         ),
-//     .FRAME_DATA_BIT   (FRAME_DATA_BIT   ),
-//     .GROUP_CHIP_NUM   (GROUP_CHIP_NUM   ),
-//     .GROUP_NUM        (GROUP_NUM        ),
-//     .DATA_BIT         (DATA_BIT         ),
-//     .SYSHZ            (SYSHZ            ),
-//     .SCLHZ            (SCLHZ            ),
-//     .READ_PORT_BYTES  (READ_PORT_BYTES  ),
-//     .WRITE_PORT_BYTES (WRITE_PORT_BYTES ),
-//     .BEAM_BYTES       (BEAM_BYTES       ),
-//     .CMD_BIT          (CMD_BIT          ),
-//     .BEAM_NUM         (BEAM_NUM         )
-// )
-// u_spi(
-//     .sys_clk               (sys_clk             ),
-//     .sys_rst               (sys_rst             ),
-//     .data_in               (data_in             ),
-//     .trig                  (trig                ),
-//     .mode                  (mode                ),//
-//     .prf_in                (prf_in              ),
-//     .ld_mode_in            (ld_mode_in          ),
-//     .send_flag_in          (send_flag_in        ),
-//     .single_lane           (single_lane         ),
-//     .scl_o                 (scl_o               ),
-//     .rst_o                 (rst_o               ),
-//     .sel_o                 (sel_o               ),
-//     .cmd_flag              (cmd_flag            ),//
-//     .tr_o                  (tr_o                ),//
-//     .trt_o                 (trt_o               ),//
-//     .trr_o                 (trr_o               ),//
-//     .sd_o                  (sd_o                ),
-//     .bc_group_send_done          (bc_group_send_done        ),
-//     .ld_done               (ld_done             ),
-//     .cmd_send_done         (cmd_send_done       ),
-//     .group_data_send_done  (group_data_send_done),
-//     .valid_in              (valid_in            ),
-//     .now_beam_send_done    (now_beam_send_done  ),
-//     .ld_o                  (ld_o                ),
-//     .dary_o                (dary_o              ),
-//     .tr_en                 (tr_en               ),
-//     .tr_mode               (tr_mode             )
-
-// );
-
-
 
 temperature #(
     .LANE_BIT         (LANE_BIT         ),
@@ -374,35 +337,66 @@ temperature #(
     .mode                    ( mode                ),
     .temper_en               ( temper_en           ),
     .sd_i                    ( sd_i                ),
-    .sel_o                   ( sel_o               ),
+    .sel_o                   ( sel_o               ),//**
     .cmd_flag                ( cmd_flag            ),
-    .scl_o                   ( scl_o               ),
-    .sd_o                    ( sd_o                ),
-    .rst_o                   ( rst_o               ),
+    .scl_o                   ( scl_o               ),//**
+    .sd_o                    ( sd_o                ),//**
+    .rst_o                   ( rst_o               ),//**
     .bc_group_send_done      ( bc_group_send_done  ),
     .temper_data0            ( temper_data0        ),
     .temper_data1            ( temper_data1        ),
     .temper_data2            ( temper_data2        ),
     .temper_data3            ( temper_data3        ),
     .temper_data_valid       ( temper_data_valid   ),
-    .temper_read_done        ( temper_read_done    )
+    .temper_read_done        ( temper_read_done    ),
+    .ld_o                    ( ld_o                ),//**
+    .dary_o                  ( dary_o              ),//**
+    .tr_o                    ( tr_o                )
 );
 
+bc_mode u_bc_mode(
+    .sys_clk     (sys_clk    ),
+    .sys_rst     (sys_rst    ),
+    .trt_o       (trt_o      ),
+    .trr_o       (trr_o      ),
+    .sel_param   (sel_param  ),
+
+    .trt_o_p_0   (trt_o_p_0  ),
+    .trr_o_p_0   (trr_o_p_0  ),
+    .trt_o_p_1   (trt_o_p_1  ),
+    .trr_o_p_1   (trr_o_p_1  ),
+    .trt_o_p_2   (trt_o_p_2  ),
+    .trr_o_p_2   (trr_o_p_2  ),
+    .trt_o_p_3   (trt_o_p_3  ),
+    .trr_o_p_3   (trr_o_p_3  )
+);
+
+`ifdef SAR
+    assign sel_o_a    = sel_o    ;
+    assign cmd_flag_a = cmd_flag ;
+    assign scl_o_a    = scl_o    ;
+    assign sd_o_a     = sd_o     ;
+    assign ld_o_a     = ld_o     ;
+    assign tr_o_a     = tr_o && (~polarization_mode)     ;
+    assign rst_o_a    = rst_o    ;
+
+    assign sel_o_b    = sel_o    ;
+    assign cmd_flag_b = cmd_flag ;
+    assign scl_o_b    = scl_o    ;
+    assign sd_o_b     = sd_o     ;
+    assign ld_o_b     = ld_o     ;
+    assign tr_o_b     = tr_o && polarization_mode     ;
+    assign rst_o_b    = rst_o    ;
+`else
+    assign sel_o_p    = sel_o    ;
+    assign scl_o_p    = scl_o    ;
+    assign sd_o_p     = sd_o     ;
+    assign dary_o_p   = dary_o   ;
+    assign ld_o_p     = ld_o     ;
+    assign rst_o_p    = rst_o    ;
+`endif
 
 
-
-
-
-// localparam DWIDTH = 100;
-// reg [DWIDTH-1:0] CFGBC_OUTEN_r = 0;
-// always@(posedge sys_clk)begin
-//     if(sys_rst)
-//         CFGBC_OUTEN_r <= 0;
-//     else
-// 	    CFGBC_OUTEN_r <= {CFGBC_OUTEN_r[DWIDTH-2:0], tr_o};
-// end
-// wire trt_cap;
-// assign BC_A_TXD[0] = tr_o;
 `ifdef DEBUG
 wire [15:0] sd;
 assign sd = sd_o;
@@ -434,69 +428,5 @@ vio_sys u_vio_sys (
 );
 
 `endif
-
-    // assign BC_A_CLK    = scl_o;
-    // assign BC_A_CS     = sel_o;
-    // assign BC_A_LATCH  = ld_o;
-    // // assign BC_A_RXD    = ld_o;
-    // assign BC_A_RXEN   = cmd_flag;
-    // assign BC_A_TXD    = sd_o;
-    // assign BC_A_TXEN   = tr_o;
-
-    // assign BC_B_CLK    = scl_o;
-    // assign BC_B_CS     = sel_o;
-    // assign BC_B_LATCH  = ld_o;
-    // // assign BC_A_RXD    = ld_o;
-    // assign BC_B_RXEN   = cmd_flag;
-    // assign BC_B_TXD    = sd_o;
-    // assign BC_B_TXEN   = tr_o;
-
-`ifdef SAR
-    assign sel_o_a    = sel_o    ;
-    assign cmd_flag_a = cmd_flag ;
-    assign scl_o_a    = scl_o    ;
-    assign sd_o_a     = sd_o     ;
-    assign ld_o_a     = ld_o     ;
-    assign tr_o_a     = tr_o && (~polarization_mode)     ;
-    assign rst_o_a    = rst_o    ;
-
-    assign sel_o_b    = sel_o    ;
-    assign cmd_flag_b = cmd_flag ;
-    assign scl_o_b    = scl_o    ;
-    assign sd_o_b     = sd_o     ;
-    assign ld_o_b     = ld_o     ;
-    assign tr_o_b     = tr_o && polarization_mode     ;
-    assign rst_o_b    = rst_o    ;
-`else
-    assign sel_o_h    = sel_o    ;
-    assign scl_o_h    = scl_o    ;
-    assign sd_o_h     = sd_o     ;
-    assign dary_o_h   = dary_o   ;
-    assign ld_o_h     = ld_o     ;
-    assign trt_o_h    = trt_o    ;
-    assign trr_o_h    = trr_o    ;
-    assign rst_o_h    = rst_o    ;
-`endif
-
-// //-----------------温度请求处理逻辑-------------------//
-// //这样做的好处是有且只响应一次请求逻辑
-// reg [2:0] temper_req_r;
-// wire temper_req_pos;
-// reg temper_req_keep;
-// always@(posedge sys_clk)begin
-//     temper_req_r <= {temper_req_r[1:0],temper_req};
-// end
-// assign temper_req_pos = temper_req_r[1] && (~temper_req_r[2]);
-
-// always@(posedge sys_clk)begin
-//     if(sys_rst)
-//         temper_req_keep <= 0;
-//     else if(temper_req_pos)
-//         temper_req_keep <= 1;
-//     else if(temper_req_keep && temper_ready)
-//         temper_req_keep <= 0;
-// end
-
-// assign temper_en = temper_req_keep && temper_ready;
 
 endmodule

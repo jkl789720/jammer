@@ -83,16 +83,6 @@ always@(posedge sys_clk)begin
 end
 assign prf_pos = ~prf_r[2] && prf_r[1];
 
-//-----------------------对send_flag_in打两拍减小亚稳态传播概率------------------------//
-reg [1:0] send_flag_r;
-wire send_flag;
-always@(posedge sys_clk)begin
-    if(reset)
-        send_flag_r <= 0;
-    else 
-        send_flag_r <= {send_flag_r[0],send_flag_in};
-end
-assign send_flag = send_flag_r[1];
 
 //-----------------------------生成tr信号-----------------------
 //----tr_other
@@ -126,8 +116,8 @@ always@(posedge sys_clk)begin
 	else
 		cnt_tr <= cnt_tr + 1;
 end
-assign tr_other = (cnt_tr >= cnt_tr_num0) && (cnt_tr < cnt_tr_num - 1) && send_flag;
-// assign tr_other = (cnt_tr >= 200) && (cnt_tr < 700 - 1) && send_flag;
+assign tr_other = (cnt_tr >= cnt_tr_num0) && (cnt_tr < cnt_tr_num - 1) && send_flag_in;
+// assign tr_other = (cnt_tr >= 200) && (cnt_tr < 700 - 1) && send_flag_in;
 //----------tr_single----------//
 wire tr_single;
 reg single_flag_sync;
@@ -140,7 +130,7 @@ always@(posedge sys_clk)begin
         single_flag_sync <= 0;
 end
 
-assign tr_single   = send_flag && single_flag_sync;
+assign tr_single   = send_flag_in && single_flag_sync;
 
 reg data_valid;
 always@(posedge sys_clk)begin
@@ -156,22 +146,32 @@ wire tr_o_local;
 assign tr_o_local = data_valid && (single_lane ? tr_single : tr_other);
 // assign tr_o = 1;
 
+reg [2:0] tr_en_r;
+wire tr_en_pos;
+always@(posedge sys_clk)begin
+    if(reset)
+        tr_en_r <= 0;
+    else
+        tr_en_r <= {tr_en_r[1:0],tr_en};
+end
+assign tr_en_pos =  ~tr_en_r[2] && tr_en_r[1];
+
 reg [31:0] cnt_close;
 always@(posedge sys_clk)begin
     if(reset)
+        cnt_close <= 5000;
+    else if(tr_en_pos && (!single_lane))
         cnt_close <= 0;
-    else if(tr_en && (!single_lane))begin
-        if(cnt_close == 5000 - 1)
-            cnt_close <= 0;
-        else
-            cnt_close <= cnt_close + 1;
-    end
+    else if(cnt_close == 5000)
+        cnt_close <= cnt_close;
     else
-        cnt_close <= 0;
+        cnt_close <= cnt_close + 1;
 end
 
 wire tr_input;
-assign tr_o_input = (cnt_close == 5000 - 1) ? 0 : tr_en;
+wire tr_max;
+assign tr_max = (single_lane) ? 1 : (cnt_close <= 5000 - 1);
+assign tr_o_input = tr_max && tr_en_r[1];
 
 assign tr_o = tr_mode ? tr_o_input: tr_o_local;
 

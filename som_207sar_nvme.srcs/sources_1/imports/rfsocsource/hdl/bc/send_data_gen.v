@@ -63,13 +63,13 @@ output                      reset
 
 //-----------------温度请求处理逻辑-------------------//
 //这样做的好处是有且只响应一次请求逻辑
-reg [2:0] temper_req_r;
+reg  temper_req_r;
 wire temper_req_pos;
 reg temper_req_keep;
 always@(posedge sys_clk)begin
-    temper_req_r <= {temper_req_r[1:0],temper_req};
+    temper_req_r <= temper_req;
 end
-assign temper_req_pos = temper_req_r[1] && (~temper_req_r[2]);
+assign temper_req_pos = ~temper_req_r && temper_req;
 
 always@(posedge sys_clk)begin
     if(sys_rst)
@@ -148,20 +148,20 @@ reg [4:0] c_state,n_state;
 //----------------------------状态编码-------------------------------------//
 localparam IDLE                         = 5'd0  ;
 localparam ARBITRATE0                   = 5'd1  ;//判断是单波位还是多波位
-localparam CMD_GEN                      = 5'd2  ;
-localparam SEND_CMD                     = 5'd3  ;
-localparam DELAY1                       = 5'd4  ;//指令和数据之间的延时 0.5us
-localparam GET_GROUP_DATA               = 5'd5  ;
-localparam SEND_GROUP_DATA              = 5'd6  ;
-localparam DELAY2                       = 5'd7  ;//组间延时
-localparam WHETHER_BEAM_SEND_DONE       = 5'd8  ;
-localparam WAIT_DARY                    = 5'd9  ;
-localparam SEND_DARY                    = 5'd10 ;
-localparam WAIT_LD                      = 5'd11 ;
-localparam SEND_LD                      = 5'd12 ;
-localparam ARBITRATE1                   = 5'd13 ;//判断是单波位还是多波位
-localparam CHANGE_BW                    = 5'd14 ;
-localparam WAIT_PRF                     = 5'd15 ;
+localparam WAIT_PRF                     = 5'd2  ;
+localparam CMD_GEN                      = 5'd3  ;
+localparam SEND_CMD                     = 5'd4  ;
+localparam DELAY1                       = 5'd5  ;//指令和数据之间的延时 0.5us
+localparam GET_GROUP_DATA               = 5'd6  ;
+localparam SEND_GROUP_DATA              = 5'd7  ;
+localparam DELAY2                       = 5'd8  ;//组间延时
+localparam WHETHER_BEAM_SEND_DONE       = 5'd9  ;
+localparam WAIT_DARY                    = 5'd10 ;
+localparam SEND_DARY                    = 5'd11 ;
+localparam WAIT_LD                      = 5'd12 ;
+localparam SEND_LD                      = 5'd13 ;
+localparam ARBITRATE1                   = 5'd14 ;//判断是单波位还是多波位
+localparam CHANGE_BW                    = 5'd15 ;
 localparam READ_TEMPERATURE             = 5'd16 ;
 localparam WHETHER_READ_TEMPERATURE     = 5'd17 ;
 //---------------------状态切换相关变量定义-------------------------------//
@@ -311,17 +311,32 @@ always@(*)begin
         n_state = IDLE;
     else begin
         case (c_state)
-            IDLE:begin
-                if(valid_pos_r0)//由于时序对齐的原因用打一拍后的信号
-                    n_state = CMD_GEN;
-                else
-                    n_state = c_state;
-            end 
+            `ifdef SAR
+                IDLE:begin
+                    if(valid_pos_r0)//由于时序对齐的原因用打一拍后的信号
+                        n_state = ARBITRATE0;
+                    else
+                        n_state = c_state;
+                end 
+            `else 
+                IDLE:begin
+                    if(valid_pos_r0)//由于时序对齐的原因用打一拍后的信号
+                        n_state = CMD_GEN;
+                    else
+                        n_state = c_state;
+                end 
+            `endif
             ARBITRATE0: begin
                 if(beam_pos_num == 1)
                     n_state = CMD_GEN;
                 else
                     n_state = WAIT_PRF;
+            end
+            WAIT_PRF:begin
+                if(prf_pos)
+                    n_state = CMD_GEN;
+                else
+                    n_state = c_state;
             end
             CMD_GEN :begin
                 n_state = SEND_CMD;
@@ -365,8 +380,10 @@ always@(*)begin
             WAIT_DARY :begin
                 if(ld_mode == 0)
                     n_state = SEND_DARY;
-                else 
-                    n_state = WAIT_PRF;
+                else if(prf_pos)
+                    n_state = SEND_DARY;
+                else
+                    n_state = c_state;
             end
             // WAIT_DARY :begin
             //     if(ld_mode == 0)
@@ -412,15 +429,15 @@ always@(*)begin
                 else
                     n_state = CHANGE_BW;
             end
-            CHANGE_BW : begin
-                n_state = CMD_GEN;
-            end
-            WAIT_PRF :begin
-                if(prf_pos)
-                    n_state = SEND_DARY;
-                else
-                    n_state = c_state;
-            end
+            `ifdef SAR
+                CHANGE_BW : begin
+                    n_state = WAIT_PRF;
+                end
+            `else 
+                CHANGE_BW : begin
+                    n_state = CMD_GEN;
+                end
+            `endif
             default: n_state = IDLE;
         endcase
     end
@@ -545,10 +562,6 @@ always@(posedge sys_clk)begin
                 else
                     beam_pos_cnt <= beam_pos_cnt + 1;
             end
-            WAIT_PRF :begin
-                // if(prf_pos)
-                    // flag <= 1;
-            end
         endcase
     end
 end
@@ -615,9 +628,9 @@ always@(posedge sys_clk)begin
         rd_addr_r0 <= rd_addr;
 end
 
-// `ifdef DEBUG
-// ila_sd_da_sar u_ila_sd_da_sar(
-// .clk          (sys_clk 		  ),
+`ifdef DEBUG
+ila_sd_da_sar u_ila_sd_da_sar(
+.clk          (sys_clk 		  ),
 // .probe0       (bc_ram_en      ), 
 // .probe1       (bc_ram_we      ), 
 // .probe2       (bc_ram_addr    ), 
@@ -630,14 +643,16 @@ end
 // .probe9       (delay_ram_din  ),
 // .probe10      (delay_ram_dout ),
 // .probe11      (delay_ram_rst  ),
-// .probe12      (c_state        ),
-// .probe13      (n_state        ),
-// .probe14      (valid_pos      ),
-// .probe15      (prf_pos        ),
-// .probe16      (beam_pos_cnt_r0)
+.probe0      (ld_o             ),//1
+.probe1      (dary_o           ),//1
+.probe2      (c_state          ),//5
+.probe3      (n_state          ),//5
+.probe4      (valid_pos        ),//1
+.probe5      (prf_pos          ),//1
+.probe6      (beam_pos_cnt_r0  ) //24
 
-// );
-// `endif
+);
+`endif
 
 
 always@(posedge sys_clk)begin

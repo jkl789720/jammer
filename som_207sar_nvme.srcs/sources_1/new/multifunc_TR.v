@@ -172,9 +172,21 @@ output DBG_PPSOUT,
 output useruart0_rx,
 input useruart0_tx,
 output useruart1_rx,
-input useruart1_tx
+input useruart1_tx,
+output rf_tx_en_v,
+output rf_tx_en_h,
+output trt_o_p_0,
+output trr_o_p_0,	
+output trt_o_p_1,	
+output trr_o_p_1,	
+output trt_o_p_2,	
+output trr_o_p_2,	
+output trt_o_p_3,	
+output trr_o_p_3	
 );
 wire rf_out;
+wire channel_sel;
+wire bc_tx_en;
 assign BC_A_TXEN = rf_out;
 
 assign BC_A_RXEN = rf_out;
@@ -779,9 +791,12 @@ data_pre
 
 .vio_dataout(vio_dataout),
 .vio_selchirp(vio_selchirp),
-.RF_A_TXEN(RF_A_TXEN),
 .adc_valid(disturb_adc_valid),
-.rf_out(rf_out)
+.rf_out(rf_out),
+.rf_tx_en_v(rf_tx_en_v),
+.rf_tx_en_h(rf_tx_en_h),
+.bc_tx_en	(bc_tx_en),
+.channel_sel	(channel_sel)
 );
 
 
@@ -994,38 +1009,73 @@ wire	                BC_rsta         ;
 // .probe4(BC_TXEN)
 // );
 
-bc_wrapper#(
-//.LANE_BIT(26),                        
-//.FRAME_DATA_BIT(106), 
-//.CHIP_NUM(BC_CHIP_NUM)
-)bc_wrapper_EP0
-(
-.sys_clk(BC_sys_clk) 	 ,
-.sys_rst(BC_sys_rst)      ,
-.prf_pin_in(preprf)   ,
-.tr_en(BC_TXEN),
-.scl_o_h(BC_scl_o)    	 ,
-.rst_o_h(BC_rst_o)        ,
-.sel_o_h(BC_sel_o)        ,
-.ld_o_h(BC_ld_o)         ,
-.dary_o_h(BC_dary_o)       ,
-.trt_o_h(BC_trt_o)        ,
-.trr_o_h(BC_trr_o)        ,
-.sd_o_h(BC_sd_o)         ,
+// bc_wrapper#(
+// //.LANE_BIT(26),                        
+// //.FRAME_DATA_BIT(106), 
+// //.CHIP_NUM(BC_CHIP_NUM)
+// )bc_wrapper_EP0
+// (
+// .sys_clk(BC_sys_clk) 	 ,
+// .sys_rst(BC_sys_rst)      ,
+// .prf_pin_in(preprf)   ,
+// .tr_en(BC_TXEN),
+// .scl_o_h(BC_scl_o)    	 ,
+// .rst_o_h(BC_rst_o)        ,
+// .sel_o_h(BC_sel_o)        ,
+// .ld_o_h(BC_ld_o)         ,
+// .dary_o_h(BC_dary_o)       ,
+// .trt_o_h(BC_trt_o)        ,
+// .trr_o_h(BC_trr_o)        ,
+// .sd_o_h(BC_sd_o)         ,
 
 			 
-.rama_clk(bram_clk)         ,
-.rama_en(1'b1)          ,
-.rama_we(wea0)          ,
-.rama_addr(addra0)        ,
-.rama_din(dina0)         ,
-.rama_dout(douta0)         ,
-.rama_rst(bram_rst),
+// .rama_clk(bram_clk)         ,
+// .rama_en(1'b1)          ,
+// .rama_we(wea0)          ,
+// .rama_addr(addra0)        ,
+// .rama_din(dina0)         ,
+// .rama_dout(douta0)         ,
+// .rama_rst(bram_rst),
 
-.app_param0(cfg_BC_param0)	 ,
-.app_param1(cfg_BC_param1)	 ,
-.app_param2(cfg_BC_param2)	 
-);
+// .app_param0(cfg_BC_param0)	 ,
+// .app_param1(cfg_BC_param1)	 ,
+// .app_param2(cfg_BC_param2)	 
+// );
+
+bc_wrapper u_bc_wrapper
+(
+. sys_clk 	    (BC_sys_clk 	    ),
+. sys_rst 	    (BC_sys_rst 	    ),
+. prf_pin_in    (preprf    	        ),
+. tr_en         (bc_tx_en         	),
+. sel_o_p       (BC_sel_o       	),
+. scl_o_p    	(BC_scl_o    	    ),
+. sd_o_p        (sd_o_p        	    ),
+. ld_o_p        (BC_ld_o        	),
+. dary_o_p      (BC_dary_o      	),
+. trt_o_p_0     (trt_o_p_0     	    ),
+. trr_o_p_0     (trr_o_p_0     	    ),
+. trt_o_p_1     (trt_o_p_1     	    ),
+. trr_o_p_1     (trr_o_p_1     	    ),
+. trt_o_p_2     (trt_o_p_2     	    ),
+. trr_o_p_2     (trr_o_p_2     	    ),
+. trt_o_p_3     (trt_o_p_3     	    ),
+. trr_o_p_3     (trr_o_p_3     	    ),
+. rst_o_p       (BC_rst_o       	),
+
+. rama_clk      (bram_clk      	    ),
+. rama_en       (1'b1       	    ),
+. rama_we       (wea0       	    ),
+. rama_addr     (addra0     	    ),
+. rama_din      (dina0      	    ),
+. rama_dout     (douta0     	    ),
+. rama_rst      (bram_rst      	    ),
+
+. app_param0	(cfg_BC_param0      ),
+. app_param1	(cfg_BC_param1      ),
+. app_param2	(cfg_BC_param2      ),
+. sel_param		(channel_sel      	)
+); 
 
 
 

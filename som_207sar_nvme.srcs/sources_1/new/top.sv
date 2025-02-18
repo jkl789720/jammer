@@ -143,7 +143,17 @@ input UART_IMU_PL,
 input DBG_UART_RX,
 output DBG_PPSOUT,
 output FPGA_SYNC,
-output PL_DBG_LED
+output PL_DBG_LED,
+output rf_tx_en_v,
+output rf_tx_en_h,
+output trt_o_p_0,
+output trr_o_p_0,	
+output trt_o_p_1,	
+output trr_o_p_1,	
+output trt_o_p_2,	
+output trr_o_p_2,	
+output trt_o_p_3,	
+output trr_o_p_3	
 );
 
 localparam LOCAL_DWIDTH = 256;
@@ -853,7 +863,17 @@ multifunc multifunc_EP0(
 //.DBG_UART_RX(DBG_UART_RX),    //input 
 .PL_RS422_3_TX(PL_RS422_3_TX),    //output 
 .PL_RS422_3_RX(PL_RS422_3_RX),    //input 
-.DBG_PPSOUT(DBG_PPSOUT)    //output 
+.DBG_PPSOUT(DBG_PPSOUT),    //output 
+.rf_tx_en_v	(rf_tx_en_v	)	,//output 
+.rf_tx_en_h	(rf_tx_en_h	)	,//output 
+.trt_o_p_0	(trt_o_p_0	)	,//output 
+.trr_o_p_0	(trr_o_p_0	)	,//output 	
+.trt_o_p_1	(trt_o_p_1	)	,//output 	
+.trr_o_p_1	(trr_o_p_1	)	,//output 	
+.trt_o_p_2	(trt_o_p_2	)	,//output 	
+.trr_o_p_2	(trr_o_p_2	)	,//output 	
+.trt_o_p_3	(trt_o_p_3	)	,//output 	
+.trr_o_p_3	(trr_o_p_3	)	
 );
 
 // ila_rxtx ila_rxtx_ep(

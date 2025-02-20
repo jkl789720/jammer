@@ -18,6 +18,8 @@ input       [255:0]         adc_data0       ,
 input       [255:0]         adc_data1       ,
 input       [31:0]          adc_thshld      ,
 
+input       [31:0]          trig_reg        ,
+
 output                      trig_valid      ,
 
 output reg  [31:0]          trig_num        ,
@@ -37,8 +39,108 @@ reg [31:0] cnt_delay;//delay阶段不检测
 reg add_flag;
 wire end_flag;
 
+//参数打拍同步
+reg [31:0] trig_reg_r[1:0];
+
 //临时触发间隔
 reg [31:0] trig_gap_temp;
+wire  trig_start;
+wire [15:0] trig_num_require;
+
+reg [1:0] trig_start_r;
+wire trig_start_pos;
+
+
+
+always @(posedge adc_clk) begin
+    if(!resetn)begin
+        trig_reg_r[0] <= 0;
+        trig_reg_r[1] <= 0;
+    end
+    else begin
+        trig_reg_r[0] <= trig_reg;
+        trig_reg_r[1] <= trig_reg_r[0];
+    end
+end
+
+
+assign trig_start = trig_reg_r[1][31];
+assign trig_num_require = trig_reg_r[1][15:0];
+
+//--------------触发间隔---------------------//
+always@(posedge adc_clk)begin
+    if(!resetn)
+        add_flag <= 0;
+    else if(trig_valid)
+        add_flag <= 1;
+    else if(end_flag)
+        add_flag <= 0;
+end
+
+always@(posedge adc_clk)begin
+    if(!resetn)
+        cnt_delay <= 0;
+    else if(add_flag)begin
+        if(end_flag)
+            cnt_delay <= 0;
+        else
+            cnt_delay <= cnt_delay + 1;
+    end
+    else
+        cnt_delay <= 0;
+end
+
+assign end_flag = add_flag && cnt_delay == TIME_100US - 1;
+
+
+//---------------------触发次数---------------------//
+//上升沿检测
+always @(posedge adc_clk) begin
+    if(!resetn)
+        trig_start_r <= 0;
+    else 
+        trig_start_r <= {trig_start_r[0],trig_start};
+end
+
+assign trig_start_pos = ~trig_start_r[1] && trig_start_r[0];
+
+//触发次数
+always@(posedge adc_clk)begin
+    if(!resetn)
+        trig_num <= 0;
+    else if(trig_start_pos)
+        trig_num <= 0;
+    else if(trig_valid)
+        trig_num <= trig_num + 1;
+end
+
+//触发检测禁用
+assign detection_disen = add_flag | (trig_num == trig_num_require);//触发间隔和触发次数限制
+
+//生成触发信号
+assign trig_valid = ~(!resetn || detection_disen) ? trig_valid0 || trig_valid1 : 0;
+
+//gap计数
+
+always@(posedge adc_clk)begin
+    if(!resetn)
+        trig_gap_temp <= 0;
+    else if(trig_start_pos)
+        trig_gap_temp <= 0;
+    else if(trig_valid)
+        trig_gap_temp <= 0;
+    else
+        trig_gap_temp <= trig_gap_temp + 1;
+end
+
+//锁存gap
+always@(posedge adc_clk)begin
+    if(!resetn)
+        trig_gap <= 0;
+    else if(trig_valid && (trig_num > 0))
+        trig_gap <= trig_gap_temp;
+end
+
 
 threshold_detection_trig#(
     . LOCAL_DWIDTH 	      (LOCAL_DWIDTH     ) ,
@@ -82,76 +184,19 @@ u_threshold_detection_trig1(
 . adc_max     (adc_max1   )
 );
 
-
-//触发保护计数器生成
-always@(posedge adc_clk)begin
-    if(!resetn)
-        add_flag <= 0;
-    else if(trig_valid)
-        add_flag <= 1;
-    else if(end_flag)
-        add_flag <= 0;
-end
-
-always@(posedge adc_clk)begin
-    if(!resetn)
-        cnt_delay <= 0;
-    else if(add_flag)begin
-        if(end_flag)
-            cnt_delay <= 0;
-        else
-            cnt_delay <= cnt_delay + 1;
-    end
-    else
-        cnt_delay <= 0;
-end
-
-assign end_flag = add_flag && cnt_delay == TIME_100US - 1;
-
-//触发检测禁用
-assign detection_disen = add_flag;
-
-//生成触发信号
-assign trig_valid = ~(!resetn || detection_disen) ? trig_valid0 || trig_valid1 : 0;
-
-//触发次数
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_num <= 0;
-    else if(trig_valid)
-        trig_num <= trig_num + 1;
-end
-
-//gap计数
-
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_gap_temp <= 0;
-    else if(trig_valid)
-        trig_gap_temp <= 0;
-    else
-        trig_gap_temp <= trig_gap_temp + 1;
-end
-
-//锁存gap
-always@(posedge adc_clk)begin
-    if(!resetn)
-        trig_gap <= 0;
-    else if(trig_valid && (trig_num > 0))
-        trig_gap <= trig_gap_temp;
-end
-
 ila_threshold_detection u_ila_threshold_detection (
 	.clk(adc_clk), // input wire clk
 
 
-	.probe0(trig_valid), // input wire [0:0]  probe0  
-	.probe1(trig_num), // input wire [31:0]  probe1 
-	.probe2(trig_gap), // input wire [31:0]  probe2 
-	.probe3(adc_max0), // input wire [31:0]  probe3 
-	.probe4(adc_max1), // input wire [31:0]  probe4
-	.probe5(adc_data0), // input wire [255:0]  probe4
-	.probe6(adc_thshld) // input wire [31:0]  probe4
+	.probe0(trig_valid      ),//1  
+	.probe1(trig_num        ),//32 
+	.probe2(trig_gap        ),//32 
+	.probe3(adc_max0        ),//32 
+	.probe4(adc_max1        ),//32 
+	.probe5(adc_data0       ),//255
+	.probe6(adc_thshld      ),//32 
+	.probe7(trig_start_pos  ),//1  
+	.probe8(trig_num_require) //16 
 );
 
 endmodule

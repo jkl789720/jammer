@@ -40,6 +40,7 @@ output reg [31:0]   app_param17  ,
 output reg [31:0]   app_param18  ,
 output reg [31:0]   app_param19  ,
 output reg [31:0]   app_param20  ,
+output reg [31:0]   app_param21  ,
 
 
 
@@ -125,6 +126,7 @@ always@(posedge cfg_clk)begin
 		`PARAM_WRITE+16'h48:cfg_rd_dat <= app_param18;
 		`PARAM_WRITE+16'h4C:cfg_rd_dat <= app_param19;
 		`PARAM_WRITE+16'h50:cfg_rd_dat <= app_param20;
+		`PARAM_WRITE+16'h54:cfg_rd_dat <= app_param21;
 
 		`ID_ADDR+16'h00		   :cfg_rd_dat <= 88;
 		`ID_ADDR+16'h04		   :cfg_rd_dat <= 99;
@@ -157,6 +159,7 @@ always@(posedge cfg_clk)begin
 		app_param18 <= 0;
 		app_param19 <= 0;
 		app_param20 <= 0;
+		app_param21 <= 0;
     end
     else begin
         if (cfg_wr_en_r)begin
@@ -182,6 +185,7 @@ always@(posedge cfg_clk)begin
 				`PARAM_WRITE+16'h48:app_param18 <= cfg_wr_dat_r;
 				`PARAM_WRITE+16'h4C:app_param19 <= cfg_wr_dat_r;
 				`PARAM_WRITE+16'h50:app_param20 <= cfg_wr_dat_r;
+				`PARAM_WRITE+16'h54:app_param21 <= cfg_wr_dat_r;
 
 		        default:begin
                 end

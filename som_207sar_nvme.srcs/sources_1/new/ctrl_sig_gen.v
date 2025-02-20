@@ -119,7 +119,9 @@ always@(posedge adc_clk)begin
         if(trig_valid_r | trig_valid)begin
             if(trig_valid)
                 cnt_prf1 <= 0;
-            else
+            else if(cnt_prf1 == 32'h2fff_ffff)
+                cnt_prf1 <= cnt_prf1;
+            else 
                 cnt_prf1 <= cnt_prf1 + 32'sd1;
         end
     end

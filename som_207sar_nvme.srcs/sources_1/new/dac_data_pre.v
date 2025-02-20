@@ -28,7 +28,7 @@ module dac_data_pre
     parameter   LANE_NUM            = 8                   ,
     parameter   CHIRP_NUM           = 256                 ,
     parameter   CALCLT_DELAY        = 35                  ,
-    parameter   DWIDTH_0            = 32                  ,
+    parameter   DWIDTH_0            = 32*4               ,
     parameter   SHIFT_RAM_DELAY     = (DWIDTH_0 >> 1) + 1 ,
     parameter   ADC_CLK_FREQ        = 156_250_000         ,
     parameter   RECO_DELAY          = 29 
@@ -129,6 +129,7 @@ wire   [31:0]                    app_param17     ;
 wire   [31:0]                    app_param18     ;
 wire   [31:0]                    app_param19     ;
 wire   [31:0]                    app_param20     ;
+wire   [31:0]                    app_param21     ;
 
 wire   [31:0]                    app_status0     ;
 wire   [31:0]                    app_status1     ;
@@ -379,6 +380,7 @@ hwreg_set_new u_hwreg_set_new(
 . app_param18 (app_param18 	) ,
 . app_param19 (app_param19 	) ,
 . app_param20 (app_param20 	) ,
+. app_param21 (app_param21 	) ,
 . cfg_clk     (ramrpu_clk   ) ,
 . cfg_rd_en   (ramrpu_en    ) ,
 . cfg_wr_en   (ramrpu_we    ) ,
@@ -444,6 +446,8 @@ u_disturb_wrapper(
 . app_param17       (app_param17      ) ,
 . app_param18       (app_param18      ) ,
 . app_param19       (app_param19      ) ,
+. app_param20       (app_param20      ) ,
+. app_param21       (app_param21      ) ,
 
 . app_status0       (app_status0      ) ,
 . app_status1       (app_status1      ) ,

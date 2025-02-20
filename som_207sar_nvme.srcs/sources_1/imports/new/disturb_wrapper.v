@@ -65,6 +65,8 @@ input   [31:0]                    app_param16       ,
 input   [31:0]                    app_param17       ,
 input   [31:0]                    app_param18       ,
 input   [31:0]                    app_param19       ,
+input   [31:0]                    app_param20       ,
+input   [31:0]                    app_param21       ,
 
 //ddr_en
 output 						                mfifo_rd_enable   ,
@@ -182,6 +184,7 @@ wire                            threshold_resetn        ;
 wire                            trig_valid              ;
 wire [31:0]                     adc_max0                ;
 wire [31:0]                     adc_max1                ;
+wire [31:0]                     trig_reg                ;
 
 
 //mode_ctrl
@@ -204,6 +207,11 @@ wire [23:0]                     k_data_now              ;
 wire [23:0]                     b_data_now              ;
 
 wire                            reco_trig               ;
+
+
+
+
+
 
 
 
@@ -318,7 +326,8 @@ threshold_detection_merge#(
 . trig_num   (trig_num  ) ,
 . trig_gap   (trig_gap  ) ,
 . adc_max0   (adc_max0  ) ,
-. adc_max1   (adc_max1  )
+. adc_max1   (adc_max1  ) ,
+. trig_reg   (trig_reg  ) 
 );
 
 
@@ -374,7 +383,7 @@ wire resetn_sof;
 wire recorde_mode;
 wire [31:0] power_adjust_coe;
 
-
+wire [31:0] data_record_period;
 
 
 assign chirp_length     = app_param0          ;
@@ -394,9 +403,11 @@ assign prf_adjust_req   = app_param13[0]      ;
 assign prf_cnt_offset   = app_param14         ;
 assign change_eq        = app_param15[0]      ;
 assign star_mode        = app_param16[0]      ;
-assign recorde_mode     = app_param17[0];
-assign power_adjust_coe = app_param18;
-assign channel_sel  = app_param19[0];
+assign recorde_mode     = app_param17[0]      ;
+assign power_adjust_coe = app_param18         ;
+assign channel_sel      = app_param19[0]      ;
+assign data_record_period      = app_param20  ;
+assign trig_reg         = app_param21         ;
 
 assign app_status0      = fft_value_max_latch_q   ;
 assign app_status1      = fft_value_max_latch_i   ;
@@ -435,7 +446,9 @@ vio_reg_write u_vio_reg_write (
   .probe_in16   (star_mode          ),  
   .probe_in17   (recorde_mode       ),  
   .probe_in18   (power_adjust_coe   ),  
-  .probe_in19   (channel_sel    ) //1 
+  .probe_in19   (channel_sel        ), //1 
+  .probe_in20   (data_record_period ), //32
+  .probe_in21   (trig_reg           )  //32 
 );
 
 vio_reg_read u_vio_reg_read (

@@ -42,7 +42,8 @@ output                              temper_read_done             ,
 input      [GROUP_CHIP_NUM-1:0]     sd_i                         ,
 input                               ld_o                         ,
 input                               dary_o                       ,
-input                               tr_o                         
+input                               tr_o                         ,
+output reg [31:0]                   cnt_bit
 );
 
 reg [7:0] temper_data_buf [GROUP_CHIP_NUM-1:0];
@@ -91,7 +92,7 @@ wire temper_read1_done,temper_read0_done;
 wire add_cnt_bit;
 wire end_cnt_bit;
 reg [31:0] cnt_cycle;
-reg [31:0] cnt_bit;
+// reg [31:0] cnt_bit;
 assign add_cnt_bit = cnt_cycle == cycle - 1;
 assign end_cnt_bit = (mode == 1 && cnt_bit == CMD_BIT + 2 - 1) || (mode == 0 && cnt_bit == FRAME_DATA_BIT + 2 - 1);//+2是为了留起始位和停止位
 
@@ -490,25 +491,4 @@ end
 
 assign rst_o = cnt_reset > 0;
 
-
-`ifdef DEBUG
-wire [15:0] sd;
-assign sd = sd_o;
-ila_spi_sar u_ila_spi_sar (
-	.clk     (sys_clk           ),
-	.probe0  (trig              ),//1
-	.probe1  (scl_o             ),//1
-	.probe2  (rst_o             ),//1
-	.probe3  (sel_o             ),//1
-	.probe4  (cmd_flag          ),//1
-	.probe5  (sd                ),//16
-	.probe6  (c_state           ),//4
-	.probe7  (n_state           ),//4
-	.probe8  (cnt_bit           ),//32
-	.probe9  (mode              ),//1
-	.probe10 (ld_o              ),//1
-	.probe11 (dary_o            ),//1
-	.probe12 (tr_o              ) //1
-);
-`endif
 endmodule

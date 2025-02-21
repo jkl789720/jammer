@@ -166,6 +166,11 @@ wire                       delay_ram_rst     ;
 
 wire [31:0] bc_top_addr; 
 wire bc_flag;
+
+wire [31:0] cnt_bit;
+
+
+
 assign bc_top_addr    = (((GROUP_NUM*GROUP_CHIP_NUM) << 4))*BEAM_NUM;
 assign delay_ram_clk  = rama_clk;
 assign delay_ram_en   = (~bc_flag) ? rama_en: 0;
@@ -351,7 +356,8 @@ temperature #(
     .temper_read_done        ( temper_read_done    ),
     .ld_o                    ( ld_o                ),//**
     .dary_o                  ( dary_o              ),//**
-    .tr_o                    ( tr_o                )
+    .tr_o                    ( tr_o                ),
+    .cnt_bit                 ( cnt_bit             )
 );
 
 bc_mode u_bc_mode(
@@ -401,30 +407,69 @@ bc_mode u_bc_mode(
 wire [15:0] sd;
 assign sd = sd_o;
 
-ila_top u_ila_top (
-	.clk	        (sys_clk	  ), 
-	.probe0	        (PLUART_txd	  ), 
-	.probe1	        (PLUART_rxd	  ),
-    .probe2         (sd           ),
-    .probe3         (sel_o        ),
-    .probe4         (cmd_flag     ),
-    .probe5         (scl_o        ),
-    .probe6         (dary_o       ),
-    .probe7         (ld_o         ),
-    .probe8         (trt_o        ),
-    .probe9         (trr_o        ),
-    .probe10        (prf_pin_in   )
-);
+// ila_top u_ila_top (
+// 	.clk	        (sys_clk	  ), 
+// 	.probe0	        (PLUART_txd	  ), 
+// 	.probe1	        (PLUART_rxd	  ),
+//     .probe2         (sd           ),
+//     .probe3         (sel_o        ),
+//     .probe4         (cmd_flag     ),
+//     .probe5         (scl_o        ),
+//     .probe6         (dary_o       ),
+//     .probe7         (ld_o         ),
+//     .probe8         (trt_o        ),
+//     .probe9         (trr_o        ),
+//     .probe10        (prf_pin_in   )
+// );
+
+
+
+assign prf_start_in         = app_param0_r[1][0];
+assign prf_mode_in          = app_param0_r[1][1];
+assign ld_mode_in           = app_param0_r[1][2];
+assign send_flag_in         = app_param0_r[1][3];//打拍
+assign single_lane          = app_param0_r[1][4];//打拍
+assign tr_mode              = app_param0_r[1][5];
+assign polarization_mode    = app_param0_r[1][6];
+
+
+assign valid_in     = app_param1_r[1][0];//打拍
+assign temper_req   = app_param1_r[1][1];//打拍
+assign bc_mode      = app_param1_r[1][5:2];//打拍
+// assign sel_param    = app_param1_r[1][6];//打拍
+assign image_start  = app_param1_r[1][8];
+
+assign beam_pos_num	= app_param2_r[1]   ;
 
 vio_sys u_vio_sys (
-.clk          (sys_clk 	    ),
-.probe_in0    (prf_mode_in  ),
-.probe_in1    (ld_mode_in   ),
-.probe_in2    (send_flag_in ),
-.probe_in3    (valid_in     ),
-.probe_in4    (beam_pos_num ),
-.probe_in5    (single_lane  ),
+.clk          (sys_clk 	                ),
+.probe_in0    (prf_start_in             ),//1
+.probe_in1    (prf_mode_in              ),//1
+.probe_in2    (ld_mode_in               ),//1
+.probe_in3    (send_flag_in             ),//1
+.probe_in4    (beam_pos_num             ),//32
+.probe_in5    (single_lane              ),//1
+.probe_in6    (tr_mode                  ),//1
+.probe_in7    (polarization_mode        ),//1
+.probe_in8    (bc_mode                  ),//4
 .probe_out0   (sys_rst_vio  )
+);
+
+
+ila_spi u_ila_spi (
+	.clk     (sys_clk           ),
+	.probe0  (sel_o             ),//1
+	.probe1  (cmd_flag          ),//1
+	.probe2  (scl_o             ),//1
+	.probe3  (sd                ),//16
+	.probe4  (ld_o              ),//1
+	.probe5  (dary_o            ),//1
+	.probe6  (prf_in            ),//1
+	.probe7  (trt_o             ),//1
+	.probe8  (trr_o             ),//1
+	.probe9  (cnt_bit           ),//32
+	.probe10 (ld_mode_in        ) //1
+
 );
 
 `endif

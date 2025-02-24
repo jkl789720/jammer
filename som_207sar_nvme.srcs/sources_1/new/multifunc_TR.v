@@ -1050,7 +1050,7 @@ bc_wrapper u_bc_wrapper
 . tr_en         (bc_tx_en         	),
 . sel_o_p       (BC_sel_o       	),
 . scl_o_p    	(BC_scl_o    	    ),
-. sd_o_p        (sd_o_p        	    ),
+. sd_o_p        (BC_sd_o        	),
 . ld_o_p        (BC_ld_o        	),
 . dary_o_p      (BC_dary_o      	),
 . trt_o_p_0     (trt_o_p_0     	    ),

@@ -588,7 +588,7 @@ assign com_multi_valid = m_axis_multi_dout_tvalid;
 
 `ifdef DISTURB_DEBUG
 
-ila_in_out u_ila_in_out(
+ila_fft u_ila_fft(
   .clk      (adc_clk                              ),
 	.probe0   (adc_valid_r                          ),  //1
 	.probe1   (adc_data_r                           ),  //256

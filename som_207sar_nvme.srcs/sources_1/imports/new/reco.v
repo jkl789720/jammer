@@ -241,16 +241,16 @@ generate
   end
 endgenerate
 `ifdef DISTURB_DEBUG
-// ila_reco u_ila_reco (
-// 	.clk    (adc_clk                  ) ,
-// 	.probe0 (data_reco_valid          ) ,//1
-// 	.probe1 (data_reco_out            ) ,//256
-// 	.probe2 (data_reco_valid_single   ) ,//1
-// 	.probe3 (data_reco_single         ) ,//256
-// 	.probe4 (read_en_reco             ) ,//1
-// 	.probe5 (read_addr_reco           ) ,//14
-// 	.probe6 (read_data_reco           )  //256
-// );
+ila_reco u_ila_reco (
+	.clk    (adc_clk                  ) ,
+	.probe0 (data_reco_valid          ) ,//1
+	.probe1 (data_reco_out            ) ,//256
+	.probe2 (data_reco_valid_single   ) ,//1
+	.probe3 (data_reco_single         ) ,//256
+	.probe4 (read_en_reco             ) ,//1
+	.probe5 (read_addr_reco           ) ,//14
+	.probe6 (read_data_reco           )  //256
+);
 `endif
 
 assign err_flag_reco = |err_flag;

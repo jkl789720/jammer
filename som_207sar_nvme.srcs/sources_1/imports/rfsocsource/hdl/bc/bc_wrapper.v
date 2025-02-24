@@ -456,21 +456,21 @@ vio_sys u_vio_sys (
 );
 
 
-ila_spi u_ila_spi (
-	.clk     (sys_clk           ),
-	.probe0  (sel_o             ),//1
-	.probe1  (cmd_flag          ),//1
-	.probe2  (scl_o             ),//1
-	.probe3  (sd                ),//16
-	.probe4  (ld_o              ),//1
-	.probe5  (dary_o            ),//1
-	.probe6  (prf_in            ),//1
-	.probe7  (trt_o             ),//1
-	.probe8  (trr_o             ),//1
-	.probe9  (cnt_bit           ),//32
-	.probe10 (ld_mode_in        ) //1
+// ila_spi u_ila_spi (
+// 	.clk     (sys_clk           ),
+// 	.probe0  (sel_o             ),//1
+// 	.probe1  (cmd_flag          ),//1
+// 	.probe2  (scl_o             ),//1
+// 	.probe3  (sd                ),//16
+// 	.probe4  (ld_o              ),//1
+// 	.probe5  (dary_o            ),//1
+// 	.probe6  (prf_in            ),//1
+// 	.probe7  (trt_o             ),//1
+// 	.probe8  (trr_o             ),//1
+// 	.probe9  (cnt_bit           ),//32
+// 	.probe10 (ld_mode_in        ) //1
 
-);
+// );
 
 `endif
 

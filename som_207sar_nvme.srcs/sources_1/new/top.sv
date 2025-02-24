@@ -902,4 +902,29 @@ assign PL_RS485_M_PO_0 = fifo_wr_enable_ctrl;
 assign PL_RS485_M_PO_1 = mfifo_rd_enable;
 
 //----------------------------- multifunc stop -----------------------------------
+
+
+ila_spi u_ila_spi (
+	.clk     	(clk50           		),
+	.probe0  	(BC_sel_o          		),//1
+	.probe1  	(BC_scl_o          		),//1
+	.probe2  	(BC_sd_o           		),//16
+	.probe3  	(BC_ld_o           		),//1
+	.probe4  	(BC_dary_o         		),//1
+	.probe5  	(trt_o_p_0             	),//1
+	.probe6  	(trr_o_p_0             	),//1
+	.probe7  	(trt_o_p_1             	),//1
+	.probe8  	(trr_o_p_1              ),//1
+	.probe9   	(trt_o_p_2            	),//1
+	.probe10  	(trr_o_p_2            	),//1
+	.probe11  	(trt_o_p_3            	),//1
+	.probe12  	(trr_o_p_3            	) //1
+);
+
+
+ila_dac_top u_ila_dac_top (
+	.clk     	(clk50           		),
+	.probe0  	(s00_axis_tdata         ) //256
+);
+
 endmodule

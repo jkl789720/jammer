@@ -180,14 +180,11 @@ wire [255:0] wr_data;
 
 `ifdef DISTURB_DEBUG
 
-// ila_dac u_ila_dac (
-// 	.clk        (adc_clk                ),
-// 	.probe0     (dac_valid              ),//1
-// 	.probe1     (dac_data               ),//256
-// 	.probe2     (data_reco_valid        ),//1
-// 	.probe3     (data_reco_out          ),//256
-// 	.probe4     (template_delay_now     ) //32
-// );
+ila_dac u_ila_dac (
+	.clk        (adc_clk                ),
+	.probe0     (dac_valid              ),//1
+	.probe1     (dac_data               )//256
+);
 
 ila_ddr u_ila_ddr (
 	.clk        (adc_clk                ),
@@ -195,10 +192,10 @@ ila_ddr u_ila_ddr (
 	.probe1     (fifo_ddr_dout          ),//64
 	.probe2     (ddr_add_flag_star      ),//1
 	.probe3     (cnt_ddr_en_star        ),//32
-	.probe4     (cnt_fifo_en            ), //2
-	.probe5     (cnt_ddr_en_plane       ), //32
-	.probe6     (ddr_add_flag_plane     ), //1
-	.probe7     (mfifo_rd_data[31:0]    )  //32
+	.probe4     (cnt_fifo_en            ),//2
+	.probe5     (cnt_ddr_en_plane       ),//32
+	.probe6     (ddr_add_flag_plane     ),//1
+	.probe7     (mfifo_rd_data[31:0]    ) //32
 );
 `endif
 //数据延时

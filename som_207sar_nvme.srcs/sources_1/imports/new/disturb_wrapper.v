@@ -422,7 +422,7 @@ assign app_status9      = {31'b0,fft_valid}       ;
 assign app_status10     = adc_max0;
 assign app_status11     = adc_max1;
 
-assign adc_data = channel_sel ? adc_data1 : adc_data0;
+assign adc_data = channel_sel ? adc_data0 : adc_data1;
 
 `ifdef DISTURB_DEBUG
 vio_reg_write u_vio_reg_write (

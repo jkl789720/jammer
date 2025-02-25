@@ -4,7 +4,6 @@ input reset,
 
 input set_en,
 input [31:0] set_dat,
-input [31:0] set_dat2,
 
 output uart_tx
 );
@@ -24,21 +23,17 @@ async_transmitter async_transmitter232 (
 localparam INTERVAL = 5000; // 20ns*5000 = 100us
 reg [15:0] tcnt;
 reg [31:0] set_dat_r;
-reg [31:0] set_dat_r2;
 always@(posedge clk)begin
     if(reset)begin
         tcnt <= 16'hFFFF;
         set_dat_r <= 0;
-        set_dat_r2<= 0;
     end
     else begin
         if(set_en)tcnt <= 0;
         else if(tcnt < 16'hFFFF)tcnt <= tcnt + 1;
         
-        if(set_en)begin
-            set_dat_r <= set_dat;
-            set_dat_r2 <= set_dat2;
-        end
+        if(set_en)set_dat_r <= set_dat;
+        
         if(tcnt==0)begin
             send_start <= 1;
             TxD_data <= 8'hEB;
@@ -49,23 +44,23 @@ always@(posedge clk)begin
         end
         else if(tcnt==(2*INTERVAL))begin
             send_start <= 1;
-            TxD_data <= set_dat_r[15:8] ;
+            TxD_data <= set_dat_r[7:0] & 8'h3F;
         end
         else if(tcnt==(3*INTERVAL))begin
             send_start <= 1;
-            TxD_data <= set_dat_r[7:0] ;
+            TxD_data <= set_dat_r[7:0] & 8'h3F;
         end
         else if(tcnt==(4*INTERVAL))begin
             send_start <= 1;
-            TxD_data <= set_dat_r2[7:0] ;
+            TxD_data <= set_dat_r[15:8] & 8'h3F;
         end
         else if(tcnt==(5*INTERVAL))begin
             send_start <= 1;
-            TxD_data <= set_dat_r2[15:8] ;
+            TxD_data <= set_dat_r[15:8] & 8'h3F;
         end
         else if(tcnt==(6*INTERVAL))begin
             send_start <= 1;
-            TxD_data <= set_dat_r2[23:16] ;
+            TxD_data <= 8'hF0;
         end
         else if(tcnt==(7*INTERVAL))begin
             send_start <= 1;

@@ -922,7 +922,6 @@ send_rf_cmd send_rf_cmd_EP0(
 .reset(reset),    //input 
 .set_en(set_rfen),    //input 
 .set_dat(set_rfdat),    //input [7:0]
-.set_dat2(set_rfdat2),    //input [7:0]
 .uart_tx(uart_tx)    //output 
 );
 

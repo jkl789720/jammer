@@ -81,4 +81,6 @@ set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks {clk
 							   -group [get_clocks -include_generated_clocks {pcie_userclk0}] \
 							   -group [get_clocks -include_generated_clocks {pcie_userclk1}] \
 							   -group [get_clocks -include_generated_clocks {CLK_PL_DDR_P}]
-					
+
+
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]

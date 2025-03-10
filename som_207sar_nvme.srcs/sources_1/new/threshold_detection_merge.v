@@ -25,6 +25,7 @@ output                      trig_valid      ,
 output reg  [31:0]          trig_num        ,
 output reg  [31:0]          trig_gap        ,
 
+output      [31:0]          adc_max_merge   ,
 output      [31:0]          adc_max0        ,
 output      [31:0]          adc_max1     
 );
@@ -140,6 +141,8 @@ always@(posedge adc_clk)begin
     else if(trig_valid && (trig_num > 0))
         trig_gap <= trig_gap_temp;
 end
+
+assign adc_max_merge = adc_max0 >= adc_max1 ? adc_max0 : adc_max1 ;
 
 
 threshold_detection_trig#(

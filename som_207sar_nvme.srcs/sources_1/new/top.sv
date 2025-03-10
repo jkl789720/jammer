@@ -90,7 +90,7 @@ output                  	BC_scl_o    	,
 output                  	BC_rst_o        ,
 output                  	BC_sel_o        ,
 output                  	BC_ld_o         ,
-output                  	BC_dary_o       ,
+// output                  	BC_dary_o       ,
 // output                  	BC_trt_o        ,
 // output                  	BC_trr_o        ,
 output [BC_CHIP_NUM-1:0]    BC_sd_o         ,
@@ -151,8 +151,12 @@ output trr_o_p_1,
 output trt_o_p_2,	
 output trr_o_p_2,	
 output trt_o_p_3,	
-output trr_o_p_3	
+output trr_o_p_3,
+output UART_PL_IMU,	
+input UART_GPS_PL_2		
 );
+
+assign  UART_PL_IMU = UART_GPS_PL_2;
 
 localparam LOCAL_DWIDTH = 256;
 localparam BC_CHIP_NUM = 16;

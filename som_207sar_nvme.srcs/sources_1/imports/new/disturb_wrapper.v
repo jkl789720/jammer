@@ -182,6 +182,7 @@ wire [31:0]                     trig_num                ;
 wire [31:0]                     trig_gap                ;
 wire                            threshold_resetn        ;
 wire                            trig_valid              ;
+wire [31:0]                     adc_max_merge           ;
 wire [31:0]                     adc_max0                ;
 wire [31:0]                     adc_max1                ;
 wire [31:0]                     trig_reg                ;
@@ -317,17 +318,18 @@ threshold_detection_merge#(
     . ADC_CLK_FREQ    (ADC_CLK_FREQ    ),
     . RECO_DELAY      (RECO_DELAY      )
 )u_threshold_detection_merge(
-. adc_clk    (adc_clk   ) ,
-. resetn     (resetn    ) ,
-. adc_data0  (adc_data0 ) ,
-. adc_data1  (adc_data1 ) ,
-. adc_thshld (adc_thshld) ,
-. trig_valid (trig_valid) ,
-. trig_num   (trig_num  ) ,
-. trig_gap   (trig_gap  ) ,
-. adc_max0   (adc_max0  ) ,
-. adc_max1   (adc_max1  ) ,
-. trig_reg   (trig_reg  ) 
+. adc_clk       (adc_clk        ) ,
+. resetn        (resetn         ) ,
+. adc_data0     (adc_data0      ) ,
+. adc_data1     (adc_data1      ) ,
+. adc_thshld    (adc_thshld     ) ,
+. trig_valid    (trig_valid     ) ,
+. trig_num      (trig_num       ) ,
+. trig_gap      (trig_gap       ) ,
+. adc_max_merge (adc_max_merge  ) ,
+. adc_max0      (adc_max0       ) ,
+. adc_max1      (adc_max1       ) ,
+. trig_reg      (trig_reg       ) 
 );
 
 
@@ -419,8 +421,7 @@ assign app_status6      = fft_index_max_latch     ;
 assign app_status7      = trig_num                ;
 assign app_status8      = trig_gap                ;
 assign app_status9      = {31'b0,fft_valid}       ;
-assign app_status10     = adc_max0;
-assign app_status11     = adc_max1;
+assign app_status10     = adc_max_merge;
 
 assign adc_data = channel_sel ? adc_data0 : adc_data1;
 

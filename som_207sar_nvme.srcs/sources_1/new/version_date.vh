@@ -1,3 +1,0 @@
-parameter 	[31:0]  	FPGA_VERSION_PRIME = 32'h00000001;
-parameter 	[31:0]  	FPGA_VERSION_DATA = 32'h20250305;
-parameter 	[31:0] 		FPGA_VERSION_TIME = 32'h110122;

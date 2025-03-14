@@ -540,16 +540,8 @@ end
 
 wire dac_valid_o_zero;
 assign dac_valid_o_zero = (dac_valid_adjust == 1) && (adc_valid_expand == 0);
-wire [255:0] s00_axis_tdata_temp;
 
-assign s00_axis_tdata_temp = dac_valid_o_zero ? dac_data_adjust : 0;
-genvar cc;
-generate
-  for (cc = 0;cc < 8 ;cc = cc +1 ) begin:blkr
-    assign s00_axis_tdata[(cc*32)+:15] = s00_axis_tdata_temp[(cc*32+16)+:15];
-    assign s00_axis_tdata[(cc*32+16)+:15] = s00_axis_tdata_temp[(cc*32)+:15];
-  end
-endgenerate
+assign s00_axis_tdata = dac_valid_o_zero ? dac_data_adjust : 0;
 
 
 ila_dac_adjust u_ila_dac_adjust (

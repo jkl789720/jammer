@@ -103,7 +103,9 @@ output              			      BC_TXEN_inter	            , //**
 output                          rf_tx_en_v                ,
 output                          rf_tx_en_h                ,
 output                          bc_tx_en                  ,
-output                          channel_sel
+output                          channel_sel               ,
+output                          adc_valid_expand          ,
+output [1:0]                    mode_value
 );
 
 //adc_valid需要自己生成
@@ -158,6 +160,80 @@ wire resetn_vio;
 
 wire rf_tx_en;
 
+reg   [31:0]                    app_param0_r [1:0]      ;
+reg   [31:0]                    app_param1_r [1:0]      ;
+reg   [31:0]                    app_param2_r [1:0]      ;
+reg   [31:0]                    app_param3_r [1:0]      ;
+reg   [31:0]                    app_param4_r [1:0]      ;
+reg   [31:0]                    app_param5_r [1:0]      ;
+reg   [31:0]                    app_param6_r [1:0]      ;
+reg   [31:0]                    app_param7_r [1:0]      ;
+reg   [31:0]                    app_param8_r [1:0]      ;
+reg   [31:0]                    app_param9_r [1:0]      ;
+reg   [31:0]                    app_param10_r[1:0]      ;
+reg   [31:0]                    app_param11_r[1:0]      ;
+reg   [31:0]                    app_param12_r[1:0]      ;
+reg   [31:0]                    app_param13_r[1:0]      ;
+reg   [31:0]                    app_param14_r[1:0]      ;
+reg   [31:0]                    app_param15_r[1:0]      ;
+reg   [31:0]                    app_param16_r[1:0]      ;
+reg   [31:0]                    app_param17_r[1:0]      ;
+reg   [31:0]                    app_param18_r[1:0]      ;
+reg   [31:0]                    app_param19_r[1:0]      ;
+reg   [31:0]                    app_param20_r[1:0]      ;
+reg   [31:0]                    app_param21_r[1:0]      ;
+
+
+always @(posedge adc_clk) begin
+  app_param0_r[0]  <=  app_param0  ;
+  app_param1_r[0]  <=  app_param1  ;
+  app_param2_r[0]  <=  app_param2  ;
+  app_param3_r[0]  <=  app_param3  ;
+  app_param4_r[0]  <=  app_param4  ;
+  app_param5_r[0]  <=  app_param5  ;
+  app_param6_r[0]  <=  app_param6  ;
+  app_param7_r[0]  <=  app_param7  ;
+  app_param8_r[0]  <=  app_param8  ;
+  app_param9_r[0]  <=  app_param9  ;
+  app_param10_r[0] <=  app_param10 ;
+  app_param11_r[0] <=  app_param11 ;
+  app_param12_r[0] <=  app_param12 ;
+  app_param13_r[0] <=  app_param13 ;
+  app_param14_r[0] <=  app_param14 ;
+  app_param15_r[0] <=  app_param15 ;
+  app_param16_r[0] <=  app_param16 ;
+  app_param17_r[0] <=  app_param17 ;
+  app_param18_r[0] <=  app_param18 ;
+  app_param19_r[0] <=  app_param19 ;
+  app_param20_r[0] <=  app_param20 ;
+  app_param21_r[0] <=  app_param21 ;
+end
+
+always @(posedge adc_clk) begin
+  app_param0_r[1]  <=  app_param0_r[0]  ;
+  app_param1_r[1]  <=  app_param1_r[0]  ;
+  app_param2_r[1]  <=  app_param2_r[0]  ;
+  app_param3_r[1]  <=  app_param3_r[0]  ;
+  app_param4_r[1]  <=  app_param4_r[0]  ;
+  app_param5_r[1]  <=  app_param5_r[0]  ;
+  app_param6_r[1]  <=  app_param6_r[0]  ;
+  app_param7_r[1]  <=  app_param7_r[0]  ;
+  app_param8_r[1]  <=  app_param8_r[0]  ;
+  app_param9_r[1]  <=  app_param9_r[0]  ;
+  app_param10_r[1] <=  app_param10_r[0] ;
+  app_param11_r[1] <=  app_param11_r[0] ;
+  app_param12_r[1] <=  app_param12_r[0] ;
+  app_param13_r[1] <=  app_param13_r[0] ;
+  app_param14_r[1] <=  app_param14_r[0] ;
+  app_param15_r[1] <=  app_param15_r[0] ;
+  app_param16_r[1] <=  app_param16_r[0] ;
+  app_param17_r[1] <=  app_param17_r[0] ;
+  app_param18_r[1] <=  app_param18_r[0] ;
+  app_param19_r[1] <=  app_param19_r[0] ;
+  app_param20_r[1] <=  app_param20_r[0] ;
+  app_param21_r[1] <=  app_param21_r[0] ;
+end
+
 `ifdef TEST
 reg [7:0] cnt_reset = 0;
 always@(posedge adc_clk)begin
@@ -180,7 +256,7 @@ assign da_sel = 1;
 //adc
 wire rd_en;
 wire adc_valid_pre;
-wire adc_valid_expand;
+// wire adc_valid_expand;
 reg [11 : 0] read_addr;
 
 // reg adc_valid;
@@ -218,9 +294,8 @@ wire rd_en_txt;
 reg [12 : 0] read_addr_txt;
 wire [WIDTH*2*8-1:0] adc_data_txt;
 
-wire [1:0] mode_value;
-assign mode_value = app_param8;
-assign rd_en_txt = mode_value == 2 ? adc_valid : 1;
+
+// assign rd_en_txt = mode_value == 2 ? adc_valid : 1;
 
 always @(posedge adc_clk) begin
     if(!resetn)
@@ -311,84 +386,51 @@ vio_rst u_vio_rst (
   assign b_vlaue = data_in_b[cnt_kb - 1];
   
 
-
-// //param
-
-//   localparam PRF_PERIOD = 31095;
-//   assign app_param0 = 6016;                    //chirp_num
-//   assign app_param1 = 1024;                    //proc_num
-//   assign app_param2 = k_vlaue;                 //k_value
-//   assign app_param3 = b_vlaue;                 //b_value
-//   assign app_param4 = -32'sd245;               //template_delay
-//   assign app_param5 = PRF_PERIOD*3*8;          //distance_delay 30000*8-200*12 + 7 (30000/2)*8
-//   assign app_param6 = app_status9[0];          //kb_valid 暂时无效，通过正确的延时来确立的k、b信号有效
-//   assign app_param7 = 128*8;                   //adc_shreshold
-//   assign app_param8 = 1;                       //mode_value
-
-//   assign app_param9  = PRF_PERIOD;             //prf_period 200us
-//   assign app_param10 = 200;                    //prf->adc延迟
-//   assign app_param11 = 10;                     //disturb_times
-//   assign app_param12 = 1;                      //resetn(software)
-//   assign app_param13 = 0;                      //prf_adjust_req
-//   assign app_param14 = -32'sd5;                //prf_cnt_offset
-//   assign app_param16 = 1;                      //star_mode
-//   assign app_param17 = 0;                      //record_mode
-//   assign app_param18 = 32'sd32767;             //功率系数
-//   assign app_param19 = 0;                      //adc_channel_sel
-//   assign app_param20 = 500;                    //data_record_period
-
-  // initial begin
-  //   #1000
-  //   app_param15 = 0;//fft点数change_req
-  //   #1000
-  //   app_param15 = 1;
-  // end
-
 `endif
 
 hwreg_set_new u_hwreg_set_new(
-. app_status0  (app_status0	) ,
-. app_status1  (app_status1	) ,
-. app_status2  (app_status2	) ,
-. app_status3  (app_status3	) ,
-. app_status4  (app_status4	) ,
-. app_status5  (app_status5	) ,
-. app_status6  (app_status6	) ,
-. app_status7  (app_status7	) ,
-. app_status8  (app_status8	) ,
-. app_status9  (app_status9	) ,
-. app_status10 (app_status10) ,
-. app_status11 (app_status11) ,
-. app_param0  (app_param0 	) ,
-. app_param1  (app_param1 	) ,
-. app_param2  (app_param2 	) ,
-. app_param3  (app_param3 	) ,
-. app_param4  (app_param4 	) ,
-. app_param5  (app_param5 	) ,
-. app_param6  (app_param6 	) ,
-. app_param7  (app_param7 	) ,
-. app_param8  (app_param8 	) ,
-. app_param9  (app_param9 	) ,
-. app_param10 (app_param10 	) ,
-. app_param11 (app_param11 	) ,
-. app_param12 (app_param12 	) ,
-. app_param13 (app_param13 	) ,
-. app_param14 (app_param14 	) ,
-. app_param15 (app_param15 	) ,
-. app_param16 (app_param16 	) ,
-. app_param17 (app_param17 	) ,
-. app_param18 (app_param18 	) ,
-. app_param19 (app_param19 	) ,
-. app_param20 (app_param20 	) ,
-. app_param21 (app_param21 	) ,
-. cfg_clk     (ramrpu_clk   ) ,
-. cfg_rd_en   (ramrpu_en    ) ,
-. cfg_wr_en   (ramrpu_we    ) ,
-. cfg_wr_addr (ramrpu_addr  ) ,
-. cfg_rd_addr (ramrpu_addr  ) ,
-. cfg_wr_dat  (ramrpu_din   ) ,
-. cfg_rd_dat  (ramrpu_dout  ) ,
-. cfg_rst     (ramrpu_rst   )
+. app_status0  (app_status0	    ) ,
+. app_status1  (app_status1	    ) ,
+. app_status2  (app_status2	    ) ,
+. app_status3  (app_status3	    ) ,
+. app_status4  (app_status4	    ) ,
+. app_status5  (app_status5	    ) ,
+. app_status6  (app_status6	    ) ,
+. app_status7  (app_status7	    ) ,
+. app_status8  (app_status8	    ) ,
+. app_status9  (app_status9	    ) ,
+. app_status10 (app_status10    ) ,
+. app_status11 (app_status11    ) ,
+. app_param0  (app_param0       ) ,
+. app_param1  (app_param1       ) ,
+. app_param2  (app_param2       ) ,
+. app_param3  (app_param3       ) ,
+. app_param4  (app_param4       ) ,
+. app_param5  (app_param5       ) ,
+. app_param6  (app_param6       ) ,
+. app_param7  (app_param7       ) ,
+. app_param8  (app_param8       ) ,
+. app_param9  (app_param9       ) ,
+. app_param10 (app_param10      ) ,
+. app_param11 (app_param11      ) ,
+. app_param12 (app_param12      ) ,
+. app_param13 (app_param13      ) ,
+. app_param14 (app_param14      ) ,
+. app_param15 (app_param15      ) ,
+. app_param16 (app_param16      ) ,
+. app_param17 (app_param17      ) ,
+. app_param18 (app_param18      ) ,
+. app_param19 (app_param19      ) ,
+. app_param20 (app_param20      ) ,
+. app_param21 (app_param21      ) ,
+. cfg_clk     (ramrpu_clk       ) ,
+. cfg_rd_en   (ramrpu_en        ) ,
+. cfg_wr_en   (ramrpu_we        ) ,
+. cfg_wr_addr (ramrpu_addr      ) ,
+. cfg_rd_addr (ramrpu_addr      ) ,
+. cfg_wr_dat  (ramrpu_din       ) ,
+. cfg_rd_dat  (ramrpu_dout      ) ,
+. cfg_rst     (ramrpu_rst       )
 );
 
 disturb_wrapper#(
@@ -426,28 +468,28 @@ u_disturb_wrapper(
 . chirp_fft_dina    (ramb_din    	    ) ,
 . chirp_fft_douta   (ramb_dout   	    ) ,
 
-. app_param0        (app_param0       ) ,
-. app_param1        (app_param1       ) ,
-. app_param2        (app_param2       ) ,
-. app_param3        (app_param3       ) ,
-. app_param4        (app_param4       ) ,
-. app_param5        (app_param5       ) ,
-. app_param6        (app_param6       ) ,
-. app_param7        (app_param7       ) ,
-. app_param8        (app_param8       ) ,
-. app_param9        (app_param9       ) ,
-. app_param10       (app_param10      ) ,
-. app_param11       (app_param11      ) ,
-. app_param12       (app_param12      ) ,
-. app_param13       (app_param13      ) ,
-. app_param14       (app_param14      ) ,
-. app_param15       (app_param15      ) ,
-. app_param16       (app_param16      ) ,
-. app_param17       (app_param17      ) ,
-. app_param18       (app_param18      ) ,
-. app_param19       (app_param19      ) ,
-. app_param20       (app_param20      ) ,
-. app_param21       (app_param21      ) ,
+. app_param0        (app_param0_r[1]  ) ,
+. app_param1        (app_param1_r[1]  ) ,
+. app_param2        (app_param2_r[1]  ) ,
+. app_param3        (app_param3_r[1]  ) ,
+. app_param4        (app_param4_r[1]  ) ,
+. app_param5        (app_param5_r[1]  ) ,
+. app_param6        (app_param6_r[1]  ) ,
+. app_param7        (app_param7_r[1]  ) ,
+. app_param8        (app_param8_r[1]  ) ,
+. app_param9        (app_param9_r[1]  ) ,
+. app_param10       (app_param10_r[1] ) ,
+. app_param11       (app_param11_r[1] ) ,
+. app_param12       (app_param12_r[1] ) ,
+. app_param13       (app_param13_r[1] ) ,
+. app_param14       (app_param14_r[1] ) ,
+. app_param15       (app_param15_r[1] ) ,
+. app_param16       (app_param16_r[1] ) ,
+. app_param17       (app_param17_r[1] ) ,
+. app_param18       (app_param18_r[1] ) ,
+. app_param19       (app_param19_r[1] ) ,
+. app_param20       (app_param20_r[1] ) ,
+. app_param21       (app_param21_r[1] ) ,
 
 . app_status0       (app_status0      ) ,
 . app_status1       (app_status1      ) ,
@@ -490,7 +532,7 @@ shift_ram_dac u_shift_ram_dac (
 
 wire dac_valid;
 
-assign resetn = app_param12[0] && resetn_vio;
+assign resetn = app_param12_r[1][0] && resetn_vio;
 assign dac_valid = dac_valid_whole;
 
 
@@ -515,7 +557,7 @@ assign rf_tx_en = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && (~adc_valid_expand);//改动�
 assign bc_tx_en = (|CFGBC_OUTEN_r_BC) ;//改动点
 
 wire signed [15:0] power_adjust_coe;
-assign power_adjust_coe = app_param18[15:0];
+assign power_adjust_coe = app_param18_r[1][15:0];
 wire [WIDTH*2*LANE_NUM*2-1:0] dac_data_adjust_pre;
 genvar yy;
 generate
@@ -603,37 +645,15 @@ assign BC_TXEN_inter = BC_TXEN ;
 
 assign prffix_inter = prf;
 //----------------------------数据记录模式值打拍寄存------------------------------------//
-wire data_record_mode_in;
-assign data_record_mode_in = app_param17[0];
-reg [1:0] data_record_mode_r;
-always@(posedge adc_clk)begin
-  if(!resetn)
-    data_record_mode_r <= 0;
-  else 
-    data_record_mode_r <= {data_record_mode_r[0],data_record_mode_in};
-end
-
-assign data_record_mode = data_record_mode_r[1];
+assign data_record_mode = app_param17_r[1][0];
 
 //-----------------------数据记录周期---------------------------//
-wire [31:0] data_record_period_in;
-assign data_record_period_in = app_param20;
-reg [31:0] data_record_period_r [1:0];
 wire [31:0] data_record_period;
-always @(posedge adc_clk) begin
-  if(!resetn)begin
-    data_record_period_r[0] <= 0;
-    data_record_period_r[1] <= 0;
-  end
-  else begin
-    data_record_period_r[0] <= data_record_period_in;
-    data_record_period_r[1] <= data_record_period_r[0];
-  end
-end
-
-assign data_record_period = data_record_period_r[1];
+assign data_record_period = app_param20_r[1];
 
 //-----------------------数据记录信号的生成----------------------------//
+// wire [1:0] mode_value;
+assign mode_value = app_param8_r[1];
 reg [31:0] cnt_record;
 reg add_flag;
 wire end_flag;

@@ -28,6 +28,36 @@ always @(posedge sys_clk) begin
         sel_dff <= {sel_dff[0],sel_param};
 end
 
+// always @(posedge sys_clk) begin
+//     if(sys_rst)begin
+//         trt_o_p_0 = 0 ;
+//         trr_o_p_0 = 0 ;
+
+//         trt_o_p_1 = 0 ;
+//         trr_o_p_1 = 0 ;
+
+//         trt_o_p_2 = 0 ;
+//         trr_o_p_2 = 0 ;
+
+//         trt_o_p_3 = 0 ;
+//         trr_o_p_3 = 0 ;
+//     end
+//     else begin
+//         begin
+//             trt_o_p_0 = sel_dff[1] == 1 ? trt_o : 0 ;//干扰机V极化
+//             trr_o_p_0 = sel_dff[1] == 1 ? trr_o : 0 ;//干扰机V极化
+//             trt_o_p_1 = sel_dff[1] == 1 ? trt_o : 0 ;//干扰机V极化
+//             trr_o_p_1 = sel_dff[1] == 1 ? trr_o : 0 ;//干扰机V极化
+
+//             trt_o_p_2 = sel_dff[1] == 1 ? 0 : trt_o ;//干扰机H极化
+//             trr_o_p_2 = sel_dff[1] == 1 ? 0 : trr_o ;//干扰机H极化
+//             trt_o_p_3 = sel_dff[1] == 1 ? 0 : trt_o ;//干扰机H极化
+//             trr_o_p_3 = sel_dff[1] == 1 ? 0 : trr_o ;//干扰机H极化
+//         end
+//     end
+
+// end
+
 always @(posedge sys_clk) begin
     if(sys_rst)begin
         trt_o_p_0 = 0 ;
@@ -44,15 +74,15 @@ always @(posedge sys_clk) begin
     end
     else begin
         begin
-            trt_o_p_0 = sel_dff[1] == 1 ? trt_o : 0 ;//干扰机V极化
-            trr_o_p_0 = sel_dff[1] == 1 ? trr_o : 0 ;//干扰机V极化
-            trt_o_p_1 = sel_dff[1] == 1 ? trt_o : 0 ;//干扰机V极化
-            trr_o_p_1 = sel_dff[1] == 1 ? trr_o : 0 ;//干扰机V极化
+            trt_o_p_0 = trt_o;//干扰机V极化
+            trr_o_p_0 = trr_o;//干扰机V极化
+            trt_o_p_1 = trt_o;//干扰机V极化
+            trr_o_p_1 = trr_o;//干扰机V极化
 
-            trt_o_p_2 = sel_dff[1] == 1 ? 0 : trt_o ;//干扰机H极化
-            trr_o_p_2 = sel_dff[1] == 1 ? 0 : trr_o ;//干扰机H极化
-            trt_o_p_3 = sel_dff[1] == 1 ? 0 : trt_o ;//干扰机H极化
-            trr_o_p_3 = sel_dff[1] == 1 ? 0 : trr_o ;//干扰机H极化
+            trt_o_p_2 = trt_o;//干扰机H极化
+            trr_o_p_2 = trr_o;//干扰机H极化
+            trt_o_p_3 = trt_o;//干扰机H极化
+            trr_o_p_3 = trr_o;//干扰机H极化
         end
     end
 

@@ -187,6 +187,7 @@ output trr_o_p_3
 wire rf_out;
 wire channel_sel;
 wire bc_tx_en;
+wire adc_valid_expand;
 assign BC_A_TXEN = rf_out;
 
 assign BC_A_RXEN = rf_out;
@@ -796,7 +797,8 @@ data_pre
 .rf_tx_en_v(rf_tx_en_v),
 .rf_tx_en_h(rf_tx_en_h),
 .bc_tx_en	(bc_tx_en),
-.channel_sel	(channel_sel)
+.channel_sel	(channel_sel),
+.adc_valid_expand	(adc_valid_expand)
 );
 
 
@@ -1040,6 +1042,24 @@ wire	                BC_rsta         ;
 // .app_param1(cfg_BC_param1)	 ,
 // .app_param2(cfg_BC_param2)	 
 // );
+wire trt_tp_0;     	    
+wire trr_tp_0;     	    
+wire trt_tp_1;     	    
+wire trr_tp_1;     	    
+wire trt_tp_2;     	    
+wire trr_tp_2;     	    
+wire trt_tp_3;     	    
+wire trr_tp_3;     
+
+assign trt_o_p_0 = (adc_valid_expand == 0) & trt_tp_0;
+assign trr_o_p_0 = (adc_valid_expand == 0) & trr_tp_0;
+assign trt_o_p_1 = (adc_valid_expand == 0) & trt_tp_1;
+assign trr_o_p_1 = (adc_valid_expand == 0) & trr_tp_1;
+assign trt_o_p_2 = (adc_valid_expand == 0) & trt_tp_2;
+assign trr_o_p_2 = (adc_valid_expand == 0) & trr_tp_2;
+assign trt_o_p_3 = (adc_valid_expand == 0) & trt_tp_3;
+assign trr_o_p_3 = (adc_valid_expand == 0) & trr_tp_3;
+
 
 bc_wrapper u_bc_wrapper
 (
@@ -1052,14 +1072,14 @@ bc_wrapper u_bc_wrapper
 . sd_o_p        (BC_sd_o        	),
 . ld_o_p        (BC_ld_o        	),
 . dary_o_p      (BC_dary_o      	),
-. trt_o_p_0     (trt_o_p_0     	    ),
-. trr_o_p_0     (trr_o_p_0     	    ),
-. trt_o_p_1     (trt_o_p_1     	    ),
-. trr_o_p_1     (trr_o_p_1     	    ),
-. trt_o_p_2     (trt_o_p_2     	    ),
-. trr_o_p_2     (trr_o_p_2     	    ),
-. trt_o_p_3     (trt_o_p_3     	    ),
-. trr_o_p_3     (trr_o_p_3     	    ),
+. trt_o_p_0     (trt_tp_0			),
+. trr_o_p_0     (trr_tp_0			),
+. trt_o_p_1     (trt_tp_1			),
+. trr_o_p_1     (trr_tp_1			),
+. trt_o_p_2     (trt_tp_2			),
+. trr_o_p_2     (trr_tp_2			),
+. trt_o_p_3     (trt_tp_3			),
+. trr_o_p_3     (trr_tp_3			),
 . rst_o_p       (BC_rst_o       	),
 
 . rama_clk      (bram_clk      	    ),

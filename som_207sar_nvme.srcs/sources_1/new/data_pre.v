@@ -137,14 +137,16 @@ output 				rf_out,
 output 				rf_tx_en_v,
 output 				rf_tx_en_h,
 output 				bc_tx_en,
-output 				channel_sel
+output 				channel_sel,
+output              adc_valid_expand           
 );
 	
 //------------------------------- DAC data -------------------------------         
 wire 			dac_valid_adjust;
 wire [255:0] 	dac_data_adjust	;
 wire 			data_record_mode;
-wire  			record_en		;      
+wire  			record_en		; 
+wire [1:0]      mode_value		;     
 dac_data_pre dac_data_pre_Ep0
 (
 .dac_clk(dac_clk),
@@ -207,7 +209,9 @@ dac_data_pre dac_data_pre_Ep0
 .rf_tx_en_v (rf_tx_en_v ),
 .rf_tx_en_h (rf_tx_en_h ),
 .bc_tx_en	(bc_tx_en	),
-.channel_sel	(channel_sel	)
+.channel_sel	(channel_sel	),
+.adc_valid_expand	(adc_valid_expand	),
+.mode_value	(mode_value	)
 
 //debug
 //.vio_dataout(vio_dataout),
@@ -337,11 +341,11 @@ reg [255:0] adc1_data;
 //assign param_data = 	{3{256'hCCCCCCCC22222222}};
 //assign debug_data = 	{4{256'hDDDDDDDD33333333}};
 
-wire [127:0] m00_axis_tdata_temp;
-wire [127:0] m01_axis_tdata_temp;
+wire [127:0] m02_axis_tdata_temp;
+wire [127:0] m03_axis_tdata_temp;
 
-assign m00_axis_tdata_temp = adc_valid ? m00_axis_tdata : 0;
-assign m01_axis_tdata_temp = adc_valid ? m01_axis_tdata : 0;
+assign m02_axis_tdata_temp = adc_valid ? m02_axis_tdata : 0;
+assign m03_axis_tdata_temp = adc_valid ? m03_axis_tdata : 0;
 
 wire [255:0] s00_axis_tdata_temp;
 assign s00_axis_tdata_temp = dac_valid_adjust ? dac_data_adjust : 0;
@@ -353,12 +357,15 @@ wire [255:0] adc1_data_buff;
 genvar kk;
 generate
 for(kk=0;kk<8;kk=kk+1)begin:blk1
+	// always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata_temp[16*kk+15:16*kk+00];
+	// always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata_temp[16*kk+15:16*kk+00];
+	// always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
+	// always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
 	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata[16*kk+15:16*kk+00];
 	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata[16*kk+15:16*kk+00];
 	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= m00_axis_tdata[16*kk+15:16*kk+00];
 	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= m01_axis_tdata[16*kk+15:16*kk+00];
-	// always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
-	// always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
+
 end
 endgenerate
 
@@ -439,11 +446,13 @@ assign div_pulse1 = adc_div[15:8];
 assign div_width2 = adc_div[23:16];
 assign div_pulse2 = adc_div[31:24];
 
-// wire data_valid;
+wire data_valid;
+wire [255:0] data0;
+wire [255:0] data1;
 
-// assign data_valid = data_record_mode ? adc_valid : dac_valid_adjust;
-
-
+assign data_valid = mode_value == 2 ? adc_valid : record_en;
+assign data0      = mode_value == 2 ? adc0_data : adc0_data_buff;
+assign data1      = mode_value == 2 ? adc1_data : adc1_data_buff;
 
 data_format data_format_EP0(
 .adc_clk(adc_clk),    //input 
@@ -452,11 +461,11 @@ data_format data_format_EP0(
 .prfin(prffix_inter),    //input 
 .fifo_wr_clr(fifo_wr_clr),    //input 
 .fifo_wr_valid(fifo_wr_valid),    //input 
-.fifo_wr_enable(record_en),    //input 
+.fifo_wr_enable(data_valid),    //input 
 .cfg_AD_rnum(cfg_adc_frmlen),    //input [31:0]
 .fifo_overflow(rec_fifo_overflow[0]),	// output
-.adc0_data(adc0_data_buff),    //input [255:0]
-.adc1_data(adc1_data_buff),    //input [255:0]adc1_data_buff
+.adc0_data(data0),    //input [255:0]
+.adc1_data(data1),    //input [255:0]adc1_data_buff
 .div_width(div_width1),    //input [7:0]
 .div_pulse(div_pulse1),    //input [7:0]
 .ctrl_data(ctrl_data),    //input [192*8-1:0]
@@ -482,7 +491,7 @@ data_format data_format_EP1(
 .fifo_wr_enable(data_valid),    //input 
 .cfg_AD_rnum(cfg_adc_frmlen),    //input [31:0]
 .fifo_overflow(rec_fifo_overflow[1]),	// output
-.adc0_data(adc1_data),    //input [255:0]
+.adc0_data(adc0_data),    //input [255:0]
 .adc1_data(adc1_data),    //input [255:0]
 .div_width(div_width2),    //input [7:0]
 .div_pulse(div_pulse2),    //input [7:0]

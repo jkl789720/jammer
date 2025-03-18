@@ -115,7 +115,7 @@ end
 always@(posedge adc_clk)begin
     if(!resetn)
         cnt_prf1 <= 0;
-    else if(mode_value == 1)begin
+    else if(mode_value[0] == 1)begin
         if(trig_valid_r | trig_valid)begin
             if(trig_valid)
                 cnt_prf1 <= 0;
@@ -126,7 +126,7 @@ always@(posedge adc_clk)begin
         end
     end
 
-    else if(mode_value == 2)begin
+    else if(mode_value[1] == 1)begin
         if(prf_adjust_valid)begin
             if(cnt_prf1 + prf_cnt_offset >= prf_period - 32'sd1)
                 cnt_prf1 <= 0;
@@ -141,8 +141,6 @@ always@(posedge adc_clk)begin
         end
     end
 
-    else
-        cnt_prf1 <= 0;
 end
 
 assign prf1 = cnt_prf1 > 0 && cnt_prf1 <= (TIME_100US);
@@ -547,32 +545,11 @@ always@(posedge adc_clk)begin
 end
 
 `ifdef DISTURB_DEBUG
-ila_ctrl_sig_gen u_ila_ctrl_sig_gen (
-	.clk         (adc_clk                       ),
-	.probe0      (distance_delay_now            ), //32
-	.probe1      (template_delay_now            ), //32
-	.probe2      (k_data_now                    ), //24
-	.probe3      (b_data_now                    ), //24
-	.probe4      (k_b_valid_pos                 ), //1
-    .probe5      (cnt_prf1                      ), //32
-    .probe6      (distance_delay_r[3]           ), //32
-    .probe7      (template_delay_r[3]           ), //32
-    .probe8      (k_data_r[3]                   ), //24
-    .probe9      (b_data_r[3]                   ), //24
-    .probe10     (cnt_kb                        ), //2
-    .probe11     (cnt_dac_valid                 ), //2
-    .probe12     (k_data                        ), //24
-    .probe13     (b_data                        ), //24
-    .probe14     (cnt_kb_ovtime                 ), //32
-    .probe15     (cnt_da_ovtime                 ), //32
-    .probe16     (dac_valid_o                   ), //1
-    .probe17     (adc_times                     ), //32
-    .probe18     (cnt_fft_valid                 ), //32
-    .probe19     (cnt_fft_valid_latch           ), //32
-    .probe20     (prf_adjust_valid              ), //1
-    .probe21     (prf_cnt_offset                ), //32
-    .probe22     (cnt_prf1                      ), //32
-    .probe23     (fft_index_max_latch           )  //13
+ila_prf u_ila_prf (
+	.clk         (adc_clk                   ),
+	.probe0      (mode_value[1:0]           ), //2
+	.probe1      (cnt_prf1                  ), //32
+	.probe2      (prf                       )  //`
 );
 
 `endif

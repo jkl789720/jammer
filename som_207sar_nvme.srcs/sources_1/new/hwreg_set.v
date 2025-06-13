@@ -17,6 +17,7 @@ output reg [31:0] cfg_dev_ctrl,
 input      [31:0] cfg_dev_status,
 input      [31:0] cfg_dev_version,
 output reg [31:0] cfg_gpio_update,
+output reg [31:0] cfg_multifuc_ctrl,
 input      [31:0] gpsdev_time,
 input      [31:0] gpsdev_count,
 output reg [31:0] cfg_fmc_rfcode2,
@@ -107,6 +108,7 @@ always@(posedge cfg_clk)begin
 		`BASE_BASE_DEVICE+16'h3C:cfg_rd_dat <= cfg_gpio_update;
 		`BASE_BASE_DEVICE+16'h40:cfg_rd_dat <= gpsdev_time_r1;
 		`BASE_BASE_DEVICE+16'h44:cfg_rd_dat <= gpsdev_count_r1;
+		`BASE_BASE_DEVICE+16'h48:cfg_rd_dat <= cfg_multifuc_ctrl;	
 		`BASE_BASE_DEVICE+16'h4C:cfg_rd_dat <= cfg_fmc_rfcode2;	
 		`BASE_AUX_PARAM+16'h00:cfg_rd_dat <= cfg_auxdw_0;
 		`BASE_AUX_PARAM+16'h04:cfg_rd_dat <= cfg_auxdw_1;
@@ -168,6 +170,7 @@ always@(posedge cfg_clk)begin
 		//cfg_dev_status <= 0;
 		//cfg_dev_version <= 0;
 		cfg_gpio_update <= 0;
+		cfg_multifuc_ctrl <= 0;
 		cfg_fmc_rfcode2 <= 0;
 		cfg_auxdw_0 <= 0;
 		cfg_auxdw_1 <= 0;
@@ -220,6 +223,7 @@ always@(posedge cfg_clk)begin
 				//`BASE_BASE_DEVICE+16'h34:cfg_dev_status <= cfg_wr_dat_r;
 				//`BASE_BASE_DEVICE+16'h38:cfg_dev_version <= cfg_wr_dat_r;
 				`BASE_BASE_DEVICE+16'h3C:cfg_gpio_update <= cfg_wr_dat_r;
+				`BASE_BASE_DEVICE+16'h48:cfg_multifuc_ctrl <= cfg_wr_dat_r;
 				`BASE_BASE_DEVICE+16'h4C:cfg_fmc_rfcode2 <= cfg_wr_dat_r;
 				`BASE_AUX_PARAM+16'h00:cfg_auxdw_0 <= cfg_wr_dat_r;
 				`BASE_AUX_PARAM+16'h04:cfg_auxdw_1 <= cfg_wr_dat_r;

@@ -108,6 +108,18 @@ output                          adc_valid_expand          ,
 output [1:0]                    mode_value
 );
 
+/*
+干扰机：0 1
+延时线：0 0
+*/
+wire [1:0] ad_sel;//注debug：0是选正常ad1，1是选择激励
+wire da_sel;//注debug： 0时延时直出，为1时出干扰信号
+
+wire rf_out_jammer;
+wire rf_tx_en_delay;
+wire rf_tx_en_h_jammer;
+wire rf_tx_en_v_jammer;
+wire dac_valid;
 //adc_valid需要自己生成
 
 wire   [31:0]                    app_param0      ;
@@ -148,6 +160,7 @@ wire   [31:0]                    app_status11    ;
 
 wire   [255:0]                    dac_data       ;
 wire                              dac_valid_whole ;
+wire   [255:0]                    delay_dac_data  ;
 wire [255:0] dac_data_o;
 wire         dac_valid_o;
 
@@ -245,12 +258,11 @@ end
 assign resetn_vio = ~(cnt_reset < 50);
 `endif
 
-wire [1:0] ad_sel;
-wire da_sel;
+
 `ifdef TEST
 
-assign ad_sel = 3;
-assign da_sel = 1;
+assign ad_sel = 1;
+assign da_sel = 0;
 `endif
 
 //adc
@@ -322,6 +334,71 @@ generate
 		assign adc_data1[(ss+1)*32-1:ss*32] = {m01_axis_tdata[(ss+1)*16-1:ss*16],m00_axis_tdata[(ss+1)*16-1:ss*16]};
 	end
 endgenerate
+//注sim：改 2025/06/09 测试用
+/*
+200us 5khz  31250   : 仿真用
+5ms   200hz 781250  : 上板用
+*/
+localparam PRF_PERIOD = 781250; // 仿真200us
+localparam SIGNAL_WIDTH = 782; // 信号时宽5us
+localparam FRAME_NUM = 2;     // 信号帧数
+wire [255:0] adc_data_delay;
+reg [255:0] adc_data_delay_stim;
+reg [255:0] adc_data_delay_stims [0:SIGNAL_WIDTH*FRAME_NUM-1];
+initial begin
+    $readmemh("D:/code/verilog/data/delay_jammer/lfm_signal.txt", adc_data_delay_stims);//512 有效，两份
+end
+reg [31:0] cnt_prf;//生成prf
+reg prf_is_odd;//计算prf的奇偶
+reg [31:0] cnt_data;//计数产生数据
+wire prf_delay;
+reg prf_delay_r;
+wire prf_delay_pos;
+//生成prf信号
+always @(posedge adc_clk) begin
+    if(!resetn)
+        cnt_prf <= 0;
+    else if(cnt_prf == PRF_PERIOD)
+        cnt_prf <= 0;
+    else
+        cnt_prf <= cnt_prf + 1;
+end
+assign prf_delay = cnt_prf <= 100;
+//检测prf信号上升沿
+always @(posedge adc_clk) begin
+    if(!resetn)
+        prf_delay_r <= 0;
+    else
+        prf_delay_r <= prf_delay;
+end
+assign prf_delay_pos = prf_delay && !prf_delay_r;
+
+//计数prf的奇偶
+always @(posedge adc_clk) begin
+    if(!resetn)
+        prf_is_odd <= 0;
+    else if(prf_delay_pos)
+        prf_is_odd <= prf_is_odd + 1;
+end
+//生成造的激励数据，奇偶帧前512数据不同
+always@(*)begin
+    if(!resetn)
+      adc_data_delay_stim = 0;
+    else if(cnt_prf < SIGNAL_WIDTH)begin
+      if(prf_is_odd)begin
+        adc_data_delay_stim = adc_data_delay_stims[cnt_prf];
+      end
+      else begin
+        adc_data_delay_stim = adc_data_delay_stims[cnt_prf + SIGNAL_WIDTH];
+      end
+    end
+    else begin
+      adc_data_delay_stim = 0;
+    end
+end
+
+assign adc_data_delay = ad_sel ? adc_data_delay_stim : adc_data1;//注debug：0是选正常ad1，1是选择激励
+
 
 
 `ifdef DISTURB_DEBUG
@@ -453,7 +530,7 @@ u_disturb_wrapper(
 . adc_data1         (adc_data1        ) ,//需要拼接而来
 . adc_valid_pre     (adc_valid_pre    ) ,//需要拼接而来
 . adc_valid_expand  (adc_valid_expand ) ,//需要拼接而来
-. rf_out            (rf_out           ) ,
+. rf_out            (rf_out_jammer    ) ,
 . chirp_in_clka     (rama_clk         ) ,
 . chirp_in_ena      (1                ) ,
 . chirp_in_wea      (rama_we          ) ,
@@ -515,12 +592,59 @@ u_disturb_wrapper(
 . fifo_underflow    (fifo_underflow   ) ,
 . channel_sel       (channel_sel      )
 );
+//注debug：调试用
+wire [31:0] receive_delay;
+wire [31:0] receive_length;
+wire trig_valid;
+wire [31:0] cnt_delay;
+wire fifo_wren;
 
 
+delay_wrapper#(
+    .  LOCAL_DWIDTH 	  (LOCAL_DWIDTH 	)  ,
+    .  WIDTH            (WIDTH          )  ,
+    .  FFT_WIDTH        (FFT_WIDTH      )  ,
+    .  LANE_NUM         (LANE_NUM       )  ,
+    .  CHIRP_NUM        (CHIRP_NUM      )  ,
+    .  CALCLT_DELAY     (CALCLT_DELAY   )  ,
+    .  DWIDTH_0         (DWIDTH_0       )  ,
+    .  SHIFT_RAM_DELAY  (SHIFT_RAM_DELAY)  ,
+    .  ADC_CLK_FREQ     (ADC_CLK_FREQ   )  ,
+    .  RECO_DELAY       (RECO_DELAY     )  
+)u_delay_wrapper(
+. adc_clk        (adc_clk       )  ,
+. resetn         (resetn        )  ,
+. adc_data       (adc_data_delay     )  ,
+. adc_thshld     (app_param7    )  ,//adc_thshld            注sim：仿真测试固定了 应该为：app_param7 
+. receive_length (receive_length   )  ,//data_record_period    注sim：仿真测试固定了 应该为：app_param20
+. receive_delay  (receive_delay   )  ,//adc_delay             注sim：仿真测试固定了 应该为：app_param10
+. dac_data       (delay_dac_data ) , 
+. dac_valid       (dac_valid_delay ),
+. rf_out          (rf_tx_en_delay    ), 
+. trig_valid          (trig_valid    ), 
+. cnt_delay           (cnt_delay     ), 
+. fifo_wren           (fifo_wren     ) 
+);
+  
+
+//注debug：调试用
+vio_delay_ctrl u_vio_delay_ctrl (
+  .clk(adc_clk), 
+  .probe_out0(receive_length), // data_record_period
+  .probe_out1(receive_delay) // adc_delay
+);
 
 
-
-
+ila_delay u_ila_delay (
+	.clk(adc_clk), // input wire clk
+	.probe0(trig_valid      ), // 1
+	.probe1(fifo_wren       ), // 1
+	.probe2(adc_data_delay  ), // 32
+	.probe3(dac_valid_delay       ), // 1
+	.probe4(s00_axis_tdata  ), // 32
+	.probe5(rf_tx_en_v          ), // 1
+	.probe6(cnt_delay       ) // 32
+);
 
 
 shift_ram_dac u_shift_ram_dac (
@@ -530,9 +654,10 @@ shift_ram_dac u_shift_ram_dac (
 );
 
 
-wire dac_valid;
 
-assign resetn = app_param12_r[1][0] && resetn_vio;
+
+// assign resetn = resetn_vio;//注sim：仿真测试时复位逻辑进行了修改
+assign resetn = app_param12_r[1][0] && resetn_vio;//注sim：仿真/测试时复位逻辑进行了修改
 assign dac_valid = dac_valid_whole;
 
 
@@ -583,8 +708,9 @@ end
 wire dac_valid_o_zero;
 assign dac_valid_o_zero = (dac_valid_adjust == 1) && (adc_valid_expand == 0);
 
-assign s00_axis_tdata = dac_valid_o_zero ? dac_data_adjust : 0;
-
+assign s00_axis_tdata = da_sel ? (dac_valid_o_zero ? dac_data_adjust : 0) :  (dac_valid_delay ? delay_dac_data : 0);//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
+assign rf_tx_en_v = da_sel ? rf_tx_en_v_jammer : rf_tx_en_delay;//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
+assign rf_tx_en_h = da_sel ? rf_tx_en_h_jammer : rf_tx_en_delay;//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
 
 ila_dac_adjust u_ila_dac_adjust (
 	.clk(adc_clk            ), // input wire clk
@@ -698,8 +824,8 @@ rf_mode u_rf_mode(
 . resetn      (resetn     ) ,
 . rf_tx_en    (rf_tx_en   ) ,
 . channel_sel (channel_sel) ,  
-. rf_tx_en_h  (rf_tx_en_h ) ,
-. rf_tx_en_v  (rf_tx_en_v )
+. rf_tx_en_h  (rf_tx_en_h_jammer) ,
+. rf_tx_en_v  (rf_tx_en_v_jammer)
 );
 
 ila_record u_ila_record (

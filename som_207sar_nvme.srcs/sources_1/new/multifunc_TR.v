@@ -182,7 +182,8 @@ output trr_o_p_1,
 output trt_o_p_2,	
 output trr_o_p_2,	
 output trt_o_p_3,	
-output trr_o_p_3	
+output trr_o_p_3	,
+output [31:0] cfg_multifuc_ctrl
 );
 wire rf_out;
 wire channel_sel;
@@ -542,6 +543,7 @@ wire [31:0] cfg_adda_mode;
 wire [31:0] cfg_dev_status;
 wire [31:0] cfg_dev_version;
 wire [31:0] cfg_gpio_update;
+// wire [31:0] cfg_multifuc_ctrl;
 wire [31:0] cfg_auxdw_0;
 wire [31:0] cfg_auxdw_1;
 wire [31:0] cfg_auxdw_2;
@@ -598,6 +600,7 @@ hwreg_set hwreg_set_EP0(
 .cfg_dev_status(cfg_dev_status),    //input [31:0]
 .cfg_dev_version(cfg_dev_version),    //input [31:0]
 .cfg_gpio_update(cfg_gpio_update),    //output [31:0]
+.cfg_multifuc_ctrl(cfg_multifuc_ctrl),    //output [31:0]
 .gpsdev_time(gps_sec),
 .gpsdev_count( ppstimer),
 .cfg_fmc_rfcode2(cfg_fmc_rfcode2),
@@ -979,7 +982,7 @@ assign RF_LOCK[0] = RF_A_LOCK;
 
 assign RF_B_TXEN = vio_sel?vio_TX_EN:(RF_TX_EN_FORCE2?RF_TX_EN2:(RF_TXEN&RF_TX_EN2));
 assign RF_B_UR_TX = vio_uart?RF_B_UR_RX:uart_tx;
-assign RF_B_RXCTL = vio_sel?vio_RXCTL:RF_RXCTL2;
+assign RF_B_RXCTL = 1;
 assign RF_B_SWITCH = vio_sel?vio_SWITCH:RF_SWITCH2;
 assign RF_LOCK[1] = RF_B_LOCK;
 

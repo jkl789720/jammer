@@ -1,0 +1,363 @@
+module control_unit
+(
+input pcie_clk,
+input pcie_rst,
+// cfg info for timing
+input [31:0] cfg_AD_base,
+input [31:0] cfg_AD_rnum,
+input [31:0] cfg_AD_anum,
+input [31:0] cfg_AD_delay,
+input [31:0] cfg_AD_mode,
+output [31:0] cfg_AD_status,	// not used
+input [31:0] cfg_DA_base,
+input [31:0] cfg_DA_rnum,
+input [31:0] cfg_DA_anum,
+input [31:0] cfg_DA_delay,
+input [31:0] cfg_DA_mode,
+output [31:0] cfg_DA_status,
+
+input  [31:0] cfg_mAD_rnum,
+input  [31:0] cfg_mAD_anum,
+input  [31:0] cfg_mAD_delay,
+input  [31:0] cfg_mAD_mode,
+input  [31:0] cfg_mAD_base,
+output [31:0] cfg_mAD_status,
+input  [31:0] cfg_mDA_rnum,
+input  [31:0] cfg_mDA_anum,
+input  [31:0] cfg_mDA_delay,
+input  [31:0] cfg_mDA_mode,
+input  [31:0] cfg_mDA_base,
+output [31:0] cfg_mDA_status,
+
+// cfg info for RPFIN
+input [31:0] cfg_prftime,
+input [31:0] cfg_pretime,
+input [31:0] cfg_prfmode,
+input prfin_ex,
+input PPS_GPS_PL,
+// 
+input [31:0] cfg_mode_ctrl,
+// cfg info for aux
+input [31:0] cfg_param_mode,
+input [31:0] cfg_param_addr,
+input [31:0] cfg_param_size,
+input [31:0] cfg_port_addr,
+input [31:0] cfg_port_size,
+output [31:0] cfg_param_status,
+
+input [31:0] cfg_param2_mode,
+input [31:0] cfg_param2_addr,
+input [31:0] cfg_param2_size,
+output [31:0] cfg_param2_status,
+
+// low API
+input xdin2_valid,
+output xdin2_ready,
+input [127:0] xdin2_data,
+input [4:0] xdin2_addr,
+// AUX API
+input [1023:0] xdin_data,	// 32 aux data
+input [31:0] xdin_signal,	// 32 timing
+
+output [1023:0] xdout_data,	// 32 aux data
+output [31:0] xdout_active,	// 32 aux data
+output [31:0] xdout_signal, // 32 timing
+
+// control IF
+input mem_clk,
+input mem_rst,
+output [31:0] tl_AD_base,
+output [31:0] tl_AD_rnum,
+output tl_AD_repeat,
+output tl_AD_reset,
+input [31:0] tl_AD_status,
+output [31:0] tl_DA_base,
+output [31:0] tl_DA_rnum,
+output tl_DA_repeat,
+output tl_DA_reset,
+input [31:0] tl_DA_status,
+
+
+input ctrl_clk,
+input ctrl_rst,
+output prfmux,
+input prffix,
+output preprf,
+output prfin,
+output [31:0] prfcnt,
+
+input adc_clk,
+input adc_rst,
+input dac_clk,
+input dac_rst,
+input adc_mask,
+input dac_mask,
+
+output mfifo_rd_clr,	// active high, only one cycle
+output mfifo_rd_valid,
+output mfifo_rd_enable,
+output mfifo_wr_clr,	// active high, only one cycle
+output mfifo_wr_valid,
+output mfifo_wr_enable,
+output fifo_rd_clr,	// active high, only one cycle
+output fifo_rd_valid,
+output fifo_rd_enable,
+output fifo_wr_clr,	// active high, only one cycle
+output fifo_wr_valid,
+output fifo_wr_enable
+);
+
+// wave from/to PCIe
+wire 		 cfg_mode_selda;	// 1:pcie
+wire 		 cfg_mode_selad;	// 1:pcie
+
+wire [3:0]  cfg_AD_div;
+wire 		cfg_AD_repeat;
+wire 		cfg_AD_continu;
+wire 		cfg_AD_multiclr;
+wire 		cfg_AD_start;
+assign cfg_AD_div = cfg_AD_mode[3:0];
+assign cfg_AD_repeat = cfg_AD_mode[4];
+assign cfg_AD_continu = cfg_AD_mode[5];
+assign cfg_AD_multiclr = cfg_AD_mode[6];
+assign cfg_mode_selad = cfg_AD_mode[7];
+assign cfg_AD_start = cfg_AD_mode[8];
+assign cfg_AD_masken = cfg_AD_mode[9];
+
+wire [3:0]  cfg_DA_div;
+wire		 cfg_DA_repeat;
+wire		 cfg_DA_continu;
+wire		 cfg_DA_multiclr;
+wire 		 cfg_DA_start;
+assign cfg_DA_div = cfg_DA_mode[3:0];
+assign cfg_DA_repeat = cfg_DA_mode[4];
+assign cfg_DA_continu = cfg_DA_mode[5];
+assign cfg_DA_multiclr = cfg_DA_mode[6];
+assign cfg_mode_selda = cfg_DA_mode[7];
+assign cfg_DA_start = cfg_DA_mode[8];
+assign cfg_DA_masken = cfg_DA_mode[9];
+
+wire 		 cfg_mode_auxen;
+wire 		 cfg_mode_newaux;
+assign cfg_mode_auxen = cfg_mode_ctrl[0];
+assign cfg_mode_newaux = cfg_mode_ctrl[1];
+
+timing_logic 
+#(
+.BUS_SAMPLE_ALIGN_BITS(5),  // DIN_WIDTH = 256 in top
+.BUS_WAVEGEN_ALIGN_BITS(5)  // DIN_WIDTH = 256 in top
+)
+timing_logic_EP0(
+.cfg_clk(pcie_clk),    //input 
+.cfg_rst(pcie_rst),    //input 
+.cfg_AD_base(cfg_AD_base),    //input [31:0]
+.cfg_AD_rnum(cfg_AD_rnum),    //input [31:0]
+.cfg_AD_anum(cfg_AD_anum),    //input [31:0]
+.cfg_AD_delay(cfg_AD_delay),    //input [31:0]
+.cfg_AD_div(cfg_AD_div),    //input [3:0]
+.cfg_AD_repeat(cfg_AD_repeat),    //input 
+.cfg_AD_status(cfg_AD_status),    //output [31:0]
+.cfg_AD_continu(cfg_AD_continu),    //input 
+.cfg_AD_multiclr(cfg_AD_multiclr),    //input 
+.cfg_AD_start(cfg_AD_start),    //input 
+.cfg_AD_masken(cfg_AD_masken),    //input 
+.cfg_DA_base(cfg_DA_base),    //input [31:0]
+.cfg_DA_rnum(cfg_DA_rnum),    //input [31:0]
+.cfg_DA_anum(cfg_DA_anum),    //input [31:0]
+.cfg_DA_delay(cfg_DA_delay),    //input [31:0]
+.cfg_DA_div(cfg_DA_div),    //input [2:0]
+.cfg_DA_repeat(cfg_DA_repeat),    //input 
+.cfg_DA_status(cfg_DA_status),    //output [31:0]
+.cfg_DA_continu(cfg_DA_continu),    //input 
+.cfg_DA_multiclr(cfg_DA_multiclr),    //input 
+.cfg_DA_start(cfg_DA_start),    //input 
+.cfg_DA_masken(cfg_DA_masken),    //input 
+.cfg_mode_auxen(cfg_mode_auxen),    //input 
+.cfg_mode_selda(cfg_mode_selda),    //input 
+.cfg_mode_selad(cfg_mode_selad),    //input 
+.mem_clk(mem_clk),    //input 
+.mem_rst(mem_rst),    //input 
+//.tl_AD_base(tl_AD_base),    //output [31:0]
+//.tl_AD_rnum(tl_AD_rnum),    //output [31:0]
+//.tl_AD_repeat(tl_AD_repeat),    //output 
+//.tl_AD_reset(tl_AD_reset),    //output 
+//.tl_AD_status(tl_AD_status),    //input [31:0] 
+//.tl_DA_base(tl_DA_base),    //output [31:0]
+//.tl_DA_rnum(tl_DA_rnum),    //output [31:0]
+//.tl_DA_repeat(tl_DA_repeat),    //output 
+//.tl_DA_reset(tl_DA_reset),    //output 
+//.tl_DA_status(tl_DA_status),    //input [31:0] 
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.dac_clk(dac_clk),    //input 
+.dac_rst(dac_rst),    //input 
+.adc_mask(adc_mask),    //input 
+.dac_mask(dac_mask),    //input 
+.preprf(preprf),    //input 
+.prfin(prfin),    //input 
+//.mfifo_rd_clr(mfifo_rd_clr),    //output 
+//.mfifo_rd_valid(mfifo_rd_valid),    //output 
+//.mfifo_rd_enable(mfifo_rd_enable),    //output 
+//.mfifo_wr_clr(mfifo_wr_clr),    //output 
+//.mfifo_wr_valid(mfifo_wr_valid),    //output 
+//.mfifo_wr_enable(mfifo_wr_enable),    //output 
+.fifo_rd_clr(fifo_rd_clr),    //output 
+.fifo_rd_valid(fifo_rd_valid),    //output 
+.fifo_rd_enable(fifo_rd_enable),    //output 
+.fifo_wr_clr(fifo_wr_clr),    //output 
+.fifo_wr_valid(fifo_wr_valid),    //output 
+.fifo_wr_enable(fifo_wr_enable)    //output 
+);
+
+// wave from/to MEM
+wire [3:0]  cfg_mAD_div;
+wire 		cfg_mAD_repeat;
+wire 		cfg_mAD_continu;
+wire 		cfg_mAD_multiclr;
+wire 		cfg_mAD_start;
+assign cfg_mAD_div = cfg_mAD_mode[3:0];
+assign cfg_mAD_repeat = cfg_mAD_mode[4];
+assign cfg_mAD_continu = cfg_mAD_mode[5];
+assign cfg_mAD_multiclr = cfg_mAD_mode[6];
+assign cfg_mAD_start = cfg_mAD_mode[8];
+assign cfg_mAD_masken = cfg_mAD_mode[9];
+
+wire [3:0]   cfg_mDA_div;
+wire		 cfg_mDA_repeat;
+wire		 cfg_mDA_continu;
+wire		 cfg_mDA_multiclr;
+wire 		 cfg_mDA_start;
+assign cfg_mDA_div = cfg_mDA_mode[3:0];
+assign cfg_mDA_repeat = cfg_mDA_mode[4];
+assign cfg_mDA_continu = cfg_mDA_mode[5];
+assign cfg_mDA_multiclr = cfg_mDA_mode[6];
+assign cfg_mDA_start = cfg_mDA_mode[8];
+assign cfg_mDA_masken = cfg_mDA_mode[9];
+
+timing_logic 
+#(
+.BUS_SAMPLE_ALIGN_BITS(5),  // LOCAL_WIDTH = 256 in top
+.BUS_WAVEGEN_ALIGN_BITS(5)  // LOCAL_WIDTH = 256 in top
+)
+timing_logic_EP1(
+.cfg_clk(pcie_clk),    //input 
+.cfg_rst(pcie_rst),    //input 
+.cfg_AD_base(cfg_mAD_base),    //input [31:0]
+.cfg_AD_rnum(cfg_mAD_rnum),    //input [31:0]
+.cfg_AD_anum(cfg_mAD_anum),    //input [31:0]
+.cfg_AD_delay(cfg_mAD_delay),    //input [31:0]
+.cfg_AD_div(cfg_mAD_div),    //input [3:0]
+.cfg_AD_repeat(cfg_mAD_repeat),    //input 
+.cfg_AD_status(cfg_mAD_status),    //output [31:0]
+.cfg_AD_continu(cfg_mAD_continu),    //input 
+.cfg_AD_multiclr(cfg_mAD_multiclr),    //input 
+.cfg_AD_start(cfg_mAD_start),    //input 
+.cfg_AD_masken(cfg_mAD_masken),    //input 
+.cfg_DA_base(cfg_mDA_base),    //input [31:0]
+.cfg_DA_rnum(cfg_mDA_rnum),    //input [31:0]
+.cfg_DA_anum(cfg_mDA_anum),    //input [31:0]
+.cfg_DA_delay(cfg_mDA_delay),    //input [31:0]
+.cfg_DA_div(cfg_mDA_div),    //input [2:0]
+.cfg_DA_repeat(cfg_mDA_repeat),    //input 
+.cfg_DA_status(cfg_mDA_status),    //output [31:0]
+.cfg_DA_continu(cfg_mDA_continu),    //input 
+.cfg_DA_multiclr(cfg_mDA_multiclr),    //input 
+.cfg_DA_start(cfg_mDA_start),    //input 
+.cfg_DA_masken(cfg_mDA_masken),    //input 
+.cfg_mode_auxen(1'b0),    //input 
+.cfg_mode_selda(1'b0),    //input 
+.cfg_mode_selad(1'b0),    //input 
+.mem_clk(mem_clk),    //input 
+.mem_rst(mem_rst),    //input 
+.tl_AD_base(tl_AD_base),    //output [31:0]
+.tl_AD_rnum(tl_AD_rnum),    //output [31:0]
+.tl_AD_repeat(tl_AD_repeat),    //output 
+.tl_AD_reset(tl_AD_reset),    //output 
+.tl_AD_status(tl_AD_status),    //input [31:0] 
+.tl_DA_base(tl_DA_base),    //output [31:0]
+.tl_DA_rnum(tl_DA_rnum),    //output [31:0]
+.tl_DA_repeat(tl_DA_repeat),    //output 
+.tl_DA_reset(tl_DA_reset),    //output 
+.tl_DA_status(tl_DA_status),    //input [31:0] 
+.adc_clk(adc_clk),    //input 
+.adc_rst(adc_rst),    //input 
+.dac_clk(dac_clk),    //input 
+.dac_rst(dac_rst),    //input 
+.adc_mask(1'b0),    //input 
+.dac_mask(1'b0),    //input 
+.preprf(preprf),    //input 
+.prfin(prfin),    //input 
+.mfifo_rd_clr(mfifo_rd_clr),    //output 
+.mfifo_rd_valid(mfifo_rd_valid),    //output 
+.mfifo_rd_enable(mfifo_rd_enable),    //output 
+.mfifo_wr_clr(mfifo_wr_clr),    //output 
+.mfifo_wr_valid(mfifo_wr_valid),    //output 
+.mfifo_wr_enable(mfifo_wr_enable)    //output 
+//.fifo_rd_clr(fifo_rd_clr),    //output 
+//.fifo_rd_valid(fifo_rd_valid),    //output 
+//.fifo_rd_enable(fifo_rd_enable),    //output 
+//.fifo_wr_clr(fifo_wr_clr),    //output 
+//.fifo_wr_valid(fifo_wr_valid),    //output 
+//.fifo_wr_enable(fifo_wr_enable)    //output 
+);
+
+
+wire cfg_prfext;	// 0:internal, 1: external
+wire cfg_prfval;	// 0:disable, 1: valid
+wire cfg_prfrst;
+assign cfg_prfext = cfg_prfmode[0];
+assign cfg_prfval = cfg_prfmode[1];
+assign cfg_prfrst = cfg_prfmode[2];
+assign cfg_prfpul = cfg_prfmode[3];
+
+wire cfg_prf_gate_enable;
+assign cfg_prf_gate_enable = cfg_prfmode[4];
+wire cfg_restart;
+assign cfg_restart = cfg_prfmode[5];
+reg gate_r1 = 0;
+reg gate_r2 = 0;
+reg gate_enable_r1 = 0;
+reg gate_enable_r2 = 0;
+reg gate_mask = 1;
+always@(posedge dac_clk)begin
+	if(dac_rst)begin
+		gate_r1 <= 0;
+		gate_r2 <= 0;
+		gate_mask <= 1;
+		gate_enable_r1 <= 0;
+		gate_enable_r2 <= 0;
+	end
+	else begin
+		gate_enable_r1 <= cfg_prf_gate_enable;
+		gate_enable_r2 <= gate_enable_r1;
+		gate_r1 <= PPS_GPS_PL;
+		gate_r2 <= gate_r1;		
+		if(gate_enable_r1)begin
+			if(~gate_enable_r2)gate_mask <= 0;
+			else if(gate_r1&(~gate_r2))gate_mask <= 1;
+		end
+		else begin
+			gate_mask <= 1;
+		end
+
+	end
+end
+prfin_gen prfin_gen_EP0(
+.clk(dac_clk),    //input 
+.reset(dac_rst),    //input 
+.cfg_prftime(cfg_prftime),    //input [31:0]
+.cfg_pretime(cfg_pretime),    //input [31:0]
+.cfg_prfext(cfg_prfext),    //input 
+.cfg_prfval(cfg_prfval & gate_mask),    //input 
+.cfg_prfrst(cfg_prfrst),    //input 
+.cfg_prfpul(cfg_prfpul),    //input 
+.cfg_prfrestart(cfg_restart & gate_r1),    //input 
+.prfin_ex(prfin_ex),    //input 
+.prfmux(prfmux),    //output 
+.prffix(prffix),    //input 
+.preprf(preprf),    //output 
+.prfin(prfin),    //output 
+.prfcnt(prfcnt)    //output [31:0]
+);
+
+endmodule

@@ -156,6 +156,8 @@ output UART_PL_IMU,
 input UART_GPS_PL_2		
 );
 
+wire [31:0] cfg_multifuc_ctrl;
+
 assign  UART_PL_IMU = UART_GPS_PL_2;
 
 localparam LOCAL_DWIDTH = 256;
@@ -685,7 +687,7 @@ datachannel_wrap_EP0
 
 //----------------------------- multifunc start ----------------------------------
 
-
+wire UART_IMU_PL_r1;
 reg BC_sys_rst = 0;
 always@(posedge clk50)BC_sys_rst <= core_rst;
 multifunc multifunc_EP0(
@@ -860,7 +862,7 @@ multifunc multifunc_EP0(
 .useruart1_tx(useruart1_tx),    //input
 .UART_PL_GPS(UART_PL_GPS),    //output 
 .UART_GPS_PL(UART_GPS_PL),    //input 
-.UART_IMU_PL(UART_IMU_PL),    //input 
+.UART_IMU_PL(UART_IMU_PL_r1),    //input 
 //.DBG_UART_TX(DBG_UART_TX),    //output 
 //.DBG_UART_RX(DBG_UART_RX),    //input 
 .PL_RS422_3_TX(PL_RS422_3_TX),    //output 
@@ -875,8 +877,13 @@ multifunc multifunc_EP0(
 .trt_o_p_2	(trt_o_p_2	)	,//output 	
 .trr_o_p_2	(trr_o_p_2	)	,//output 	
 .trt_o_p_3	(trt_o_p_3	)	,//output 	
-.trr_o_p_3	(trr_o_p_3	)	
+.trr_o_p_3	(trr_o_p_3	)	,
+.cfg_multifuc_ctrl(cfg_multifuc_ctrl)
 );
+wire fpga_syncinoutsel;
+assign fpga_syncinoutsel = cfg_multifuc_ctrl[3];
+
+assign UART_IMU_PL_r1 = fpga_syncinoutsel?UART_GPS_PL_2:UART_IMU_PL;
 
 // ila_rxtx ila_rxtx_ep(
 // .clk(clk50),
@@ -926,9 +933,27 @@ ila_spi u_ila_spi (
 );
 
 
+
+
+wire [255:0] adc_data1;
+genvar ss;
+generate
+	for(ss = 0;ss < 8;ss = ss + 1)begin:blk2
+		assign adc_data1[(ss+1)*32-1:ss*32] = {m01_axis_tdata[(ss+1)*16-1:ss*16],m00_axis_tdata[(ss+1)*16-1:ss*16]};
+	end
+endgenerate
+
 ila_dac_top u_ila_dac_top (
-	.clk     	(clk50           		),
-	.probe0  	(s00_axis_tdata         ) //256
+	.clk     	(adc_clk           		),
+	.probe0  	(s00_axis_tdata         ), //256
+	.probe1  	(adc_data1              ) //256
 );
 
+ila_test u_ila_test(
+	.clk     	(clk50           		),
+	.probe0  	(fpga_syncinoutsel         ), 
+	.probe1  	(UART_GPS_PL_2         ), 
+	.probe2  	(UART_IMU_PL         ) ,
+	.probe3  	(UART_IMU_PL_r1         ) 
+);
 endmodule

@@ -180,11 +180,11 @@ wire [255:0] wr_data;
 
 `ifdef DISTURB_DEBUG
 
-ila_dac u_ila_dac (
-	.clk        (adc_clk                ),
-	.probe0     (dac_valid              ),//1
-	.probe1     (dac_data               )//256
-);
+// ila_dac u_ila_dac (
+// 	.clk        (adc_clk                ),
+// 	.probe0     (dac_valid              ),//1
+// 	.probe1     (dac_data               )//256
+// );
 
 ila_ddr u_ila_ddr (
 	.clk        (adc_clk                ),

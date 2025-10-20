@@ -183,12 +183,17 @@ output trt_o_p_2,
 output trr_o_p_2,	
 output trt_o_p_3,	
 output trr_o_p_3	,
-output [31:0] cfg_multifuc_ctrl
+output [31:0] cfg_multifuc_ctrl,
+output adc_valid_expand
 );
 wire rf_out;
 wire channel_sel;
 wire bc_tx_en;
-wire adc_valid_expand;
+//wire adc_valid_expand;
+wire zero_sel;
+wire trt_close_flag;
+wire trr_close_flag;
+
 assign BC_A_TXEN = rf_out;
 
 assign BC_A_RXEN = rf_out;
@@ -686,7 +691,7 @@ wire [16*32-1:0] status_data;
 wire [24*32-1:0] param_data;
 wire [32*32-1:0] debug_data;
 //wire			 DAC_VOUT;
-
+wire dac_valid_adjust;
 data_pre
 #(
 .LOCAL_DWIDTH(LOCAL_DWIDTH)
@@ -801,7 +806,11 @@ data_pre
 .rf_tx_en_h(rf_tx_en_h),
 .bc_tx_en	(bc_tx_en),
 .channel_sel	(channel_sel),
-.adc_valid_expand	(adc_valid_expand)
+.adc_valid_expand	(adc_valid_expand),
+.zero_sel	(zero_sel),
+.dac_valid_adjust	(dac_valid_adjust),
+.trt_close_flag  (trt_close_flag),
+.trr_close_flag  (trr_close_flag)
 );
 
 
@@ -1054,14 +1063,14 @@ wire trr_tp_2;
 wire trt_tp_3;     	    
 wire trr_tp_3;     
 
-assign trt_o_p_0 = (adc_valid_expand == 0) & trt_tp_0;
-assign trr_o_p_0 = (adc_valid_expand == 0) & trr_tp_0;
-assign trt_o_p_1 = (adc_valid_expand == 0) & trt_tp_1;
-assign trr_o_p_1 = (adc_valid_expand == 0) & trr_tp_1;
-assign trt_o_p_2 = (adc_valid_expand == 0) & trt_tp_2;
-assign trr_o_p_2 = (adc_valid_expand == 0) & trr_tp_2;
-assign trt_o_p_3 = (adc_valid_expand == 0) & trt_tp_3;
-assign trr_o_p_3 = (adc_valid_expand == 0) & trr_tp_3;
+assign trt_o_p_0 =  !trt_close_flag & trt_tp_0;//
+assign trr_o_p_0 =  !trr_close_flag & trr_tp_0;
+assign trt_o_p_1 =  !trt_close_flag & trt_tp_1;
+assign trr_o_p_1 =  !trr_close_flag & trr_tp_1;
+assign trt_o_p_2 =  !trt_close_flag & trt_tp_2;
+assign trr_o_p_2 =  !trr_close_flag & trr_tp_2;
+assign trt_o_p_3 =  !trt_close_flag & trt_tp_3;
+assign trr_o_p_3 =  !trr_close_flag & trr_tp_3;
 
 
 bc_wrapper u_bc_wrapper
@@ -1313,4 +1322,45 @@ always@(posedge bram_clk)begin
 	end
 end
 
+ila_zero_trt u_ila_zero_trt (
+	.clk(adc_clk), // input wire clk
+
+
+	.probe0(trt_o_p_0), // input wire [0:0]  probe0  
+	.probe1(trr_o_p_0), // input wire [0:0]  probe1 
+	.probe2(trt_o_p_1), // input wire [0:0]  probe2 
+	.probe3(trr_o_p_1), // input wire [0:0]  probe3 
+	.probe4(trt_o_p_2), // input wire [0:0]  probe4 
+	.probe5(trr_o_p_2), // input wire [0:0]  probe5 
+	.probe6(trt_o_p_3), // input wire [0:0]  probe6 
+	.probe7(trr_o_p_3) // input wire [0:0]  probe7
+);
+wire [255:0]adc_data0,adc_data1;
+genvar kk;
+generate
+	for(kk = 0;kk < 8;kk = kk + 1)begin:blk1
+        assign adc_data0[(kk+1)*32-1:kk*32] =   {m02_axis_tdata[(kk+1)*16-1:kk*16],m03_axis_tdata[(kk+1)*16-1:kk*16]};
+        assign adc_data1[(kk+1)*32-1:kk*32] =   {m00_axis_tdata[(kk+1)*16-1:kk*16],m01_axis_tdata[(kk+1)*16-1:kk*16]};
+    end
+endgenerate
+
+ila_txrx_change u_ila_txrx_change (
+	.clk(adc_clk), // input wire clk
+
+
+	.probe0 (disturb_adc_valid	), // input wire [0:0]  probe0  
+	.probe1 (adc_valid_expand	), // input wire [0:0]  probe1 
+	.probe2 (dac_valid_adjust	), // input wire [0:0]  probe2 
+	.probe3 (rf_tx_en_v			), // input wire [0:0]  probe3 
+	.probe4 (rf_tx_en_h			), // input wire [0:0]  probe4 
+	.probe5 ( trt_o_p_0    		), // input wire [0:0]  probe5 
+	.probe6 ( trr_o_p_0    		), // input wire [0:0]  probe6 
+	.probe7 ( trt_o_p_1    		), // input wire [0:0]  probe7 
+	.probe8 ( trr_o_p_1    		), // input wire [0:0]  probe8 
+	.probe9 ( trt_o_p_2    		), // input wire [0:0]  probe9 
+	.probe10( trr_o_p_2    		), // input wire [0:0]  probe10 
+	.probe11( trt_o_p_3    		), // input wire [0:0]  probe11 
+	.probe12( trr_o_p_3    		), // input wire [0:0]  probe12
+	.probe13(adc_data1[31:0]    ) // input wire [0:0]  probe12
+);
 endmodule

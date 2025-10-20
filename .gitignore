@@ -1,0 +1,15 @@
+
+# 忽略所有
+*
+
+# 保留项目主文件
+!.gitignore
+!som_207sar_nvme.xpr
+!cpu.tcl
+
+# 保留整个 srcs 内容
+!som_207sar_nvme.srcs/
+!som_207sar_nvme.srcs/**
+# 忽略 bd 文件夹
+som_207sar_nvme.srcs/sources_1/bd/
+som_207sar_nvme.srcs/sources_1/new/version_date.vh

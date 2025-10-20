@@ -142,7 +142,7 @@ input UART_IMU_PL,
 // output DBG_UART_TX,
 // input DBG_UART_RX,
 output DBG_PPSOUT,
-output FPGA_SYNC,
+//output FPGA_SYNC,//注debug:debug ad_delay
 output PL_DBG_LED,
 output trt_o_p_0,
 output trr_o_p_0,	
@@ -153,7 +153,8 @@ output trr_o_p_2,
 output trt_o_p_3,	
 output trr_o_p_3,
 output UART_PL_IMU,	
-input UART_GPS_PL_2		
+input UART_GPS_PL_2,
+output adc_valid_expand		
 );
 
 wire [31:0] cfg_multifuc_ctrl;
@@ -878,7 +879,8 @@ multifunc multifunc_EP0(
 .trr_o_p_2	(trr_o_p_2	)	,//output 	
 .trt_o_p_3	(trt_o_p_3	)	,//output 	
 .trr_o_p_3	(trr_o_p_3	)	,
-.cfg_multifuc_ctrl(cfg_multifuc_ctrl)
+.cfg_multifuc_ctrl(cfg_multifuc_ctrl),
+.adc_valid_expand(adc_valid_expand)
 );
 wire fpga_syncinoutsel;
 assign fpga_syncinoutsel = cfg_multifuc_ctrl[3];
@@ -908,7 +910,7 @@ assign PLUART_rxd = BC_A_RXD;
 // assign BC_A_TXD[0] = PLUART_txd;
 `endif
 
-assign FPGA_SYNC = prffix;
+//assign FPGA_SYNC = prffix;
 assign PL_RS485_M_PO_0 = fifo_wr_enable_ctrl;
 assign PL_RS485_M_PO_1 = mfifo_rd_enable;
 

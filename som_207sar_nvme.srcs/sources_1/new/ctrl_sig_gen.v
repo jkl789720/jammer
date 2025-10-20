@@ -49,6 +49,9 @@ output reg                ddr_read_trig       ,//提前一个生成
 output                    adc_valid_pre       ,
 output                    adc_valid_expand    ,
 output                    rf_out              ,
+output                    rf_close_flag       ,//1016 add in
+output                    trt_close_flag      ,//1016 add in
+output                    trr_close_flag      ,//1016 add in
 input           [13:0]    fft_index_max_latch
     );
     
@@ -194,12 +197,19 @@ vio_dac_limit u_vio_dac_limit (
   .probe_out0(dac_limit_value)  // output wire [15 : 0] probe_out0
 );
 
+
 assign adc_valid =  wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay) && (cnt_prf1 < (prf_adc_delay + adc_length));
 assign adc_valid_pre = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - 1) && (cnt_prf1 < (prf_adc_delay + adc_length - 1));
 
-assign adc_valid_expand = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - dac_limit_value) && (cnt_prf1 < (prf_adc_delay + adc_length));
+assign adc_valid_expand = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - 19) && (cnt_prf1 < (prf_adc_delay + adc_length -19));// 121.6ns ahead of adc_valid
 
 
+//51.2ns ahead of adc_valid_expand
+assign rf_close_flag  = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - 19 - 8) && (cnt_prf1 < (prf_adc_delay + adc_length - 19 -8));
+//204.8ns ahead of adc_valid_expand and expand it by 102.4ns
+assign trt_close_flag = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - 19 -16 -16) && (cnt_prf1 < (prf_adc_delay + adc_length - 19 + 16));
+// 102.4ns ahead od adc_valid_expand
+assign trr_close_flag = wait_prf && mode_value == 2 && (adc_times <= disturb_times - 1) && (cnt_prf1 >= prf_adc_delay - 19 -16 ) && (cnt_prf1 < (prf_adc_delay + adc_length - 19));
 //k、b distance_delay template_delay逻辑生成
 reg [31:0]       distance_delay_r [3:0];
 reg [31:0]       template_delay_r [3:0];

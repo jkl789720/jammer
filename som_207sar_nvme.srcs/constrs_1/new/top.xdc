@@ -1,4 +1,3 @@
-set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design] 
 
 create_clock -name clk_pl_0 -period "6.666" [get_pins "PS8_i/PLCLK[0]"]
 create_clock -name clk_pl_1 -period "20" [get_pins "PS8_i/PLCLK[1]"]
@@ -67,20 +66,8 @@ set_false_path -from [get_clocks -of_objects [get_pins cpu_ep/cpu_subsys_EP0/xdm
 
 
 
-set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks {clk_pl_0}] \
-							   -group [get_clocks -include_generated_clocks {clk_pl_1}] \
-							   -group [get_clocks -include_generated_clocks {pci0_clk_clk_p}] \
-							   -group [get_clocks -include_generated_clocks {pci1_clk_clk_p}] \
-							   -group [get_clocks -include_generated_clocks {clk_out1_clk_sys}] \
-							   -group [get_clocks -include_generated_clocks {clk_out2_clk_sys}] \
-							   -group [get_clocks -include_generated_clocks {clk_out3_clk_sys}] \
-							   -group [get_clocks -include_generated_clocks {clk_out4_clk_sys}] \
-							   -group [get_clocks -include_generated_clocks {xdma_0_axi_aclk}] \
-							   -group [get_clocks -include_generated_clocks {xdma_1_axi_aclk}] \
-							   -group [get_clocks -include_generated_clocks {clk_out1_clk_dclk}] \
-							   -group [get_clocks -include_generated_clocks {pcie_userclk0}] \
-							   -group [get_clocks -include_generated_clocks {pcie_userclk1}] \
-							   -group [get_clocks -include_generated_clocks {CLK_PL_DDR_P}]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks clk_pl_0] -group [get_clocks -include_generated_clocks clk_pl_1] -group [get_clocks -include_generated_clocks pci0_clk_clk_p] -group [get_clocks -include_generated_clocks pci1_clk_clk_p] -group [get_clocks -include_generated_clocks clk_out1_clk_sys] -group [get_clocks -include_generated_clocks clk_out2_clk_sys] -group [get_clocks -include_generated_clocks clk_out3_clk_sys] -group [get_clocks -include_generated_clocks clk_out4_clk_sys] -group [get_clocks -include_generated_clocks xdma_0_axi_aclk] -group [get_clocks -include_generated_clocks xdma_1_axi_aclk] -group [get_clocks -include_generated_clocks clk_out1_clk_dclk] -group [get_clocks -include_generated_clocks pcie_userclk0] -group [get_clocks -include_generated_clocks pcie_userclk1] -group [get_clocks -include_generated_clocks CLK_PL_DDR_P]
 
 
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+

@@ -143,7 +143,15 @@ always@(posedge adc_clk)begin
 end
 
 assign adc_max_merge = adc_max0 >= adc_max1 ? adc_max0 : adc_max1 ;
-
+reg disable_trig;
+always@(posedge adc_clk)begin
+    if(!resetn)
+        disable_trig = 1;
+    else if(trig_start_pos)
+        disable_trig = 0;
+    else if(trig_num == trig_num_require)
+        disable_trig = 1;
+end
 
 threshold_detection_trig#(
     . LOCAL_DWIDTH 	      (LOCAL_DWIDTH     ) ,
@@ -159,7 +167,7 @@ threshold_detection_trig#(
 )
 u_threshold_detection_trig0(
 . adc_clk     (adc_clk    )     ,
-. resetn      (resetn     )     ,
+. resetn      (resetn && !disable_trig    )     ,
 . adc_data    (adc_data0  )     ,
 . adc_thshld  (adc_thshld )     ,
 . trig_valid  (trig_valid0)     ,
@@ -180,7 +188,7 @@ threshold_detection_trig#(
 )
 u_threshold_detection_trig1(
 . adc_clk     (adc_clk    )     ,
-. resetn      (resetn     )     ,
+. resetn      (resetn && !disable_trig     )     ,
 . adc_data    (adc_data1  )     ,
 . adc_thshld  (adc_thshld )     ,
 . trig_valid  (trig_valid1)     ,
@@ -199,7 +207,8 @@ ila_threshold_detection u_ila_threshold_detection (
 	.probe5(adc_data0       ),//255
 	.probe6(adc_thshld      ),//32 
 	.probe7(trig_start_pos  ),//1  
-	.probe8(trig_num_require) //16 
+	.probe8(disable_trig    ),//1  
+	.probe9(trig_num_require) //16 
 );
 
 endmodule

@@ -60,3 +60,4 @@ set_property USER_CLOCK_ROOT X0Y5 [get_nets {cpu_ep/cpu_subsys_EP0/xdma_1/inst/p
 set_property USER_CLOCK_ROOT X0Y5 [get_nets {cpu_ep/cpu_subsys_EP0/xdma_1/inst/pcie4c_ip_i/inst/cpu_subsys_xdma_1_0_pcie4c_ip_gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/CLK_PCLK2_GT}]
 set_property USER_CLOCK_ROOT X0Y4 [get_nets {cpu_ep/cpu_subsys_EP0/xdma_0/inst/pcie4c_ip_i/inst/cpu_subsys_xdma_0_0_pcie4c_ip_gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/CLK_CORECLK}]
 set_property USER_CLOCK_ROOT X0Y4 [get_nets {cpu_ep/cpu_subsys_EP0/xdma_0/inst/pcie4c_ip_i/inst/cpu_subsys_xdma_0_0_pcie4c_ip_gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/CLK_PCLK2_GT}]
+

@@ -138,15 +138,21 @@ output 				rf_tx_en_v,
 output 				rf_tx_en_h,
 output 				bc_tx_en,
 output 				channel_sel,
-output              adc_valid_expand           
+output              adc_valid_expand   ,        
+output              zero_sel      ,     
+output              dac_valid_adjust  ,
+output                          trt_close_flag            ,
+output                          trr_close_flag                
 );
 	
 //------------------------------- DAC data -------------------------------         
-wire 			dac_valid_adjust;
+//wire 			dac_valid_adjust;
 wire [255:0] 	dac_data_adjust	;
 wire 			data_record_mode;
 wire  			record_en		; 
 wire [1:0]      mode_value		;     
+wire [255:0] adc0_data;
+wire [255:0] adc1_data;
 dac_data_pre dac_data_pre_Ep0
 (
 .dac_clk(dac_clk),
@@ -211,7 +217,12 @@ dac_data_pre dac_data_pre_Ep0
 .bc_tx_en	(bc_tx_en	),
 .channel_sel	(channel_sel	),
 .adc_valid_expand	(adc_valid_expand	),
-.mode_value	(mode_value	)
+.mode_value	(mode_value	),
+.zero_sel	(zero_sel	),
+.adc_data0	(adc0_data	),
+.adc_data1	(adc1_data	),
+.trt_close_flag	(trt_close_flag),
+.trr_close_flag	(trr_close_flag)
 
 //debug
 //.vio_dataout(vio_dataout),
@@ -328,8 +339,8 @@ assign m03_axis_data_tdata = s03_axis_data_tdata;
 `endif
 
 
-reg [255:0] adc0_data;
-reg [255:0] adc1_data;
+//reg [255:0] adc0_data;
+//reg [255:0] adc1_data;
 
 //wire [192*8-1:0] ctrl_data;
 //wire [64*8-1:0] status_data;
@@ -355,19 +366,19 @@ wire [255:0] adc1_data_buff;
 //-----------------2025/02/12 22:51改动--------------------//
 //ad0和ad1接反，从而实现ad0接h通道，ad1接v通道；射频模块那块反了一层，因此这里软件再反一次反回来
 genvar kk;
-generate
-for(kk=0;kk<8;kk=kk+1)begin:blk1
-	// always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata_temp[16*kk+15:16*kk+00];
-	// always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata_temp[16*kk+15:16*kk+00];
-	// always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
-	// always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
-	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata[16*kk+15:16*kk+00];
-	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata[16*kk+15:16*kk+00];
-	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= m00_axis_tdata[16*kk+15:16*kk+00];
-	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= m01_axis_tdata[16*kk+15:16*kk+00];
+//generate
+//for(kk=0;kk<8;kk=kk+1)begin:blk1
+//	// always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata_temp[16*kk+15:16*kk+00];
+//	// always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata_temp[16*kk+15:16*kk+00];
+//	// always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= s00_axis_tdata_temp[32*kk+15:32*kk+00];
+//	// always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= s00_axis_tdata_temp[32*kk+31:32*kk+16];
+//	always@(posedge adc_clk)adc0_data[32*kk+15:32*kk+00] <= m02_axis_tdata[16*kk+15:16*kk+00];
+//	always@(posedge adc_clk)adc0_data[32*kk+31:32*kk+16] <= m03_axis_tdata[16*kk+15:16*kk+00];
+//	always@(posedge adc_clk)adc1_data[32*kk+15:32*kk+00] <= m00_axis_tdata[16*kk+15:16*kk+00];
+//	always@(posedge adc_clk)adc1_data[32*kk+31:32*kk+16] <= m01_axis_tdata[16*kk+15:16*kk+00];
 
-end
-endgenerate
+//end
+//endgenerate
 
 adc_buff u_adc0_buff (
   .D(adc0_data),      // input wire [255 : 0] D

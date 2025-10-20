@@ -105,8 +105,23 @@ output                          rf_tx_en_h                ,
 output                          bc_tx_en                  ,
 output                          channel_sel               ,
 output                          adc_valid_expand          ,
-output [1:0]                    mode_value
+output [1:0]                    mode_value                ,
+output                          zero_sel                  ,
+output  [255:0]                 adc_data0                 ,
+output  [255:0]                 adc_data1                 ,
+output                          trt_close_flag            ,
+output                          trr_close_flag            
+                       
 );
+
+wire rf_close_flag;
+/*
+注design：
+*/
+
+wire real_imag_swap;
+
+wire [255:0]	 			        s00_axis_tdata_tmp;
 
 /*
 干扰机：0 1
@@ -144,6 +159,7 @@ wire   [31:0]                    app_param18     ;
 wire   [31:0]                    app_param19     ;
 wire   [31:0]                    app_param20     ;
 wire   [31:0]                    app_param21     ;
+wire   [31:0]                    app_param22     ;
 
 wire   [31:0]                    app_status0     ;
 wire   [31:0]                    app_status1     ;
@@ -195,6 +211,7 @@ reg   [31:0]                    app_param18_r[1:0]      ;
 reg   [31:0]                    app_param19_r[1:0]      ;
 reg   [31:0]                    app_param20_r[1:0]      ;
 reg   [31:0]                    app_param21_r[1:0]      ;
+reg   [31:0]                    app_param22_r[1:0]      ;
 
 
 always @(posedge adc_clk) begin
@@ -220,6 +237,7 @@ always @(posedge adc_clk) begin
   app_param19_r[0] <=  app_param19 ;
   app_param20_r[0] <=  app_param20 ;
   app_param21_r[0] <=  app_param21 ;
+  app_param22_r[0] <=  app_param22 ;
 end
 
 always @(posedge adc_clk) begin
@@ -245,7 +263,17 @@ always @(posedge adc_clk) begin
   app_param19_r[1] <=  app_param19_r[0] ;
   app_param20_r[1] <=  app_param20_r[0] ;
   app_param21_r[1] <=  app_param21_r[0] ;
+  app_param22_r[1] <=  app_param22_r[0] ;
 end
+
+//注debug：调试用
+// assign da_sel = app_param22_r[1][0];
+// assign real_imag_swap = app_param22_r[1][1];
+// assign zero_sel = app_param22_r[1][2];
+
+ assign da_sel = 1;
+ assign real_imag_swap = 1;
+ assign zero_sel = 1;
 
 `ifdef TEST
 reg [7:0] cnt_reset = 0;
@@ -318,22 +346,18 @@ end
 
 assign adc_data_txt = data_in[read_addr_txt];
 //-----------------2025/02/12 22:51改动--------------------//
-//ad0和ad1接反，从而实现ad0接h通道，ad1接v通道；射频模块那块反了一层，因此这里软件再反一次反回来
-wire [255:0] adc_data0;
+//ad0和ad1接反，从而实现ad0接h通道，ad1接v通道；射频模块那块反了一层，因此这里软件再反一次反回来 
+//wire [255:0] adc_data0;
+//wire [255:0] adc_data1;
 genvar kk;
 generate
 	for(kk = 0;kk < 8;kk = kk + 1)begin:blk1
-		assign adc_data0[(kk+1)*32-1:kk*32] = {m03_axis_tdata[(kk+1)*16-1:kk*16],m02_axis_tdata[(kk+1)*16-1:kk*16]};
+        assign adc_data0[(kk+1)*32-1:kk*32] = real_imag_swap ? {m02_axis_tdata[(kk+1)*16-1:kk*16],m03_axis_tdata[(kk+1)*16-1:kk*16]} : {m03_axis_tdata[(kk+1)*16-1:kk*16],m02_axis_tdata[(kk+1)*16-1:kk*16]};
+        assign adc_data1[(kk+1)*32-1:kk*32] = real_imag_swap ? {m00_axis_tdata[(kk+1)*16-1:kk*16],m01_axis_tdata[(kk+1)*16-1:kk*16]} : {m01_axis_tdata[(kk+1)*16-1:kk*16],m00_axis_tdata[(kk+1)*16-1:kk*16]};
+    assign s00_axis_tdata[(kk+1)*32-1:kk*32] = real_imag_swap ?   {s00_axis_tdata_tmp[kk*32+15:kk*32],s00_axis_tdata_tmp[kk*32+31:kk*32+16 ]} : s00_axis_tdata_tmp[(kk+1)*32-1:kk*32];
 	end
 endgenerate
 
-wire [255:0] adc_data1;
-genvar ss;
-generate
-	for(ss = 0;ss < 8;ss = ss + 1)begin:blk2
-		assign adc_data1[(ss+1)*32-1:ss*32] = {m01_axis_tdata[(ss+1)*16-1:ss*16],m00_axis_tdata[(ss+1)*16-1:ss*16]};
-	end
-endgenerate
 //注sim：改 2025/06/09 测试用
 /*
 200us 5khz  31250   : 仿真用
@@ -400,30 +424,22 @@ end
 assign adc_data_delay = ad_sel ? adc_data_delay_stim : adc_data1;//注debug：0是选正常ad1，1是选择激励
 
 
-
-`ifdef DISTURB_DEBUG
-vio_rst u_vio_rst (
+  vio_rst u_vio_rst (
   .clk			  (adc_clk	  ), 
   .probe_in0	(probe_in0	), 
   .probe_in1	(probe_in1	), 
   .probe_in2	(probe_in2	)
 `ifndef TEST
   ,
-  .probe_out0	(resetn_vio ),  
-  .probe_out1	(ad_sel  	  ),  
-  .probe_out2	(da_sel  	  )  
+  .probe_out0	(resetn_vio         ),  
+  .probe_out1	(ad_sel  	          ),  
+  .probe_out2	(         	  )
 `endif
 
 );
+   
+   
 
-// ila_ad_da ila_ad_da (
-// 	.clk   (adc_clk     ), // input wire clk
-// 	.probe0(adc_data_in ), // input wire [255:0]  probe0  
-// 	.probe1(dac_data    ), // input wire [255:0]  probe1 
-// 	.probe2(dac_valid   ) // input wire [0:0]  probe2
-// );
-
-`endif
 `ifdef TEST
 
 //kb_data_gen
@@ -500,6 +516,7 @@ hwreg_set_new u_hwreg_set_new(
 . app_param19 (app_param19      ) ,
 . app_param20 (app_param20      ) ,
 . app_param21 (app_param21      ) ,
+. app_param22 (app_param22      ) ,
 . cfg_clk     (ramrpu_clk       ) ,
 . cfg_rd_en   (ramrpu_en        ) ,
 . cfg_wr_en   (ramrpu_we        ) ,
@@ -567,6 +584,7 @@ u_disturb_wrapper(
 . app_param19       (app_param19_r[1] ) ,
 . app_param20       (app_param20_r[1] ) ,
 . app_param21       (app_param21_r[1] ) ,
+. app_param22       (app_param22_r[1] ) ,
 
 . app_status0       (app_status0      ) ,
 . app_status1       (app_status1      ) ,
@@ -590,7 +608,10 @@ u_disturb_wrapper(
 . err_flag          (err_flag         ) ,
 . fifo_overflow     (fifo_overflow    ) ,
 . fifo_underflow    (fifo_underflow   ) ,
-. channel_sel       (channel_sel      )
+. channel_sel       (channel_sel      ) ,
+. rf_close_flag     (rf_close_flag    ) ,
+. trt_close_flag    (trt_close_flag   ) ,
+. trr_close_flag    (trr_close_flag   )
 );
 //注debug：调试用
 wire [31:0] receive_delay;
@@ -678,8 +699,8 @@ always@(posedge adc_clk)begin
 	CFGBC_OUTEN_r_BC <= {CFGBC_OUTEN_r_BC[(DWIDTH_0/2)-1:0], RF_A_TXEN_TEMP};
 end
 
-assign rf_tx_en = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && (~adc_valid_expand);//改动点
-assign bc_tx_en = (|CFGBC_OUTEN_r_BC) ;//改动点
+assign rf_tx_en = CFGBC_OUTEN_r_BC[DWIDTH_0/4] && !rf_close_flag;//改动点
+assign bc_tx_en = CFGBC_OUTEN_r_BC[DWIDTH_0/4] ;//改动点
 
 wire signed [15:0] power_adjust_coe;
 assign power_adjust_coe = app_param18_r[1][15:0];
@@ -708,7 +729,11 @@ end
 wire dac_valid_o_zero;
 assign dac_valid_o_zero = (dac_valid_adjust == 1) && (adc_valid_expand == 0);
 
-assign s00_axis_tdata = da_sel ? (dac_valid_o_zero ? dac_data_adjust : 0) :  (dac_valid_delay ? delay_dac_data : 0);//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
+
+
+
+
+assign s00_axis_tdata_tmp = da_sel ? (dac_valid_adjust ? dac_data_adjust : 0) :  (dac_valid_delay ? delay_dac_data : 0);//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
 assign rf_tx_en_v = da_sel ? rf_tx_en_v_jammer : rf_tx_en_delay;//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
 assign rf_tx_en_h = da_sel ? rf_tx_en_h_jammer : rf_tx_en_delay;//注sim： 2025/06/09 da_sel 为 0时延时直出，为1时出干扰信号
 

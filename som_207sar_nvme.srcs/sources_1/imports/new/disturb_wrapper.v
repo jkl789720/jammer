@@ -67,6 +67,7 @@ input   [31:0]                    app_param18       ,
 input   [31:0]                    app_param19       ,
 input   [31:0]                    app_param20       ,
 input   [31:0]                    app_param21       ,
+input   [31:0]                    app_param22       ,
 
 //ddr_en
 output 						                mfifo_rd_enable   ,
@@ -102,7 +103,10 @@ output                            fifo_overflow     ,
 output                            fifo_underflow    ,
 
 output                            rf_out            ,
-output                            channel_sel
+output                            channel_sel       ,
+output                            rf_close_flag     ,
+output                            trt_close_flag    ,
+output                            trr_close_flag
 
 );
 
@@ -377,7 +381,10 @@ ctrl_sig_gen#(
 . k_data_now                (k_data_now          )  ,
 . b_data_now                (b_data_now          )  ,
 . rf_out                    (rf_out              )  ,
-. fft_index_max_latch       (fft_index_max_latch )  
+. fft_index_max_latch       (fft_index_max_latch )  ,
+. rf_close_flag             (rf_close_flag       )  ,
+. trt_close_flag            (trt_close_flag      )  ,
+. trr_close_flag            (trr_close_flag      )
     );
 
 wire resetn_sof;

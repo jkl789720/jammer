@@ -558,8 +558,8 @@ cpu_subsys cpu_subsys_EP0(
 .AUXRAM_en(AUXRAM_en),
 .AUXRAM_rst(AUXRAM_rst),
 .AUXRAM_we(AUXRAM_we),
-.PLUART_rxd(PLUART_rxd),
-.PLUART_txd(PLUART_txd),
+// .PLUART_rxd(PLUART_rxd),
+// .PLUART_txd(PLUART_txd),
 
 .DDR4_act_n(DDR4_act_n),    //output 
 .DDR4_adr(DDR4_adr),    //output [16:0]
